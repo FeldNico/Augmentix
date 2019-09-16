@@ -1,0 +1,19 @@
+{
+    "name": "Augmentix",
+    "references": [
+        "GUID:57c32fc907df0f54e8e6e8f0d2488336",
+        "GUID:831409e8f9d13b5479a3baef9822ad34",
+        "GUID:b59fae9c7ebc1574e8690f2570b29d6f",
+        "GUID:d62e4537d6f8ca64c8d2affe565a5cd1",
+        "GUID:8e3c55029ca641543bf030857af4d525",
+        "GUID:ffad5d59ee9e83d48949503709e1f0c1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
