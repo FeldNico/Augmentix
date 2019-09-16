@@ -21,7 +21,7 @@ namespace Augmentix.Scripts.AR.UI
 
         void Start()
         {
-            TangibleTarget.Instance.GotPlayer += (player) =>
+            PickupTarget.Instance.GotPlayer += (player) =>
             {
                 StreamToggle.gameObject.SetActive(true);
                 ScaleSlider.gameObject.SetActive(true);
@@ -29,7 +29,7 @@ namespace Augmentix.Scripts.AR.UI
                 LockCam.gameObject.SetActive(true);
             };
 
-            TangibleTarget.Instance.LostPlayer += () =>
+            PickupTarget.Instance.LostPlayer += (player) =>
             {
                 StreamToggle.gameObject.SetActive(false);
                 ScaleSlider.gameObject.SetActive(false);

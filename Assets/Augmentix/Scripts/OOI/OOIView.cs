@@ -1,6 +1,9 @@
 ﻿using System;
+using Augmentix.Scripts.AR;
 using Augmentix.Scripts.AR.UI;
+#if UNITY_EDITOR
 using Augmentix.Scripts.OOI.Editor;
+#endif
 using Augmentix.Scripts.VR;
 using Photon.Pun;
 using UnityEngine;
@@ -15,11 +18,13 @@ namespace Augmentix.Scripts.OOI
         [Flags]
         public enum InteractionFlag
         {
-            Highlight = 0x1,
-            Text = 0x2,
-            Video = 0x4,
-            Animation = 0x8,
-            Manipulate = 0x16
+            Highlight = 1,
+            Text = 2,
+            Video = 4,
+            Animation = 8,
+            Manipulate = 16,
+            Scale = 32,
+            Changeable = 64
         }
 
 #if UNITY_EDITOR
@@ -32,14 +37,32 @@ namespace Augmentix.Scripts.OOI
 
         public float TextScale = 0.02f;
 
+        private void Start()
+        {
+            GetComponent<PhotonView>().OwnershipTransfer = OwnershipOption.Takeover;
+            
+            if (TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
+            {
+                PickupTarget.Instance.GotPlayer += player =>
+                {
+                    var treveris = TreverisView.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner);
+                    if (transform.IsChildOf(treveris.transform))
+                        GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+                };
+
+                PickupTarget.Instance.LostPlayer += player =>
+                {
+                    var treveris = TreverisView.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner);
+                    if (transform.IsChildOf(treveris.transform))
+                        GetComponent<PhotonView>().TransferOwnership(player.GetComponent<PhotonView>().Owner);
+                };
+            }
+            
+        }
+
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             throw new System.NotImplementedException();
-        }
-
-        private void Start()
-        {
-
         }
 
         private GameObject _videoCube = null;
@@ -48,14 +71,14 @@ namespace Augmentix.Scripts.OOI
         public void Interact(InteractionFlag flag)
         {
             var view = GetComponent<PhotonView>();
-            if (!view.IsMine)
-                view.RPC("Interact",view.Owner,flag);
+            if (view.IsMine)
+                view.RPC("Interact",PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Owner,flag);
 
             switch (flag)
             {
                 case InteractionFlag.Highlight:
                 {
-                    if (view.IsMine)
+                    if (!view.IsMine)
                     {
                         VRUI.Instance.ToggleHighlightTarget(gameObject);
                     }

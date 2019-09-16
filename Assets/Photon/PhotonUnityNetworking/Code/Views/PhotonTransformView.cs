@@ -85,8 +85,7 @@ namespace Photon.Pun
             }
             else
             {
-
-
+                
                 if (this.m_SynchronizePosition)
                 {
                     this.m_NetworkPosition = (Vector3)stream.ReceiveNext();

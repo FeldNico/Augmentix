@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 #if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using System;
 
 namespace Augmentix.Scripts.Editor

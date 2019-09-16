@@ -22,9 +22,9 @@ namespace Augmentix.Scripts
             }
             else
             {
-                if (TangibleTarget.Instance != null)
+                if (PickupTarget.Instance != null)
                 {
-                    TangibleTarget.Instance.GotPlayer += (player) =>
+                    PickupTarget.Instance.GotPlayer += (player) =>
                         GetComponent<PhotonView>().RPC("OnPickup", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
                 }
             }
@@ -47,8 +47,8 @@ namespace Augmentix.Scripts
 
         void OnDestroy()
         {
-            if (TangibleTarget.Instance != null)
-                TangibleTarget.Instance.LostPlayer.Invoke();
+            if (PickupTarget.Instance != null)
+                PickupTarget.Instance.LostPlayer.Invoke(gameObject);
         }
     }
 }

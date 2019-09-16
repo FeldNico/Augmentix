@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Augmentix.Scripts.OOI;
+using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -23,11 +25,13 @@ namespace Augmentix.Scripts.AR.UI
 
         public float Radius = 100f;
 
+        public Slider Slider;
+        public TMP_Dropdown Dropdown;
         public Button Text;
         public Button Video;
         public Button Animation;
         public Button Highlight;
-    
+
         public OOIView CurrentSelected { private set; get; } = null;
 
         public UnityAction<OOIView> OnSelect;
@@ -53,28 +57,17 @@ namespace Augmentix.Scripts.AR.UI
 
         void Start()
         {
-            OnSelect += (target) =>
-            {
-                _target = target;
-                StartCoroutine(SmoothMoveButtons());
-            };
+            OnSelect += (target) => { _target = target; };
 
-            OnDeselect += () =>
-            {
-                _target = null;
-                foreach (var button in GetComponentsInChildren<Button>())
-                {
-                    button.gameObject.SetActive(false);
-                }
-            };
-        
-            TangibleTarget.Instance.OnStatusChange += status =>
+            OnDeselect += () => { _target = null; };
+
+            PickupTarget.Instance.OnStatusChange += status =>
             {
                 if (status == TrackableBehaviour.Status.NO_POSE)
                     Deselect();
             };
 
-            TangibleTarget.Instance.LostPlayer += Deselect;
+            PickupTarget.Instance.LostPlayer += player =>  Deselect();
 
             Highlight.onClick.AddListener(() =>
             {
@@ -96,9 +89,27 @@ namespace Augmentix.Scripts.AR.UI
                 CurrentSelected.Interact(OOIView.InteractionFlag.Video);
                 Deselect();
             });
-
+            Slider.onValueChanged.AddListener(value =>
+            {
+                CurrentSelected.transform.localScale = new Vector3(value,value,value);
+            });
+            Dropdown.onValueChanged.AddListener(value =>
+            {
+                /*
+                var parent = CurrentSelected.transform.parent;
+                PhotonNetwork.Destroy(CurrentSelected.gameObject);
+                var go =PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
+                var scale = go.transform.localScale;
+                var position = go.transform.localPosition;
+                go.transform.parent = parent;
+                go.transform.localScale = scale;
+                go.transform.localPosition = position;
+                go.transform.localRotation = Quaternion.identity;
+                */
+            });
+            
         }
-    
+
         void Update()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -108,26 +119,121 @@ namespace Augmentix.Scripts.AR.UI
             if (Input.GetMouseButtonDown(0))
             {
 #endif
-                if (EventSystem.current.IsPointerOverGameObject() ||
-                    EventSystem.current.currentSelectedGameObject != null)
+                if (!(EventSystem.current.IsPointerOverGameObject() ||
+                      EventSystem.current.currentSelectedGameObject != null))
                 {
-                    return;
-                }
 #if UNITY_ANDROID && !UNITY_EDITOR
-            var ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                    var ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 #else
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #endif
-                RaycastHit hit = new RaycastHit();
-                if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<OOIView>())
-                {
-                    Select(hit.transform.GetComponent<OOIView>());
+                    RaycastHit hit = new RaycastHit();
+                    if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<OOIView>())
+                    {
+                        Select(hit.transform.GetComponent<OOIView>());
+                    }
+                    else
+                    {
+                        Deselect();
+                    }
                 }
-                else
+            }
+
+            SmoothMoveButtons();
+        }
+
+        private List<Button> _buttons = null;
+        private OOIView _prevtarget = null;
+        private Vector3 _center = new Vector3();
+
+        void SmoothMoveButtons()
+        {
+            if (_target == null)
+            {
+                if (_prevtarget == null) return;
+
+                foreach (Transform child in transform)
+                    child.gameObject.SetActive(false);
+
+                _prevtarget = null;
+                return;
+            }
+
+            if (_target != _prevtarget)
+            {
+                if (_prevtarget != null)
+                    foreach (Transform child in transform)
+                        child.gameObject.SetActive(false);
+
+                _prevtarget = _target;
+
+                _buttons = GetButtons(_target);
+                foreach (var button in _buttons)
+                    button.gameObject.SetActive(true);
+
+                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Scale))
                 {
-                    Deselect();
+                    var view = _target.GetComponent<PhotonTransformView>();
+                    if (view == null)
+                        Debug.LogError("OOI Scale activated but OOI does not have a Transform View for Scale-Synchronization");
+                    else if (!view.m_SynchronizeScale)
+                        Debug.LogError("OOI Scale activated but Scale-Synchronization in Transform View not activated");
+                    else
+                    {
+                        Slider.gameObject.SetActive(true);
+                        var scale = _target.transform.localScale.x;
+                        Slider.minValue = scale / 5f;
+                        Slider.value = scale;
+                        Slider.maxValue = scale * 5f;
+                    }
+                }
+                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Changeable))
+                {
+                    Dropdown.gameObject.SetActive(true);
                 }
 
+                _center = new Vector3();
+                var renderers = _target.GetComponentsInChildren<Renderer>();
+
+                if (renderers.Length > 0)
+                {
+                    foreach (var child in renderers)
+                        _center += child.bounds.center;
+                    _center = _center / renderers.Length;
+                    _center = _center - _target.transform.position;
+                }
+            }
+
+            if (_target != null)
+            {
+                var worldCenter = Camera.main.WorldToScreenPoint(_target.transform.position + _center);
+
+                for (var i = 0; i < _buttons.Count; i++)
+                {
+                    var rectTransform = _buttons[i].GetComponent<RectTransform>();
+
+                    var x = (float) (Radius * Screen.width / 100 * Math.Cos(2 * i * Math.PI / _buttons.Count));
+                    var y = (float) (Radius * Screen.height / 100 * Math.Sin(2 * i * Math.PI / _buttons.Count));
+
+                    var sizeDelta = rectTransform.sizeDelta;
+                    x = x > 0 ? x + sizeDelta.x / 2 : x - sizeDelta.x / 2;
+                    y = y > 0 ? y + sizeDelta.y / 2 : y - sizeDelta.y / 2;
+
+
+                    rectTransform.transform.position = worldCenter + new Vector3(x, y, 0);
+                }
+
+                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Scale))
+                {
+                    Slider.GetComponent<RectTransform>().transform.position =
+                        worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
+                }
+                
+                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Changeable))
+                {
+                    Dropdown.GetComponent<RectTransform>().transform.position =
+                        worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
+                }
             }
         }
 
@@ -146,58 +252,10 @@ namespace Augmentix.Scripts.AR.UI
                 CurrentSelected = null;
             }
         }
-    
-        private IEnumerator SmoothMoveButtons()
-        {
-            List<Button> Buttons = null;
-            OOIView prevtarget = null;
-            Vector3 center = new Vector3();
-            while (true)
-            {
-                if (_target == null)
-                    break;
-            
-                if (_target != prevtarget)
-                {
-                    foreach (var button in GetComponentsInChildren<Button>())
-                        button.gameObject.SetActive(false);
 
-                    Buttons = GetButtons(_target);
-                    foreach (var button in Buttons)
-                        button.gameObject.SetActive(true);
-
-                    center = new Vector3();
-                    var renderers = _target.GetComponentsInChildren<Renderer>();
-                    foreach (var child in renderers)
-                        center += child.bounds.center;
-                    center = center / renderers.Length;
-                    center = center - _target.transform.position;
-                    prevtarget = _target;
-                }
-
-                if (_target != null)
-                {
-                    for (var i = 0; i < Buttons.Count; i++)
-                    {
-                        var x = (float) (Radius * Screen.width / 100 * Math.Cos(2 * i * Math.PI / Buttons.Count));
-                        var y = (float) (Radius * Screen.height / 100 * Math.Sin(2 * i * Math.PI / Buttons.Count));
-
-                        var rectTransform = Buttons[i].GetComponent<RectTransform>();
-
-                        var position = rectTransform.transform.position;
-                        var direction = ((Camera.main.WorldToScreenPoint(_target.transform.position + center) + new Vector3(x, y, 0)) -
-                                         position) * 1f;
-
-                        position = position + direction;
-                        rectTransform.transform.position = position;
-                    }
-
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-        }
 
         private GameObject _prevHighlightTarget = null;
+
         public void ToggleHighlightTarget(GameObject Target)
         {
             if (_prevHighlightTarget != Target)

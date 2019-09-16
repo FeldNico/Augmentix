@@ -17,7 +17,7 @@ namespace Augmentix.Scripts
         {
             if (!GetComponent<PhotonView>().IsMine)
             {
-                transform.parent = TangibleTarget.Instance.Scaler.transform;
+                transform.parent = PickupTarget.Instance.Scaler.transform;
                 transform.localScale = Vector3.one;
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
