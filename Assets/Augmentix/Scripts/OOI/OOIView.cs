@@ -37,6 +37,11 @@ namespace Augmentix.Scripts.OOI
 
         public float TextScale = 0.02f;
 
+        public bool IsTangible()
+        {
+            return GetComponentInParent<TangibleTarget>() != null;
+        }
+        
         private void Start()
         {
             GetComponent<PhotonView>().OwnershipTransfer = OwnershipOption.Takeover;
@@ -57,7 +62,6 @@ namespace Augmentix.Scripts.OOI
                         GetComponent<PhotonView>().TransferOwnership(player.GetComponent<PhotonView>().Owner);
                 };
             }
-            
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

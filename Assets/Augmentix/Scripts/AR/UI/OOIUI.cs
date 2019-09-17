@@ -95,17 +95,15 @@ namespace Augmentix.Scripts.AR.UI
             });
             Dropdown.onValueChanged.AddListener(value =>
             {
-                /*
                 var parent = CurrentSelected.transform.parent;
                 PhotonNetwork.Destroy(CurrentSelected.gameObject);
-                var go =PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
+                var go =PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
                 var scale = go.transform.localScale;
                 var position = go.transform.localPosition;
                 go.transform.parent = parent;
                 go.transform.localScale = scale;
                 go.transform.localPosition = position;
                 go.transform.localRotation = Quaternion.identity;
-                */
             });
             
         }

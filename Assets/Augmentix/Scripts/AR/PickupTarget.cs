@@ -36,8 +36,12 @@ namespace Augmentix.Scripts.AR
         // Start is called before the first frame update
         void Start()
         {
+            TargetManager.Instance.OnConnection += () =>
+            {
+                PhotonNetwork.SetInterestGroups((byte) PhotonNetwork.LocalPlayer.ActorNumber, true);
+            };
+            
             _mapTarget = FindObjectOfType<MapTarget>();
-
             Scaler = new GameObject("Scaler");
             Scaler.transform.parent = transform;
             Scaler.transform.localPosition = Vector3.zero;

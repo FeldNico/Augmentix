@@ -1,5 +1,6 @@
 ﻿using Augmentix.Scripts.OOI;
 using Photon.Pun;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Vuforia;
@@ -13,13 +14,11 @@ namespace Augmentix.Scripts.AR
         public GameObject Current { private set; get; } = null;
         private void Start()
         {
-            /*
-            Current = PhotonNetwork.Instantiate("Dummy", Vector3.zero, Quaternion.identity);
+            Current = PhotonNetwork.Instantiate("Dummy", Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
             Current.transform.parent = transform;
             Current.transform.localPosition = Vector3.zero;
             Current.transform.localScale = Vector3.one;
             Current.transform.localRotation = Quaternion.identity;
-            */
         }
     
         private TrackableBehaviour.Status _prevStatus = TrackableBehaviour.Status.NO_POSE;

@@ -26,14 +26,16 @@ namespace Augmentix.Scripts
                 {
                     PickupTarget.Instance.GotPlayer += (player) =>
                         GetComponent<PhotonView>().RPC("OnPickup", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
+                    
+                    PickupTarget.Instance.LostPlayer += (player) =>
+                        GetComponent<PhotonView>().RPC("OnLost", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
                 }
             }
         }
 
         public void OnPhotonInstantiate(PhotonMessageInfo info)
         {
-            if (InstanceAction != null)
-                InstanceAction.Invoke(info);
+            InstanceAction?.Invoke(info);
         }
 
         [PunRPC]
@@ -42,6 +44,17 @@ namespace Augmentix.Scripts
             if (GetComponent<PhotonView>().IsMine)
             {
                 Primary = PhotonNetwork.PlayerListOthers.First( (player) =>player.ActorNumber == primaryActorNumber);
+                PhotonNetwork.SetInterestGroups((byte) primaryActorNumber,true);
+            }
+        }
+        
+        [PunRPC]
+        public void OnLost(int primaryActorNumber)
+        {
+            if (GetComponent<PhotonView>().IsMine)
+            {
+                Primary = null;
+                PhotonNetwork.SetInterestGroups( 0,true);
             }
         }
 
