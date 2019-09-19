@@ -1,10 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.Assertions;
 using Npgsql;
-using Photon.Pun;
 
 public class WorldGenerator : MonoBehaviour
 {
@@ -12,7 +10,6 @@ public class WorldGenerator : MonoBehaviour
     {
         public string id = "_00000";
         public Vector3 position = Vector3.zero;
-        public Quaternion rotation = Quaternion.identity;
     }
 
     public class PXR_PolygonModel
@@ -29,9 +26,10 @@ public class WorldGenerator : MonoBehaviour
     // models
     public Material streetMat;
     public Material buildingMat;
-    
 
-    void Start()
+    public Func<PXR_Model, Transform, bool> OnBuildingCreation = (model, root) => false;
+
+    public void Generate()
     {
         net = new PsmNetwork();
 
@@ -61,11 +59,13 @@ public class WorldGenerator : MonoBehaviour
         GameObject streetRoot = new GameObject("Streets");
         streetRoot.transform.parent = transform;
         streetRoot.transform.localScale = Vector3.one;
+
         foreach (List<Vector2> way in ways)
         {
             GameObject street = new GameObject("Street");
             street.transform.parent = streetRoot.transform;
             street.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            street.transform.localScale = Vector3.one;
 
             LineRenderer line = street.AddComponent<LineRenderer>();
             line.sortingLayerName = "OnTop";
@@ -95,11 +95,13 @@ public class WorldGenerator : MonoBehaviour
         GameObject wallsRoot = new GameObject("Walls");
         wallsRoot.transform.parent = transform;
         wallsRoot.transform.localScale = Vector3.one;
+
         foreach (List<Vector2> wall in walls)
         {
             GameObject wallRoot = new GameObject("Wall");
             wallRoot.transform.parent = wallsRoot.transform;
             wallRoot.transform.localScale = Vector3.one;
+            
             for (int i = 0; i + 1 < wall.Count; ++i)
             {
                 Vector2 mid = (wall[i + 1] + wall[i]) / 2;
@@ -124,29 +126,19 @@ public class WorldGenerator : MonoBehaviour
         GameObject buildingsRoot = new GameObject("Buildings");
         buildingsRoot.transform.parent = transform;
         buildingsRoot.transform.localScale = Vector3.one;
+
         foreach (PXR_Model building in buildings)
         {
+            var created = OnBuildingCreation.Invoke(building,buildingsRoot.transform);
 
-            var d = Resources.Load<GameObject>(building.id);
-
-            string[] GUIDs = AssetDatabase.FindAssets(building.id, new[] { "Assets/Resources" });
-
-            if (GUIDs.Length != 0)
+            if (!created)
             {
-                // there is a problem, if more then one object found to the unique ID
-                Assert.IsTrue(GUIDs.Length == 1);
-                GameObject go = (GameObject)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(GUIDs[0]), typeof(GameObject));
-
-                var b = PhotonNetwork.Instantiate(go.name, Vector3.zero, Quaternion.identity);
-                b.transform.parent = buildingsRoot.transform;
-                b.transform.localScale = Vector3.one;
-                b.transform.localPosition = building.position;
-                b.transform.localRotation = building.rotation;
-                //Instantiate(go, building.position, building.rotation, buildingsRoot.transform);
+                // TODO:
+                // else if (in central shared model container) load it
+                // else error
+                Debug.LogError("Building "+building.id+" not created!");
             }
-            // TODO:
-            // else if (in central shared model container) load it
-            // else error
+            
         }
 
         // generate models for buildings with just polygons
@@ -157,6 +149,7 @@ public class WorldGenerator : MonoBehaviour
             GameObject building = new GameObject("Generated Building");
             building.transform.parent = buildingsRoot.transform;
             building.transform.localScale = Vector3.one;
+
             MeshFilter meshFilter = building.AddComponent<MeshFilter>();
             item.polygon.RemoveAt(item.polygon.Count - 1);
             meshFilter.mesh = CreateExtrudedMeshFromPXR_PolygonModel(item);

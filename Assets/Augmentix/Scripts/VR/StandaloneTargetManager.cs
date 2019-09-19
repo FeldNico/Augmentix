@@ -13,10 +13,11 @@ namespace Augmentix.Scripts.VR
             {
                 VRUI.Instance.ConnectionText.text = "Connected";
                 VRUI.Instance.ConnectionText.color = Color.green;
-                var player = PhotonNetwork.Instantiate("Player", new Vector3(), new Quaternion());
+                var player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
                 player.transform.parent = Camera.main.transform;
                 player.transform.localPosition = Vector3.zero;
-                var treveris = PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
+                player.transform.localRotation = Quaternion.identity;
+                PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
             };
 
         }

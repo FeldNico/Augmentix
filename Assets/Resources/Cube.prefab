@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7589200249651251962}
   - component: {fileID: 7589200249651251909}
   - component: {fileID: 7589200249651251908}
-  - component: {fileID: 6944351590130203766}
+  - component: {fileID: -8270014764711856335}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -114,7 +114,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 6944351590130203766}
+  - {fileID: -8270014764711856335}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   Flags: 98
   Text: gfdfgdfgdf
   TextScale: 0.02
---- !u!114 &6944351590130203766
+--- !u!114 &-8270014764711856335
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,9 +156,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7589200249651251910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d80302e0f21b1244b426d92bf49f994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0

@@ -32,28 +32,28 @@ namespace Augmentix.Scripts.AR.UI
         public Button Animation;
         public Button Highlight;
 
-        public OOIView CurrentSelected { private set; get; } = null;
+        public OOI.OOI CurrentSelected { private set; get; } = null;
 
-        public UnityAction<OOIView> OnSelect;
+        public UnityAction<OOI.OOI> OnSelect;
         public UnityAction OnDeselect;
 
-        public List<Button> GetButtons(OOIView ooiView)
+        public List<Button> GetButtons(OOI.OOI ooi)
         {
-            var flags = ooiView.Flags;
+            var flags = ooi.Flags;
             var l = new List<Button>();
-            if (flags.HasFlag(OOIView.InteractionFlag.Highlight))
+            if (flags.HasFlag(OOI.OOI.InteractionFlag.Highlight))
                 l.Add(Highlight);
-            if (flags.HasFlag(OOIView.InteractionFlag.Animation))
+            if (flags.HasFlag(OOI.OOI.InteractionFlag.Animation))
                 l.Add(Animation);
-            if (flags.HasFlag(OOIView.InteractionFlag.Text))
+            if (flags.HasFlag(OOI.OOI.InteractionFlag.Text))
                 l.Add(Text);
-            if (flags.HasFlag(OOIView.InteractionFlag.Video))
+            if (flags.HasFlag(OOI.OOI.InteractionFlag.Video))
                 l.Add(Video);
 
             return l;
         }
 
-        private OOIView _target;
+        private OOI.OOI _target;
 
         void Start()
         {
@@ -71,22 +71,22 @@ namespace Augmentix.Scripts.AR.UI
 
             Highlight.onClick.AddListener(() =>
             {
-                CurrentSelected.Interact(OOIView.InteractionFlag.Highlight);
+                CurrentSelected.Interact(OOI.OOI.InteractionFlag.Highlight);
                 Deselect();
             });
             Animation.onClick.AddListener(() =>
             {
-                CurrentSelected.Interact(OOIView.InteractionFlag.Animation);
+                CurrentSelected.Interact(OOI.OOI.InteractionFlag.Animation);
                 Deselect();
             });
             Text.onClick.AddListener(() =>
             {
-                CurrentSelected.Interact(OOIView.InteractionFlag.Text);
+                CurrentSelected.Interact(OOI.OOI.InteractionFlag.Text);
                 Deselect();
             });
             Video.onClick.AddListener(() =>
             {
-                CurrentSelected.Interact(OOIView.InteractionFlag.Video);
+                CurrentSelected.Interact(OOI.OOI.InteractionFlag.Video);
                 Deselect();
             });
             Slider.onValueChanged.AddListener(value =>
@@ -126,9 +126,9 @@ namespace Augmentix.Scripts.AR.UI
                     var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #endif
                     RaycastHit hit = new RaycastHit();
-                    if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<OOIView>())
+                    if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<OOI.OOI>())
                     {
-                        Select(hit.transform.GetComponent<OOIView>());
+                        Select(hit.transform.GetComponent<OOI.OOI>());
                     }
                     else
                     {
@@ -141,7 +141,7 @@ namespace Augmentix.Scripts.AR.UI
         }
 
         private List<Button> _buttons = null;
-        private OOIView _prevtarget = null;
+        private OOI.OOI _prevtarget = null;
         private Vector3 _center = new Vector3();
 
         void SmoothMoveButtons()
@@ -169,7 +169,7 @@ namespace Augmentix.Scripts.AR.UI
                 foreach (var button in _buttons)
                     button.gameObject.SetActive(true);
 
-                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Scale))
+                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
                 {
                     var view = _target.GetComponent<PhotonTransformView>();
                     if (view == null)
@@ -185,7 +185,7 @@ namespace Augmentix.Scripts.AR.UI
                         Slider.maxValue = scale * 5f;
                     }
                 }
-                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Changeable))
+                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
                 {
                     Dropdown.gameObject.SetActive(true);
                 }
@@ -221,13 +221,13 @@ namespace Augmentix.Scripts.AR.UI
                     rectTransform.transform.position = worldCenter + new Vector3(x, y, 0);
                 }
 
-                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Scale))
+                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
                 {
                     Slider.GetComponent<RectTransform>().transform.position =
                         worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
                 }
                 
-                if (_target.Flags.HasFlag(OOIView.InteractionFlag.Changeable))
+                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
                 {
                     Dropdown.GetComponent<RectTransform>().transform.position =
                         worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
@@ -235,7 +235,7 @@ namespace Augmentix.Scripts.AR.UI
             }
         }
 
-        public void Select(OOIView Target)
+        public void Select(OOI.OOI Target)
         {
             Deselect();
             CurrentSelected = Target;

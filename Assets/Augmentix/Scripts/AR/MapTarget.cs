@@ -4,11 +4,11 @@ namespace Augmentix.Scripts.AR
 {
     public class MapTarget : MonoBehaviour
     {
-
         public static MapTarget Instance = null;
 
         public float PlayerScale;
         public float Scale;
+        public Vector3 MapOffset;
         public GameObject Scaler { private set; get; }
 
         void Awake()
@@ -33,7 +33,7 @@ namespace Augmentix.Scripts.AR
 
             Scaler = new GameObject("Scaler");
             Scaler.transform.parent = transform;
-            Scaler.transform.localPosition = Vector3.zero;
+            Scaler.transform.localPosition = MapOffset;
             Scaler.transform.localScale = new Vector3(Scale,Scale,Scale);
         }
 

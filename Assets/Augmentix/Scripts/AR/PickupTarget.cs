@@ -22,7 +22,7 @@ namespace Augmentix.Scripts.AR
         public UnityAction<TrackableBehaviour.Status> OnStatusChange;
         public GameObject Scaler { private set; get; }
 
-        private TreverisView _treveris;
+        private Treveris _treveris;
         private MapTarget _mapTarget;
         private bool _locked = false;
 
@@ -68,7 +68,7 @@ namespace Augmentix.Scripts.AR
                 t.localPosition = Vector3.zero;
 
                 PlayerSync = null;
-                TreverisView.RemoveTreveris();
+                Treveris.RemoveTreveris();
                 _treveris = null;
 
                 StartCoroutine(LockTimer());
@@ -117,6 +117,7 @@ namespace Augmentix.Scripts.AR
                 }
             }
 
+            
             if (_treveris != null && PlayerSync != null)
             {
 
@@ -135,12 +136,13 @@ namespace Augmentix.Scripts.AR
                     }
                 }
             }
+            
 
             IEnumerator AnimateTransition()
             {
                 _locked = true;
 
-                _treveris = TreverisView.GetTreverisByPlayer(PlayerSync.GetComponent<PhotonView>().Owner);
+                _treveris = Treveris.GetTreverisByPlayer(PlayerSync.GetComponent<PhotonView>().Owner);
                 PlayerSync.transform.parent = _treveris.transform;
 
                 var elapsedTime = 0f;

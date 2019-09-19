@@ -112,7 +112,7 @@ public class PsmNetwork
     {
         List<WorldGenerator.PXR_Model> buildings = new List<WorldGenerator.PXR_Model>();
 
-        string sql = "SELECT name, tags->'pxr:id' AS id, tags->'pxr:ref' AS ref, tags->'pxr:ref_dir' AS dir " +
+        string sql = "SELECT name, tags->'pxr:id' AS id, ST_AsText(ST_Transform(way,31466)) AS polygon " +
                         "FROM planet_osm_polygon " +
                         "WHERE tags ? 'pxr:id';";
 
@@ -123,15 +123,22 @@ public class PsmNetwork
             WorldGenerator.PXR_Model building = new WorldGenerator.PXR_Model();
 
             building.id = "_" + (string)reader["id"];
+       
+            List<Vector2> polygon = ParsePGSQL_PolygonString((string)reader["polygon"], WorldGenerator.worldReference);
 
-            Vector2 mapCoord = ParsePGSQL_CoordinateTupel((string)reader["ref"], WorldGenerator.worldReference);
-            building.position = new Vector3(mapCoord.x, 0, mapCoord.y);
-
-            mapCoord = ParsePGSQL_CoordinateTupel((string)reader["dir"], WorldGenerator.worldReference);
-            Vector3 buildingDirection = new Vector3(mapCoord.x, 0, mapCoord.y);
-            buildingDirection = (buildingDirection - building.position).normalized;
-            building.rotation = Quaternion.LookRotation(buildingDirection);
-
+            Vector2 referencePoint = new Vector2(Mathf.Infinity, Mathf.Infinity);
+            foreach (Vector2 point in polygon)
+            {
+                if(point.x < referencePoint.x)
+                {
+                    referencePoint = point;
+                }
+                else if(point.x == referencePoint.x && point.y < referencePoint.y)
+                {
+                    referencePoint = point;
+                }
+            }
+            building.position = new Vector3(referencePoint.x, 0, referencePoint.y);
             buildings.Add(building);
         }
         CloseReader(reader);
