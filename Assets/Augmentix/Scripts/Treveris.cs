@@ -3,6 +3,7 @@ using System.Linq;
 using Augmentix.Scripts.AR;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using Valve.VR.InteractionSystem;
 using Player = Photon.Realtime.Player;
 
@@ -14,6 +15,8 @@ namespace Augmentix.Scripts
         private static Dictionary<int,Treveris> _treveri = new Dictionary<int, Treveris>();
         private static Treveris _currentTreveris = null;
 
+        public Material GroundMaterial;
+        
         private PhotonView view;
         // Start is called before the first frame update
         void Start()
@@ -34,9 +37,15 @@ namespace Augmentix.Scripts
                 var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 plane.transform.parent = transform;
                 plane.transform.localRotation = Quaternion.identity;
-                plane.transform.localPosition = new Vector3(-318,0,-500);
+                plane.transform.localPosition = new Vector3(-318,0.01f,-500);
                 plane.transform.localScale = new Vector3(220,1,300);
                 plane.AddComponent<TeleportArea>();
+                GameObject.CreatePrimitive(PrimitiveType.Plane);
+                plane.transform.parent = transform;
+                plane.transform.localRotation = Quaternion.identity;
+                plane.transform.localPosition = new Vector3(-318,0,-500);
+                plane.transform.localScale = new Vector3(220,1,300);
+                plane.GetComponent<Renderer>().material = GroundMaterial;
             }
 
             /*

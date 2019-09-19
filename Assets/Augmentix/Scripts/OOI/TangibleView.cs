@@ -49,18 +49,19 @@ namespace Augmentix.Scripts.OOI
             if (stream.IsWriting)
             {
 
-                var localTransform = PickupTarget.Instance.transform;
+                var localTransform =
+                    Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Owner).transform;
                 var position = localTransform.InverseTransformPoint(transform.position);
-                
+
                 this.m_Direction = position - this.m_StoredPosition;
                 this.m_StoredPosition = position;
 
                 stream.SendNext(position);
                 stream.SendNext(this.m_Direction);
 
-                stream.SendNext(transform.rotation);
+                stream.SendNext(Quaternion.Inverse(localTransform.transform.rotation) * transform.rotation);
 
-                stream.SendNext(transform.localScale);
+                stream.SendNext(transform.localScale / PickupTarget.Instance.Scaler.transform.localScale.x);
             }
             else
             {
@@ -91,15 +92,17 @@ namespace Augmentix.Scripts.OOI
                 {
                     this.m_Angle = Quaternion.Angle(transform.localRotation, this.m_NetworkRotation);
                 }
+                
+                transform.localScale = (Vector3) stream.ReceiveNext();
+
+                if (m_firstTake)
+                {
+                    m_firstTake = false;
+                }
             }
 
 
-            transform.localScale = (Vector3) stream.ReceiveNext();
-
-            if (m_firstTake)
-            {
-                m_firstTake = false;
-            }
+            
         }
         
         

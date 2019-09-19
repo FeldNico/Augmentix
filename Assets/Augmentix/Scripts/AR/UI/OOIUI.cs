@@ -95,8 +95,10 @@ namespace Augmentix.Scripts.AR.UI
             });
             Dropdown.onValueChanged.AddListener(value =>
             {
-                var parent = CurrentSelected.transform.parent;
-                PhotonNetwork.Destroy(CurrentSelected.gameObject);
+                var current = CurrentSelected;
+                Deselect();
+                var parent = current.transform.parent;
+                PhotonNetwork.Destroy(current.gameObject);
                 var go =PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
                 var scale = go.transform.localScale;
                 var position = go.transform.localPosition;
@@ -171,19 +173,11 @@ namespace Augmentix.Scripts.AR.UI
 
                 if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
                 {
-                    var view = _target.GetComponent<PhotonTransformView>();
-                    if (view == null)
-                        Debug.LogError("OOI Scale activated but OOI does not have a Transform View for Scale-Synchronization");
-                    else if (!view.m_SynchronizeScale)
-                        Debug.LogError("OOI Scale activated but Scale-Synchronization in Transform View not activated");
-                    else
-                    {
-                        Slider.gameObject.SetActive(true);
-                        var scale = _target.transform.localScale.x;
-                        Slider.minValue = scale / 5f;
-                        Slider.value = scale;
-                        Slider.maxValue = scale * 5f;
-                    }
+                    Slider.gameObject.SetActive(true);
+                    var scale = _target.transform.localScale.x;
+                    Slider.minValue = scale / 5f;
+                    Slider.value = scale;
+                    Slider.maxValue = scale * 5f;
                 }
                 if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
                 {
