@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-#endif
+﻿using System.Collections;
 using Augmentix.Scripts.AR;
 using Augmentix.Scripts.AR.UI;
 using Augmentix.Scripts.VR;
@@ -8,6 +7,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.PUN;
 using UnityEngine;
+using UnityEngine.UI;
+using Vuforia;
 using Recorder = Photon.Voice.Unity.Recorder;
 
 namespace Augmentix.Scripts
@@ -18,7 +19,8 @@ namespace Augmentix.Scripts
         public const byte TOOGLESTREAM = 5;
         public const byte SENDIMAGE = 6;
 
-        public bool IsStreaming { private set; get; } = false;
+        public bool IsStreaming { private set; get; }
+        public bool IsVideoEnabled { private set; get; } = true;
         private bool _isPrimary;
         private WebCamTexture _webCam;
         private Texture2D _tex2d;
@@ -32,28 +34,72 @@ namespace Augmentix.Scripts
             TargetManager.Instance.OnConnection += () =>
             {
                 GetComponent<Recorder>().Init(GetComponent<PhotonVoiceNetwork>().VoiceClient);
-                GetComponent<Recorder>().InterestGroup = (byte)PhotonNetwork.LocalPlayer.ActorNumber;
+                GetComponent<Recorder>().InterestGroup = (byte) PhotonNetwork.LocalPlayer.ActorNumber;
                 _voiceStreamer = PhotonNetwork.Instantiate("VoiceStreamer", Vector3.one, Quaternion.identity);
             };
 
             if (_isPrimary)
             {
-#if !UNITY_EDITOR
-            _webCam = new WebCamTexture();
-            foreach (var device in WebCamTexture.devices)
-            {
-                if (device.isFrontFacing)
-                    _webCam = new WebCamTexture(device.name, 640, 480);
-            }
-            _webCam.Play();
-#endif
-            
-                InvokeRepeating("SendImage",0.3f,0.3f);
-
-                ARUI.Instance.StreamToggle.onValueChanged.AddListener(toggle =>
+#if !UNITY_EDITOR && UNITY_ANDROID
+                var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                var activity = unityClass.GetStatic<AndroidJavaObject>("currentActivity");
+                var context = activity.Call<AndroidJavaObject>("getApplicationContext");
+                var packageManager = context.Call<AndroidJavaObject>("getPackageManager");
+                if (packageManager.Call<bool>("hasSystemFeature", "android.hardware.camera") &&
+                    packageManager.Call<bool>("hasSystemFeature", "android.hardware.camera.front"))
                 {
-                    ToogleStream();
-                });
+                    _webCam = new WebCamTexture();
+                    foreach (var device in WebCamTexture.devices)
+                    {
+                        if (device.isFrontFacing)
+                            _webCam = new WebCamTexture(device.name, 640, 480);
+                    }
+
+                    _webCam.Play();
+
+                    IsVideoEnabled = true;
+
+                    if (!CameraDevice.Instance.IsActive())
+                    {
+                        _webCam.Stop();
+                        IsVideoEnabled = false;
+                        ARUI.Instance.StreamToggle.GetComponentInChildren<Text>().text = "Audio Stream";
+
+
+                        activity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                        {
+                            AndroidJavaClass Toast = new AndroidJavaClass("android.widget.Toast");
+                            AndroidJavaObject javaString = new AndroidJavaObject("java.lang.String",
+                                "This device does not support the usage of multiple cameras.\n Videostream is disabled.");
+                            AndroidJavaObject toast = Toast.CallStatic<AndroidJavaObject>("makeText", context,
+                                javaString, Toast.GetStatic<int>("LENGTH_LONG"));
+                            toast.Call("show");
+                        }));
+                    }
+                    else
+                    {
+                        IsVideoEnabled = true;
+                    }
+                }
+                else
+                {
+                    IsVideoEnabled = false;
+                    ARUI.Instance.StreamToggle.GetComponentInChildren<Text>().text = "Audio Stream";
+                    
+                    activity.Call("runOnUiThread",new AndroidJavaRunnable(() =>
+                    {
+                        AndroidJavaClass Toast = new AndroidJavaClass("android.widget.Toast");
+                        AndroidJavaObject javaString = new AndroidJavaObject("java.lang.String", "This device does not support the usage of multiple cameras.\n Videostream is disabled.");
+                        AndroidJavaObject toast = Toast.CallStatic<AndroidJavaObject>("makeText", context, javaString, Toast.GetStatic<int>("LENGTH_LONG"));
+                        toast.Call("show");
+                    }));
+                }
+#endif
+
+                if (IsVideoEnabled)
+                    InvokeRepeating("SendImage", 0.3f, 0.3f);
+
+                ARUI.Instance.StreamToggle.onValueChanged.AddListener(toggle => { ToogleStream(toggle); });
 
                 PickupTarget.Instance.GotPlayer += (player) =>
                 {
@@ -68,15 +114,25 @@ namespace Augmentix.Scripts
                 PickupTarget.Instance.LostPlayer += (player) =>
                 {
                     if (IsStreaming)
-                        ToogleStream();
+                        ARUI.Instance.StreamToggle.isOn = false;
                 };
-
             }
-
-        
+            else
+            {
+                FindObjectOfType<PlayerSynchronizer>().OnLost += player =>
+                {
+                    var recorder = GetComponent<Recorder>();
+                    recorder.StopRecording();
+                    GetComponent<PhotonVoiceNetwork>().Client.OpChangeGroups(new[] {(byte)player.ActorNumber}, null);
+                    recorder.InterestGroup = (byte) PhotonNetwork.LocalPlayer.ActorNumber;
+                    VRUI.Instance.VideoImage.gameObject.SetActive(false);
+                    IsStreaming = false;
+                };
+            }
         }
 
         private DeviceOrientation _prevOrientation = DeviceOrientation.Unknown;
+
         void Update()
         {
             if (_isPrimary)
@@ -105,12 +161,17 @@ namespace Augmentix.Scripts
                 return;
 
             if (_tex2d.width == 1)
-                _tex2d = new Texture2D(_webCam.width,_webCam.height);
+                _tex2d = new Texture2D(_webCam.width, _webCam.height);
 
             _tex2d.SetPixels(_webCam.GetPixels());
             _tex2d.Apply();
 
-            var options = new RaiseEventOptions { CachingOption = EventCaching.DoNotCache, Receivers = ReceiverGroup.Others, TargetActors = new []{ PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber } };
+            var options = new RaiseEventOptions
+            {
+                CachingOption = EventCaching.DoNotCache, Receivers = ReceiverGroup.Others,
+                TargetActors = new[]
+                    {PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber}
+            };
 
             PhotonNetwork.RaiseEvent(SENDIMAGE, _tex2d.EncodeToJPG(10), options, SendOptions.SendUnreliable);
         }
@@ -151,12 +212,13 @@ namespace Augmentix.Scripts
                             break;
                         }
                     }
+
                     break;
                 }
 
                 case SENDIMAGE:
                 {
-                    var pixels = (byte[])photonEvent.CustomData;
+                    var pixels = (byte[]) photonEvent.CustomData;
 
                     if (pixels != null && pixels.Length > 0)
                     {
@@ -164,15 +226,16 @@ namespace Augmentix.Scripts
                             VRUI.Instance.VideoImage.gameObject.SetActive(true);
 
                         _tex2d.LoadImage(pixels);
-                        VRUI.Instance.VideoImage.sprite = Sprite.Create(_tex2d, new Rect(0, 0, 640, 480), new Vector2(0.5f, 0.5f));
+                        VRUI.Instance.VideoImage.sprite =
+                            Sprite.Create(_tex2d, new Rect(0, 0, 640, 480), new Vector2(0.5f, 0.5f));
                     }
+
                     break;
                 }
 
                 case TOOGLESTREAM:
-                { 
+                {
                     var group = (byte) photonEvent.CustomData;
-                    Debug.Log(group);
                     var recorder = GetComponent<Recorder>();
                     if (!IsStreaming)
                     {
@@ -185,28 +248,30 @@ namespace Augmentix.Scripts
                     else
                     {
                         recorder.StopRecording();
-                        GetComponent<PhotonVoiceNetwork>().Client.OpChangeGroups(new[] { group }, null);
-                        recorder.InterestGroup = (byte)PhotonNetwork.LocalPlayer.ActorNumber;
+                        GetComponent<PhotonVoiceNetwork>().Client.OpChangeGroups(new[] {group}, null);
+                        recorder.InterestGroup = (byte) PhotonNetwork.LocalPlayer.ActorNumber;
                         VRUI.Instance.VideoImage.gameObject.SetActive(false);
                         IsStreaming = false;
                     }
+
                     break;
                 }
             }
         }
 
-        public void ToogleStream()
+        public void ToogleStream(bool toggle)
         {
             if (PickupTarget.Instance == null || PickupTarget.Instance.PlayerSync == null || !_isPrimary)
                 return;
 
-            GetComponent<PhotonVoiceNetwork>().Client.OpChangeGroups(null, new[] { (byte)PhotonNetwork.LocalPlayer.ActorNumber });
+            GetComponent<PhotonVoiceNetwork>().Client
+                .OpChangeGroups(null, new[] {(byte) PhotonNetwork.LocalPlayer.ActorNumber});
 
-            if (!IsStreaming)
+            if (!IsStreaming && toggle)
             {
                 GetComponent<Recorder>().StartRecording();
 
-                PhotonNetwork.RaiseEvent(TOOGLESTREAM, (byte)PhotonNetwork.LocalPlayer.ActorNumber,
+                PhotonNetwork.RaiseEvent(TOOGLESTREAM, (byte) PhotonNetwork.LocalPlayer.ActorNumber,
                     new RaiseEventOptions
                     {
                         TargetActors = new[]
@@ -214,11 +279,13 @@ namespace Augmentix.Scripts
                     }, SendOptions.SendReliable);
                 IsStreaming = true;
             }
-            else
+            
+            
+            if (IsStreaming && !toggle)
             {
                 GetComponent<Recorder>().StopRecording();
 
-                PhotonNetwork.RaiseEvent(TOOGLESTREAM, (byte)PhotonNetwork.LocalPlayer.ActorNumber,
+                PhotonNetwork.RaiseEvent(TOOGLESTREAM, (byte) PhotonNetwork.LocalPlayer.ActorNumber,
                     new RaiseEventOptions
                     {
                         TargetActors = new[]

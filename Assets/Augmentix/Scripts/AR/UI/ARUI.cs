@@ -7,6 +7,7 @@ namespace Augmentix.Scripts.AR.UI
     {
         public static ARUI Instance = null;
 
+        public Text DebugText;
         public Text ConnectionText;
         public Slider ScaleSlider;
         public Toggle StreamToggle;
