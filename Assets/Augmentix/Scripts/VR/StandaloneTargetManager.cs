@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Augmentix.Scripts.VR
 {
@@ -19,7 +20,6 @@ namespace Augmentix.Scripts.VR
                 player.transform.localRotation = Quaternion.identity;
                 PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
             };
-
         }
 
 

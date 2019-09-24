@@ -20,8 +20,19 @@ namespace Augmentix.Scripts
         {
             if (GetComponent<PhotonView>().IsMine)
             {
+                /*
                 GetComponentsInChildren<Transform>().First(transform1 => transform1.gameObject.name.Equals("Cube"))
                     .GetComponent<Renderer>().enabled = false;
+                */
+                foreach (var child in GetComponentsInChildren<Transform>())
+                {
+                    if (child.GetComponent<Renderer>())
+                        child.GetComponent<Renderer>().enabled = false;
+                    
+                    if (child.GetComponent<Collider>())
+                        child.GetComponent<Collider>().enabled = false;
+                }
+
 
                 OnPickup += (player) =>
                 {
