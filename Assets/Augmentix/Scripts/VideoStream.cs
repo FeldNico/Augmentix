@@ -36,19 +36,6 @@ namespace Augmentix.Scripts
                 GetComponent<Recorder>().Init(GetComponent<PhotonVoiceNetwork>().VoiceClient);
                 GetComponent<Recorder>().InterestGroup = (byte) PhotonNetwork.LocalPlayer.ActorNumber;
                 _voiceStreamer = PhotonNetwork.Instantiate("VoiceStreamer", Vector3.one, Quaternion.identity);
-
-                if (!_isPrimary)
-                {
-                    FindObjectOfType<PlayerSynchronizer>().OnLost += player =>
-                    {
-                        var recorder = GetComponent<Recorder>();
-                        recorder.StopRecording();
-                        GetComponent<PhotonVoiceNetwork>().Client.OpChangeGroups(new[] {(byte)player.ActorNumber}, null);
-                        recorder.InterestGroup = (byte) PhotonNetwork.LocalPlayer.ActorNumber;
-                        VRUI.Instance.VideoImage.gameObject.SetActive(false);
-                        IsStreaming = false;
-                    };
-                }
             };
 
             if (_isPrimary)
@@ -128,6 +115,21 @@ namespace Augmentix.Scripts
                 {
                     if (IsStreaming)
                         ARUI.Instance.StreamToggle.isOn = false;
+                };
+            }
+            else
+            {
+                PlayerSynchronizer.InstanceAction += (info) =>
+                {
+                    info.photonView.GetComponent<PlayerSynchronizer>().OnLost += player =>
+                    {
+                        var recorder = GetComponent<Recorder>();
+                        recorder.StopRecording();
+                        GetComponent<PhotonVoiceNetwork>().Client.OpChangeGroups(new[] {(byte)player.ActorNumber}, null);
+                        recorder.InterestGroup = (byte) PhotonNetwork.LocalPlayer.ActorNumber;
+                        VRUI.Instance.VideoImage.gameObject.SetActive(false);
+                        IsStreaming = false;
+                    };
                 };
             }
         }

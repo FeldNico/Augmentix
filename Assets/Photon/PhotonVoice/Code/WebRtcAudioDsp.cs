@@ -13,6 +13,9 @@ namespace Photon.Voice.Unity
 
         [SerializeField]
         private bool aecMobile;
+        
+        [SerializeField]
+        private bool aecMobileComfortNoise;
 
         [SerializeField]
         private bool agc = true;
@@ -38,9 +41,11 @@ namespace Photon.Voice.Unity
         private AudioOutCapture ac;
         private bool started;
 
-        private readonly Dictionary<AudioSpeakerMode, int> channelsMap = new Dictionary<AudioSpeakerMode, int>
+        private static readonly Dictionary<AudioSpeakerMode, int> channelsMap = new Dictionary<AudioSpeakerMode, int>
         {
-            //{AudioSpeakerMode.Raw, 0},
+            #if !UNITY_2019_2_OR_NEWER
+            {AudioSpeakerMode.Raw, 0},
+            #endif
             {AudioSpeakerMode.Mono, 1},
             {AudioSpeakerMode.Stereo, 2},
             {AudioSpeakerMode.Quad, 4},
@@ -102,6 +107,22 @@ namespace Photon.Voice.Unity
                     this.proc.AECMobile = this.aecMobile;
                 }
                 this.SetOutputListener();
+            }
+        }
+
+        public bool AECMobileComfortNoise
+        {
+            get { return this.aecMobileComfortNoise; }
+            set
+            {
+                if (value == this.aecMobileComfortNoise)
+                {
+                    return;
+                }
+                if (this.proc != null)
+                {
+                    this.proc.AECMComfortNoise = this.aecMobileComfortNoise;
+                }
             }
         }
 
@@ -321,7 +342,7 @@ namespace Photon.Voice.Unity
             }
 
             // can't access the AudioSettings properties in InitAEC if it's called from not main thread
-            this.reverseChannels = this.channelsMap[AudioSettings.speakerMode];
+            this.reverseChannels = channelsMap[AudioSettings.speakerMode];
             this.outputSampleRate = AudioSettings.outputSampleRate;
             this.Init();
             LocalVoiceAudioShort v = this.localVoice as LocalVoiceAudioShort;
@@ -367,6 +388,7 @@ namespace Photon.Voice.Unity
             this.proc.AEC = this.AEC;
             this.proc.AECMobile = this.AECMobile;
             this.proc.AECMRoutingMode = 4;
+            this.proc.AECMComfortNoise = this.AECMobileComfortNoise;
             this.proc.AECStreamDelayMs = this.ReverseStreamDelayMs;
             this.proc.HighPass = this.HighPass;
             this.proc.NoiseSuppression = this.NoiseSuppression;

@@ -49,6 +49,9 @@ namespace Augmentix.Scripts.OOI
             if (stream.IsWriting)
             {
 
+                if (PickupTarget.Instance.PlayerSync == null)
+                    return;
+                
                 var localTransform =
                     Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Owner).transform;
                 var position = localTransform.InverseTransformPoint(transform.position);

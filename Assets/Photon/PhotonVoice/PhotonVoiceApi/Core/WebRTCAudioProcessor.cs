@@ -287,7 +287,7 @@ namespace Photon.Voice
             public const int AGC_LIMITER = 57;
             public const int VAD = 61;
             public const int VAD_FRAME_SIZE_MS = 62;
-            public const int VAD_LIKEHOOD = 63;
+            public const int VAD_LIKELIHOOD = 63;
         }
     }
 }

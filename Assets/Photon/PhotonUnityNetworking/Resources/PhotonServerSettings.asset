@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: 476c50b7-5234-467b-a264-057c791b0026
     AppIdChat: 54a4d4ff-01f9-4e05-a97e-abbb74a51b52
     AppIdVoice: 6350743f-e6fb-4907-b040-8061f8401cd4
-    AppVersion: 1
+    AppVersion: 
     UseNameServer: 1
     FixedRegion: 
     Server: 
@@ -24,11 +24,15 @@ MonoBehaviour:
     Protocol: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  StartInOfflineMode: 0
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
+  StartInOfflineMode: 0
   RpcList:
-  - OnPickup
+  - ClickRpc
+  - DestroyRpc
+  - Interact
+  - OnLostRPC
+  - OnPickupRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1

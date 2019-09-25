@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Augmentix.Scripts.OOI;
 using Photon.Pun;
 using TMPro;
@@ -99,14 +100,17 @@ namespace Augmentix.Scripts.AR.UI
                 Deselect();
                 var parent = current.transform.parent;
                 PhotonNetwork.Destroy(current.gameObject);
-                var go =PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
+                var go =PhotonNetwork.Instantiate("Tangibles/"+Dropdown.options[value].text, Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
                 var scale = go.transform.localScale;
-                var position = go.transform.localPosition;
                 go.transform.parent = parent;
                 go.transform.localScale = scale;
-                go.transform.localPosition = position;
+                go.transform.localPosition = Vector3.zero;
                 go.transform.localRotation = Quaternion.identity;
             });
+            var options = ((AndroidTargetManager) AndroidTargetManager.Instance).TangiblePrefabs.Select(o => o.name)
+                .ToList();
+            Dropdown.AddOptions(options);
+            
             
         }
 
@@ -128,9 +132,15 @@ namespace Augmentix.Scripts.AR.UI
                     var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #endif
                     RaycastHit hit = new RaycastHit();
-                    if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<OOI.OOI>())
+                    if (Physics.Raycast(ray, out hit))
                     {
-                        Select(hit.transform.GetComponent<OOI.OOI>());
+                        var transform = hit.transform;
+                        var ooi = transform.GetComponent<OOI.OOI>()
+                            ? transform.GetComponent<OOI.OOI>()
+                            : transform.GetComponentInParent<OOI.OOI>();
+                        
+                        if (ooi)
+                            Select(ooi);
                     }
                     else
                     {
@@ -241,6 +251,7 @@ namespace Augmentix.Scripts.AR.UI
             if (CurrentSelected != null)
             {
                 OnDeselect.Invoke();
+                //Slider.value = 1f;
                 CurrentSelected = null;
             }
         }

@@ -53,7 +53,6 @@ namespace Photon.Voice.PUN
         private static object instanceLock = new object();
         private static PhotonVoiceNetwork instance;
         private static bool instantiated;
-        private static bool applicationIsQuitting;
 
         [SerializeField]
         private bool usePunAppSettings = true;
@@ -71,7 +70,7 @@ namespace Photon.Voice.PUN
             {
                 lock (instanceLock)
                 {
-                    if (applicationIsQuitting)
+                    if (AppQuits)
                     {
                         if (instance.Logger.IsWarningEnabled)
                         {
@@ -213,20 +212,14 @@ namespace Photon.Voice.PUN
             clientCalledDisconnect = false;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             PhotonNetwork.NetworkingClient.StateChanged -= OnPunStateChanged;
-        }
-
-        protected override void OnApplicationQuit()
-        {
-            applicationIsQuitting = true;
-            base.OnApplicationQuit();
         }
 
         protected override void OnDestroy()
         {
-            base.OnDestroy();
             lock (instanceLock)
             {
                 instantiated = false;
@@ -368,7 +361,7 @@ namespace Photon.Voice.PUN
         // In case Voice client is connected to the wrong room switch to the correct one
         private void FollowPun()
         {
-            if (applicationIsQuitting)
+            if (AppQuits)
             {
                 return;
             }

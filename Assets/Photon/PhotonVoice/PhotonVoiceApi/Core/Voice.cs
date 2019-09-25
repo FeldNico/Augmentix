@@ -115,7 +115,7 @@ namespace Photon.Voice
             }
             this.encoder.Output = sendFrame;
         }
-        internal string Name { get { return "Local v#" + id + " ch#" + voiceClient.channelStr(channelId); } }
+        internal string Name { get { return "Local " + info.Codec + " v#" + id + " ch#" + voiceClient.channelStr(channelId); } }
         internal string LogPrefix { get { return "[PV] " + Name; } }
         
         private int noTransmitCnt;
@@ -249,7 +249,7 @@ namespace Photon.Voice
             t.Start();
 #endif
         }
-        protected string Name { get { return "Remote v#" + voiceId + " ch#" + voiceClient.channelStr(channelId) + " p#" + playerId; } }
+        protected string Name { get { return "Remote " + Info.Codec +  " v#" + voiceId + " ch#" + voiceClient.channelStr(channelId) + " p#" + playerId; } }
         protected string LogPrefix { get { return "[PV] " + Name; } }
         internal byte lastEvNumber = 0;
         private VoiceClient voiceClient;
@@ -263,14 +263,22 @@ namespace Photon.Voice
             if (evNumber != this.lastEvNumber) // skip check for 1st event 
             {
                 int missing = byteDiff(evNumber, this.lastEvNumber);
-                if (missing != 0)
+                if (missing == 0)
                 {
-                    this.voiceClient.transport.LogDebug(LogPrefix + " evNumer: " + evNumber + " playerVoice.lastEvNumber: " + this.lastEvNumber + " missing: " + missing + " r/b " + receivedBytes.Length);
+                    this.lastEvNumber = evNumber;
                 }
-                this.lastEvNumber = evNumber;
-                // restoring missing frames
-                receiveNullFrames(missing);
-                this.voiceClient.FramesLost += missing;
+                else if (missing < 127)
+                {
+                    this.voiceClient.transport.LogWarning(LogPrefix + " evNumer: " + evNumber + " playerVoice.lastEvNumber: " + this.lastEvNumber + " missing: " + missing + " r/b " + receivedBytes.Length);
+                    this.voiceClient.FramesLost += missing;
+                    this.lastEvNumber = evNumber;
+                    // restoring missing frames
+                    receiveNullFrames(missing);
+                } else {
+                    // late (out of order) frames, just ignore them
+                    // these frames already counted in FramesLost
+                    this.voiceClient.transport.LogWarning(LogPrefix + " evNumer: " + evNumber + " playerVoice.lastEvNumber: " + this.lastEvNumber + " late: " + (255 - missing) + " r/b " + receivedBytes.Length);
+                }
             }
             this.receiveFrame(receivedBytes);
         }
@@ -331,25 +339,30 @@ namespace Photon.Voice
                     }
 #if PHOTON_VOICE_VIDEO_ENABLE
                 case RemoteVoiceOptions.OutputType.Image:
-                    if (Info.Codec == Codec.VideoVP8)
+                    voiceClient.transport.LogInfo(LogPrefix + ": Creating default decoder for output type = " + options.outType);
+                    IDecoderQueuedOutputImageNative vd;
+                    switch (Info.Codec)
                     {
-                        voiceClient.transport.LogInfo(LogPrefix + ": Creating default decoder for output type = " + options.outType);
-                        var vd = new VPxCodec.Decoder(options.output as Action<ImageOutputBuf>);
-                        if (options.OutputImageFormat != ImageFormat.Undefined)
-                        {
-                            vd.OutputImageFormat = options.OutputImageFormat;
-                        }
-                        if (options.OutputImageFlip != Flip.Undefined)
-                        {
-                            vd.OutputImageFlip = options.OutputImageFlip;
-                        }
-                        return vd;
+                        case Codec.VideoVP8:
+                        case Codec.VideoVP9:
+                            vd = new VPxCodec.Decoder(options.output as Action<ImageOutputBuf>, voiceClient.transport);
+                            break;
+                        case Codec.VideoH264:
+                            vd = new FFmpegCodec.Decoder(options.output as Action<ImageOutputBuf>, voiceClient.transport);
+                            break;
+                        default:
+                            voiceClient.transport.LogError(LogPrefix + ": Action<ImageOutputBuf> output set for not video decoder (output type = " + options.outType + ")");
+                            return null;
                     }
-                    else
+                    if (options.OutputImageFormat != ImageFormat.Undefined)
                     {
-                        voiceClient.transport.LogError(LogPrefix + ": Action<ImageOutputBuf> output set for not video decoder (output type = " + options.outType + ")");
-                        return null;
+                        vd.OutputImageFormat = options.OutputImageFormat;
                     }
+                    if (options.OutputImageFlip != Flip.Undefined)
+                    {
+                        vd.OutputImageFlip = options.OutputImageFlip;
+                    }
+                    return vd;
 #endif
                 case RemoteVoiceOptions.OutputType.None:
                 default:
@@ -359,6 +372,9 @@ namespace Photon.Voice
         }
         void decodeThread()
         {
+//#if UNITY_5_3_OR_NEWER
+//            UnityEngine.Profiling.Profiler.BeginThreadProfiling("PhotonVoice", LogPrefix);
+//#endif
             IDecoder decoder;
             if (this.options.Decoder == null)
             {
@@ -391,6 +407,9 @@ namespace Photon.Voice
                 while (!disposed)
                 {
                     frameQueueReady.WaitOne(); // Wait until data is pushed to the queue or Dispose signals.
+//#if UNITY_5_3_OR_NEWER
+//                    UnityEngine.Profiling.Profiler.BeginSample("Decoder");
+//#endif
                     while (true) // Dequeue and process while the queue is not empty
                     {
                         if (disposed) break; // early exit to save few resources
@@ -413,6 +432,9 @@ namespace Photon.Voice
                             break;
                         }
                     }
+//#if UNITY_5_3_OR_NEWER
+//                    UnityEngine.Profiling.Profiler.EndSample();
+//#endif
                 }
             }
             catch (Exception e)
@@ -438,6 +460,9 @@ namespace Photon.Voice
                 }
                 decoder.Dispose();
                 voiceClient.transport.LogInfo(LogPrefix + ": Exiting decode thread");
+//#if UNITY_5_3_OR_NEWER
+//                UnityEngine.Profiling.Profiler.EndThreadProfiling();
+//#endif
             }
         }
         internal void removeAndDispose()

@@ -5,6 +5,8 @@ namespace Augmentix.Scripts.AR
 {
     public class AndroidTargetManager : TargetManager
     {
+        public GameObject[] TangiblePrefabs;
+        
         new void Start()
         {
             base.Start();

@@ -94,9 +94,11 @@ namespace Photon.Voice
     public enum Codec
     {
         /// <summary>OPUS audio</summary>
-        AudioOpus = 11
+        AudioOpus = 11,
 #if PHOTON_VOICE_VIDEO_ENABLE
-        , VideoVP8 = 21
+        VideoVP8 = 21,
+        VideoVP9 = 22,
+        VideoH264 = 31,
 #endif
     }
     public enum ImageFormat

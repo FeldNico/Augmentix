@@ -38,6 +38,10 @@ namespace Photon.Voice.Unity.Editor
             {
                 processor.ReverseStreamDelayMs = EditorGUILayout.IntField(new GUIContent("ReverseStreamDelayMs", "Reverse stream delay (hint for AEC) in Millieconds"), processor.ReverseStreamDelayMs);
             }
+            if (processor.AECMobile)
+            {
+                processor.AECMobileComfortNoise = EditorGUILayout.Toggle(new GUIContent("AEC Mobile Comfort Noise", "Acoustic Echo Cancellation Mobile Comfort Noise"), processor.AECMobileComfortNoise);
+            }
             processor.AGC = EditorGUILayout.Toggle(new GUIContent("AGC", "Automatic Gain Control"), processor.AGC);
             processor.VAD = EditorGUILayout.Toggle(new GUIContent("VAD", "Voice Activity Detection"), processor.VAD);
             processor.HighPass = EditorGUILayout.Toggle(new GUIContent("HighPass", "High Pass Filter"), processor.HighPass);

@@ -98,10 +98,6 @@ namespace Photon.Voice.Unity.Editor
                 if (recorder.IsCurrentlyTransmitting)
                 {
                     amplitude = recorder.LevelMeter.CurrentPeakAmp;
-                    if (amplitude > 1f)
-                    {
-                        amplitude /= short.MaxValue;
-                    }
                 }
                 EditorGUILayout.Slider("Level", amplitude, 0, 1);
             }

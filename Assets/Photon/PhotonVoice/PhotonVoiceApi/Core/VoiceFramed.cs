@@ -227,11 +227,17 @@ namespace Photon.Voice
         bool exitThread = false;
         private void PushDataAsyncThread()
         {
+//#if UNITY_5_3_OR_NEWER
+//            UnityEngine.Profiling.Profiler.BeginThreadProfiling("PhotonVoice", LogPrefix);
+//#endif
             try
             {
                 while (!exitThread)
                 {
                     pushDataQueueReady.WaitOne(); // Wait until data is pushed to the queue or Dispose signals.
+//#if UNITY_5_3_OR_NEWER
+//                    UnityEngine.Profiling.Profiler.BeginSample("Encoder");
+//#endif
                     while (true) // Dequeue and process while the queue is not empty
                     {
                         if (exitThread) break; // early exit to save few resources
@@ -253,6 +259,9 @@ namespace Photon.Voice
                             break;
                         }
                     }
+//#if UNITY_5_3_OR_NEWER
+//                    UnityEngine.Profiling.Profiler.EndSample();
+//#endif
                 }
             }
             catch (Exception e)
@@ -273,6 +282,9 @@ namespace Photon.Voice
                 pushDataQueueReady.Close();
 #endif
                 voiceClient.transport.LogInfo(LogPrefix + ": Exiting data encode thread");
+//#if UNITY_5_3_OR_NEWER
+//                UnityEngine.Profiling.Profiler.EndThreadProfiling();
+//#endif
             }
         }
         /// <summary>Synchronously push data into this stream.</summary>

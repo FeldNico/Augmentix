@@ -55,6 +55,25 @@ namespace Photon.Voice
                 UserData = userdata,
             };
         }
+        /// <summary>
+        /// Helper for VP9 stream info creation.
+        /// </summary>
+        /// <param name="bitrate">Stream bitrate.</param>
+        /// <param name="width">Streamed video width. If 0, width and height of video source used (no rescaling).</param>
+        /// <param name="heigth">Streamed video height. If -1, aspect ratio preserved during rescaling.</param>
+        /// <param name="userdata">Optional user data. Should be serializable by Photon.</param>        
+        /// <returns>VoiceInfo instance.</returns>
+        static public VoiceInfo CreateVideo(Codec codec, int bitrate, int width = 0, int heigth = -1, object userdata = null)
+        {
+            return new VoiceInfo()
+            {
+                Codec = codec,
+                Bitrate = bitrate,
+                Width = width,
+                Height = heigth,
+                UserData = userdata,
+            };
+        }
 #endif
         public override string ToString()
         {

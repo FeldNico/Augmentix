@@ -240,18 +240,20 @@ namespace Photon.Voice
             protected int prevValuesHead;
             protected float accumAvgPeakAmpSum;
             protected int accumAvgPeakAmpCount;
-            internal LevelMeter(int samplingRate, int numChannels)
+			protected float currentPeakAmp;
+			protected float norm;
+			internal LevelMeter(int samplingRate, int numChannels)
             {
                 this.bufferSize = samplingRate * numChannels / 2; // 1/2 sec
                 this.prevValues = new float[this.bufferSize];
             }
-            public float CurrentAvgAmp { get { return ampSum / this.bufferSize; } }
+            public float CurrentAvgAmp { get { return ampSum / this.bufferSize * norm; } }
             public float CurrentPeakAmp
             {
-                get;
-                protected set;
+				get { return currentPeakAmp * norm; }
+				protected set { currentPeakAmp = value / norm; }
             }
-            public float AccumAvgPeakAmp { get { return this.accumAvgPeakAmpCount == 0 ? 0 : accumAvgPeakAmpSum / this.accumAvgPeakAmpCount; } }
+            public float AccumAvgPeakAmp { get { return this.accumAvgPeakAmpCount == 0 ? 0 : accumAvgPeakAmpSum / this.accumAvgPeakAmpCount * norm; } }
             public void ResetAccumAvgPeakAmp() { this.accumAvgPeakAmpSum = 0; this.accumAvgPeakAmpCount = 0; ampPeak = 0; }
             public abstract T[] Process(T[] buf);
             public void Dispose()
@@ -266,7 +268,10 @@ namespace Photon.Voice
             /// <summary>Create new LevelMeterFloat instance.</summary>
             /// <param name="samplingRate">Sampling rate of the audio signal (in Hz).</param>
             /// <param name="numChannels">Number of channels in the audio signal.</param>
-            public LevelMeterFloat(int samplingRate, int numChannels) : base(samplingRate, numChannels) { }
+            public LevelMeterFloat(int samplingRate, int numChannels) : base(samplingRate, numChannels)
+			{
+				norm = 1.0f;
+			}
             public override float[] Process(float[] buf)
             {
                 foreach (var v in buf)
@@ -284,9 +289,9 @@ namespace Photon.Voice
                     }
                     if (this.prevValuesHead == 0)
                     {
-                        CurrentPeakAmp = ampPeak;
+                        currentPeakAmp = ampPeak;
                         ampPeak = 0;
-                        accumAvgPeakAmpSum += CurrentPeakAmp;
+                        accumAvgPeakAmpSum += currentPeakAmp;
                         accumAvgPeakAmpCount++;
                     }
                     this.prevValuesHead = (this.prevValuesHead + 1) % this.bufferSize;
@@ -302,7 +307,10 @@ namespace Photon.Voice
             /// <summary>Create new LevelMeterShort instance.</summary>
             /// <param name="samplingRate">Sampling rate of the audio signal (in Hz).</param>
             /// <param name="numChannels">Number of channels in the audio signal.</param>
-            public LevelMeterShort(int samplingRate, int numChannels) : base(samplingRate, numChannels) { }
+            public LevelMeterShort(int samplingRate, int numChannels) : base(samplingRate, numChannels)
+			{
+				norm = 1.0f / short.MaxValue;
+			}
             public override short[] Process(short[] buf)
             {
                 foreach (var v in buf)
@@ -320,9 +328,9 @@ namespace Photon.Voice
                     }
                     if (this.prevValuesHead == 0)
                     {
-                        CurrentPeakAmp = ampPeak;
+                        currentPeakAmp = ampPeak;
                         ampPeak = 0;
-                        accumAvgPeakAmpSum += CurrentPeakAmp;
+                        accumAvgPeakAmpSum += currentPeakAmp;
                         accumAvgPeakAmpCount++;
                     }
                     this.prevValuesHead = (this.prevValuesHead + 1) % this.bufferSize;
@@ -409,15 +417,17 @@ namespace Photon.Voice
             /// <summary>
             /// Simple voice activity detector triggered by signal level.
             /// </summary>
-            abstract public class VoiceDetector<T> : IProcessor<T>, IVoiceDetector
+        abstract public class VoiceDetector<T> : IProcessor<T>, IVoiceDetector
         {
             /// <summary>If true, voice detection enabled.</summary>
             public bool On { get; set; }
             /// <summary>Voice detected as soon as signal level exceeds threshold.</summary>
-            public float Threshold { get; set; }
-            bool detected;
-            /// <summary>If true, voice detected.</summary>
-            public bool Detected
+            public float Threshold { get { return threshold * norm; } set { threshold = value / norm; } }
+			protected float norm;
+			protected float threshold;
+			bool detected;
+			/// <summary>If true, voice detected.</summary>
+			public bool Detected
             {
                 get { return detected; }
                 protected set
@@ -466,7 +476,7 @@ namespace Photon.Voice
             /// <param name="numChannels">Number of channels in the audio signal.</param>
             public VoiceDetectorFloat(int samplingRate, int numChannels) : base(samplingRate, numChannels)
             {
-                this.Threshold = 0.01f;
+                norm = 1f;
             }
             public override float[] Process(float[] buffer)
             {
@@ -474,7 +484,7 @@ namespace Photon.Voice
                 {
                     foreach (var s in buffer)
                     {
-                        if (s > this.Threshold)
+                        if (s > this.threshold)
                         {
                             this.Detected = true;
                             this.autoSilenceCounter = 0;
@@ -504,7 +514,7 @@ namespace Photon.Voice
             /// <param name="numChannels">Number of channels in the audio signal.</param>
             public VoiceDetectorShort(int samplingRate, int numChannels) : base(samplingRate, numChannels)
             {
-                this.Threshold = 0.01f * short.MaxValue;
+                norm = 1.0f / short.MaxValue;
             }
             public override short[] Process(short[] buffer)
             {
@@ -512,7 +522,7 @@ namespace Photon.Voice
                 {
                     foreach (var s in buffer)
                     {
-                        if (s > this.Threshold)
+                        if (s > this.threshold)
                         {
                             this.Detected = true;
                             this.autoSilenceCounter = 0;

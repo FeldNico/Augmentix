@@ -235,6 +235,14 @@ namespace Photon.Voice.Unity
                 }
                 return false;
             }
+            if (string.IsNullOrEmpty(Settings.AppIdVoice) && string.IsNullOrEmpty(Settings.Server))
+            {
+                if (this.Logger.IsErrorEnabled)
+                {
+                    this.Logger.LogError("Provide an AppId or a Server address in Settings to be able to connect");
+                }
+                return false;
+            }
 
             if (Settings.Protocol == ConnectionProtocol.Tcp)
             {
@@ -259,7 +267,7 @@ namespace Photon.Voice.Unity
                 }
                 this.Client.LoadBalancingPeer.TransportProtocol = ConnectionProtocol.Udp;
             }
-            
+
             this.Client.EnableLobbyStatistics = Settings.EnableLobbyStatistics;
 
             this.Client.LoadBalancingPeer.DebugOut = Settings.NetworkLogging;
@@ -364,7 +372,16 @@ namespace Photon.Voice.Unity
             }
         }
 
-        protected override void OnDestroy()
+        protected override void OnDisable()
+        {
+            if (AppQuits)
+            {
+                this.CleanUp();
+                SupportClass.StopAllBackgroundCalls();
+            }
+        }
+
+        protected virtual void OnDestroy()
         {
             this.CleanUp();
         }
@@ -514,13 +531,7 @@ namespace Photon.Voice.Unity
             cachedRegionHandler = regionHandler;
             this.Client.ConnectToRegionMaster(regionHandler.BestRegion.Code);
         }
-
-        protected override void OnApplicationQuit()
-        {
-            this.CleanUp();
-            SupportClass.StopAllBackgroundCalls();
-        }
-
+        
         protected void CalcStatistics()
         {
             float now = Time.time;

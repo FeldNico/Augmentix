@@ -12,7 +12,6 @@ using UnityEngine.Video;
 namespace Augmentix.Scripts.OOI
 {
     [RequireComponent(typeof(PhotonView))]
-    [RequireComponent(typeof(MeshCollider))]
     public class OOI : MonoBehaviourPunCallbacks
     {
         [Flags]
@@ -30,7 +29,7 @@ namespace Augmentix.Scripts.OOI
 #if UNITY_EDITOR
         [OOIViewEditor.EnumFlagsAttribute]
 #endif
-        public InteractionFlag Flags;
+        public InteractionFlag Flags = InteractionFlag.Highlight;
 
         [TextArea] public string Text;
 
@@ -65,7 +64,7 @@ namespace Augmentix.Scripts.OOI
         public void Interact(InteractionFlag flag)
         {
             var view = GetComponent<PhotonView>();
-            if (view.IsMine)
+            if (view.IsMine && PickupTarget.Instance.PlayerSync)
                 view.RPC("Interact", PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Owner, flag);
 
             switch (flag)

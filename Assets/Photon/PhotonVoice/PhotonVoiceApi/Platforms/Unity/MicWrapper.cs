@@ -5,16 +5,18 @@ using System.Linq;
 namespace Photon.Voice.Unity
 {
     // Wraps UnityEngine.Microphone with Voice.IAudioStream interface.
-    public class MicWrapper : Photon.Voice.IAudioReader<float>
+    public class MicWrapper : IAudioReader<float>
     {
         private AudioClip mic;
         private string device;
+		ILogger logger;
 
-        public MicWrapper(string device, int suggestedFrequency, Voice.ILogger logger)
+		public MicWrapper(string device, int suggestedFrequency, ILogger logger)
         {
             try
             {
                 this.device = device;
+				this.logger = logger;
                 if (Microphone.devices.Length < 1)
                 {
                     Error = "No microphones found (Microphone.devices is empty)";
@@ -81,9 +83,15 @@ namespace Photon.Voice.Unity
 
             var micAbsPos = micLoopCnt * this.mic.samples + micPos;
 
-            var bufferSamplesCount = buffer.Length / mic.channels;
+			if (mic.channels == 0)
+			{
+				Error = "Number of channels is 0 in Read()";
+				logger.LogError("[PV] MicWrapper: " + Error);
+				return false;
+			}
+			var bufferSamplesCount = buffer.Length / mic.channels;
 
-            var nextReadPos = this.readAbsPos + bufferSamplesCount;
+			var nextReadPos = this.readAbsPos + bufferSamplesCount;
             if (nextReadPos < micAbsPos)
             {
                 this.mic.GetData(buffer, this.readAbsPos % this.mic.samples);

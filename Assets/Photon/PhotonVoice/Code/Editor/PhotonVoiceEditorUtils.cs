@@ -36,12 +36,10 @@ namespace Photon.Voice.Unity.Editor
                 Debug.LogWarning("PUN already removed!");
                 return;
             }
+            DeleteDirectory("Assets/Photon/PhotonVoice/Demos/DemoProximityVoiceChat");
             DeleteDirectory("Assets/Photon/PhotonVoice/Demos/DemoVoicePun");
-            DeleteFile("Assets/Photon/PhotonVoice/Demos/DemoVoicePun.meta");
             DeleteDirectory("Assets/Photon/PhotonVoice/Code/PUN");
-            DeleteFile("Assets/Photon/PhotonVoice/Code/PUN.meta");
             DeleteDirectory("Assets/Photon/PhotonUnityNetworking");
-            DeleteFile("Assets/Photon/PhotonUnityNetworking.meta");
             CleanUpPunDefineSymbols();
         }
         #endif
@@ -55,7 +53,6 @@ namespace Photon.Voice.Unity.Editor
                 return;
             }
             DeleteDirectory("Assets/Photon/PhotonChat");
-            DeleteFile("Assets/Photon/PhotonChat.meta");
         }
 
         [MenuItem("Window/Photon Voice/Leave a review", false, 3)]
@@ -72,6 +69,7 @@ namespace Photon.Voice.Unity.Editor
                 {
                     Debug.LogWarningFormat("Directory \"{0}\" not deleted.", path);
                 }
+                DeleteFile(string.Concat(path, ".meta"));
             }
             else
             {

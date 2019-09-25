@@ -271,14 +271,7 @@ namespace Photon.Voice.Unity
                 this.voiceDetectionThreshold = value;
                 if (this.VoiceDetector != null)
                 {
-                    if (this.VoiceDetector is AudioUtil.VoiceDetectorShort)
-                    {
-                        this.VoiceDetector.Threshold = this.voiceDetectionThreshold * short.MaxValue;
-                    }
-                    else
-                    {
-                        this.VoiceDetector.Threshold = this.voiceDetectionThreshold;
-                    }
+                    this.VoiceDetector.Threshold = this.voiceDetectionThreshold;
                 }
             }
         }
@@ -1121,39 +1114,17 @@ namespace Photon.Voice.Unity
         {
             if (this.IsRecording && this.VoiceDetector != null && !this.voiceDetectionThreshold.Equals(this.VoiceDetector.Threshold))
             {
-                if (this.VoiceDetector.Threshold > 1f)
-                {
-                    if (this.VoiceDetector is AudioUtil.VoiceDetectorShort)
-                    {
-                        float newValue = this.VoiceDetector.Threshold / short.MaxValue;
-                        if (this.Logger.IsDebugEnabled)
-                        {
-                            this.Logger.LogDebug("VoiceDetectionThreshold automatically changed from {0} to {1}", this.voiceDetectionThreshold, newValue);
-                        }
-                        this.voiceDetectionThreshold = newValue;
-                    }
-                    else
-                    {
-                        if (this.Logger.IsWarningEnabled)
-                        {
-                            this.Logger.LogWarning("VoiceDetector.Threshold has unexpected value {0}", this.VoiceDetector.Threshold);
-                        }
-                    }
-                }
-                else if (this.VoiceDetector.Threshold >= 0f)
+                if (this.VoiceDetector.Threshold <= 1f && this.VoiceDetector.Threshold >= 0f)
                 {
                     if (this.Logger.IsDebugEnabled)
                     {
                         this.Logger.LogDebug("VoiceDetectionThreshold automatically changed from {0} to {1}", this.voiceDetectionThreshold, this.VoiceDetector.Threshold);
                     }
                     this.voiceDetectionThreshold = this.VoiceDetector.Threshold;
-                } 
-                else
+                }
+                else if (this.Logger.IsWarningEnabled)
                 {
-                    if (this.Logger.IsWarningEnabled)
-                    {
-                        this.Logger.LogWarning("VoiceDetector.Threshold has unexpected value {0}", this.VoiceDetector.Threshold);
-                    }
+                    this.Logger.LogWarning("VoiceDetector.Threshold has unexpected value {0}", this.VoiceDetector.Threshold);
                 }
             }
         }

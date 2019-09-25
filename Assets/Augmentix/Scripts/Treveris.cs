@@ -3,7 +3,6 @@ using System.Linq;
 using Augmentix.Scripts.AR;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
 using Valve.VR.InteractionSystem;
 using Player = Photon.Realtime.Player;
 
