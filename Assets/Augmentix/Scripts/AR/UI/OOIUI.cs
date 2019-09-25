@@ -68,7 +68,10 @@ namespace Augmentix.Scripts.AR.UI
                     Deselect();
             };
 
-            PickupTarget.Instance.LostPlayer += player =>  Deselect();
+            PickupTarget.Instance.LostPlayer += player =>
+            {
+                Deselect();
+            };
 
             Highlight.onClick.AddListener(() =>
             {
@@ -100,17 +103,12 @@ namespace Augmentix.Scripts.AR.UI
                 Deselect();
                 var parent = current.transform.parent;
                 PhotonNetwork.Destroy(current.gameObject);
-                var go =PhotonNetwork.Instantiate("Tangibles/"+Dropdown.options[value].text, Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
-                var scale = go.transform.localScale;
-                go.transform.parent = parent;
-                go.transform.localScale = scale;
-                go.transform.localPosition = Vector3.zero;
-                go.transform.localRotation = Quaternion.identity;
+                parent.GetComponent<TangibleTarget>().AddOOI("Tangibles/"+Dropdown.options[value].text);
             });
+            
             var options = ((AndroidTargetManager) AndroidTargetManager.Instance).TangiblePrefabs.Select(o => o.name)
                 .ToList();
             Dropdown.AddOptions(options);
-            
             
         }
 
@@ -251,7 +249,6 @@ namespace Augmentix.Scripts.AR.UI
             if (CurrentSelected != null)
             {
                 OnDeselect.Invoke();
-                //Slider.value = 1f;
                 CurrentSelected = null;
             }
         }

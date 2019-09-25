@@ -15,12 +15,18 @@ namespace Augmentix.Scripts.AR
         {
             TargetManager.Instance.OnConnection += () =>
             {
-                Current = PhotonNetwork.Instantiate("Tangibles/Empty", Vector3.zero, Quaternion.identity);
-                Current.transform.parent = transform;
-                Current.transform.localPosition = Vector3.zero;
-                Current.transform.localScale = Vector3.one;
-                Current.transform.localRotation = Quaternion.identity;
+                AddOOI("Tangibles/Empty");
                 Current.SetActive(false);
+            };
+            
+            PickupTarget.Instance.LostPlayer += player =>
+            {
+                if (Current)
+                {
+                    PhotonNetwork.Destroy(Current);
+                    AddOOI("Tangibles/Empty");
+                    Current.SetActive(false);
+                }
             };
 
             OnStatusChange += status =>
@@ -37,6 +43,17 @@ namespace Augmentix.Scripts.AR
                     Current.SetActive(false);
                 }
             };
+        }
+
+        public void AddOOI(string name)
+        {
+            var go =PhotonNetwork.Instantiate(name, Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
+            var scale = go.transform.localScale;
+            go.transform.parent = transform;
+            go.transform.localScale = scale;
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            Current = go;
         }
     
         private TrackableBehaviour.Status _prevStatus = TrackableBehaviour.Status.NO_POSE;
