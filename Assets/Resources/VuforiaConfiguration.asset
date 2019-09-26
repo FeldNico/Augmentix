@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vuforia:
     vuforiaLicenseKey: AQ6n6Z//////AAABmXaC3uMiQEe6ttOjpNurD+xxFx/mJThPam8TYWoFAts9bQDPgUKJPTPbnrPXGN5w0aZwmt9s9rCBdZzFocb7pYjFF5vSTDvYah0Azq6BhOe7XxOpgsv3YV6nwbLGIHdSW3wAGSv6Tiym8XApK/5BGEvFrLOVF1v9ZsqhUE1Q/P76mL8i+nfPYhVLPZ0gi7R5qkkKunsCHK9V2nmVfZw4fw16bmJ9KiliSwqF6eOSbyhI0UZpo7wHBPkvM3V285K1Vet1StHaQmQppopCED0Mouj0IfgCrBlimgkYOes5A5eIBc7LUFjiGGcwfD1athgb5y9+jD/R8S/XdQ/YFTR5IiMobMSR36lpiJ/LURA5BlUY
-    ufoLicenseKey: QWVQNjNUbi8vLy8vQUFBQUtHMTI3alNhOWtQQXNia09BUFpURlVWSmozSCt1elJlRkMyMVZHZG16bnMzc2twU1NoQlJEcGZjZ1BDM2poRVhya3pDYWZEQVdKN21hSEZWeTVDM0czdlFDL2x5eXVnaGVjZU43RXY1VWs5Q3ZiSGRkSVZqb2NocW9CZ3RPZGgwT3BvN2p4YzRrZ3Y4MTZ1UUExTmtXRjZsemRremhSWkVkZmRlbnlXeThDdGFieXF0YzlnV1Z2eSttd2JCK2doSXM0NWpSQ08vR1dHaWMwRlpQdlc4YmFWZW9peHZKT0J3UXZualNjU3FVeXFUNG0zOWloRjNTTnJuQW9lOWFDaWhFKzZ5U3piSWpROXlCZCsvZXZNcG1NeVFpL3dqb3haWjVGWm4vckdkcVFHcnN0R0ZXY2tnS1BVckIwOHFKVThHaGVGTzJTZDRqR3N3N3F0RzBudnE2N3Zja3NILzM1RmdocmhuQ0FxcmpJd1Q=
+    ufoLicenseKey: QVhiM0Y1Ly8vLy8vQUFBQUtPbnFIeHJFSGs1N3VrMlg4U050eVBzK2pkOFZxMDhrazlwYjBsYS9aZUIxQlV1ckZWcWt0ZllSQWpnT2tIRlY2VzdOMDRTRjNYRUhmbTF5L1BnYlB4eWdHWEF6RUNheXowc3dyNVNYa2ozdERuRjhka1FpOHRscHdkMDcrcEJEY1FjTjNJcUM1bEgwOTYzQkdZdjRsQStRb0hSQU9nRGthelp5TlY0WHVwWU9EaE05NWw5bXAzbnBDMjM5MWZBWXBFdEdiL2loTDNab3N4b25ZblhjK1JtSS9wLzRoTDIwVGhmTXR6WFJNYkpUTXZLZzJoQ0N0TEJXNEptZ0pSOUtSdStzQWM3QjVNOWFFMGVHQ1dUT1VRSUUweEpiZC9ZL2cvS29iNDhBRXdQOGFwbWR5NmRWU0FHU2psVzRZY2FEU2Zud3J1ZHhucVNmSUZiajNTUnIzM0lKVlFIaW1rL0oyOGNFeDdyekcySXg=
     delayedInitialization: 0
     cameraDeviceModeSetting: -1
     maxSimultaneousImageTargets: 5
@@ -22,7 +22,7 @@ MonoBehaviour:
     useDelayedLoadingObjectTargets: 0
     modelTargetRecoWhileExtendedTracked: 0
     version: 8.3.8
-    eulaAcceptedVersions: '{"Values":["8.1","8.3","0.0","7.1","7.2","7.5","7.7","8.0","7.9","8.2"]}'
+    eulaAcceptedVersions: '{"Values":["8.3"]}'
   digitalEyewear:
     cameraOffset: 0.06
     distortionRenderingLayer: 31
@@ -66,6 +66,6 @@ MonoBehaviour:
     autoInitTracker: 0
     autoStartTracker: 0
   webcam:
-    deviceNameSetInEditor: Logitech QuickCam Pro 4000
+    deviceNameSetInEditor: 
     turnOffWebCam: 0
     renderTextureLayer: 30

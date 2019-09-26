@@ -15,7 +15,7 @@ public class Pointer : MonoBehaviour
     private LineRenderer lineRenderer;
     private float MaxLength = 5f;
     // Start is called before the first frame update
-    private void Awake()
+    private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         
@@ -64,9 +64,9 @@ public class Pointer : MonoBehaviour
             {
                 if (CurrentPointerTarget != null)
                 {
-                    CurrentPointerTarget.OnHoverEnd.Invoke();
+                    CurrentPointerTarget.OnHoverEnd?.Invoke();
                 }
-                pointerTarget.OnHoverStart.Invoke();
+                pointerTarget.OnHoverStart?.Invoke();
                 CurrentPointerTarget = pointerTarget;
                 Dot.gameObject.SetActive(true);
             }
@@ -77,10 +77,10 @@ public class Pointer : MonoBehaviour
             {
                 lineRenderer.SetPosition(0,Vector3.zero);
                 lineRenderer.SetPosition(1,Vector3.zero);
-                CurrentPointerTarget.OnHoverEnd.Invoke();
+                CurrentPointerTarget.OnHoverEnd?.Invoke();
+                Dot.gameObject.SetActive(false);
             }
             CurrentPointerTarget = null;
-            Dot.gameObject.SetActive(false);
         }
     }
 }
