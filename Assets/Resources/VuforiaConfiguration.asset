@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: VuforiaConfiguration
   m_EditorClassIdentifier: 
   vuforia:
-    vuforiaLicenseKey: 
+    vuforiaLicenseKey: AQ6n6Z//////AAABmXaC3uMiQEe6ttOjpNurD+xxFx/mJThPam8TYWoFAts9bQDPgUKJPTPbnrPXGN5w0aZwmt9s9rCBdZzFocb7pYjFF5vSTDvYah0Azq6BhOe7XxOpgsv3YV6nwbLGIHdSW3wAGSv6Tiym8XApK/5BGEvFrLOVF1v9ZsqhUE1Q/P76mL8i+nfPYhVLPZ0gi7R5qkkKunsCHK9V2nmVfZw4fw16bmJ9KiliSwqF6eOSbyhI0UZpo7wHBPkvM3V285K1Vet1StHaQmQppopCED0Mouj0IfgCrBlimgkYOes5A5eIBc7LUFjiGGcwfD1athgb5y9+jD/R8S/XdQ/YFTR5IiMobMSR36lpiJ/LURA5BlUY
     ufoLicenseKey: QVVqVE1yNy8vLy8vQUFBQUtOMFN1Q2Vkd0VsbmpKUWhHVCtIMjlRTjNhbmlKdmVRdzlLK3l6aDNCcDFkZE83eG9YRTlGVmYwNlVnTDdLRmFieWVHNmFSaytTWnRZNVNOSGc1ZENSdUJ2UXNLRlJOc0QvWmo3cUxCUGNUMzhrQ1NVMVJ0TGFJSDlMa3lQRC9xZURFdm41Ykt0V21FQXBVMTIxWFYwZWREVUQvWTdBeG1TM1ZVQkJSaUNvQUtLYnJiclpKK3VKYjBoWklITWJ4R3FzKzlPTnM2ck0vRDI1MnpCNFYzQkR6a2orLzNLdXZ3ZUNzMk5OL2hKb01tanNWaWg3bDJHTVRCTnRXU25Zd2ZxMDl5dm9VTC9ENzYxWWFMRXdFZzI5Q2ExbGdqemNEYlU0NmZIT2Nub004YjM1b0VvbEpxbm8wN2VKdkN2Rnh5Q3lCYWc3TVZKcUZPV05Oa28wWDZ0L1V6KzF4UHhuZ1lLQXhIdDlMQytvRTU=
     delayedInitialization: 0
     cameraDeviceModeSetting: -1
@@ -21,7 +21,7 @@ MonoBehaviour:
     maxSimultaneousObjectTargets: 1
     useDelayedLoadingObjectTargets: 0
     modelTargetRecoWhileExtendedTracked: 1
-    version: 1.0.0
+    version: 8.3.8
     eulaAcceptedVersions: '{"Values":["8.3"]}'
   digitalEyewear:
     cameraOffset: 0.06
@@ -66,6 +66,6 @@ MonoBehaviour:
     autoInitTracker: 0
     autoStartTracker: 0
   webcam:
-    deviceNameSetInEditor: 
+    deviceNameSetInEditor: Logitech QuickCam Pro 4000
     turnOffWebCam: 0
     renderTextureLayer: 30

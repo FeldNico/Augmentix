@@ -34,5 +34,6 @@ MonoBehaviour:
   - Interact
   - OnLostRPC
   - OnPickupRPC
+  - OnHelpRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1

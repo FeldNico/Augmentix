@@ -797,11 +797,11 @@ namespace Valve.VR.InteractionSystem
 			{
 				if ( validLocation )
 				{
-					pointerHand.TriggerHapticPulse( 800 );
+					//pointerHand.TriggerHapticPulse( 800 );
 				}
 				else
 				{
-					pointerHand.TriggerHapticPulse( 100 );
+					//pointerHand.TriggerHapticPulse( 100 );
 				}
 			}
 		}
@@ -989,7 +989,7 @@ namespace Valve.VR.InteractionSystem
 					{
 						if ( !isShowingHint )
 						{
-							ControllerButtonHints.ShowTextHint( hand, teleportAction, "Teleport" );
+							//ControllerButtonHints.ShowTextHint( hand, teleportAction, "Teleport" );
 							prevBreakTime = Time.time;
 							prevHapticPulseTime = Time.time;
 						}
@@ -1004,7 +1004,7 @@ namespace Valve.VR.InteractionSystem
 					}
 					else if ( !showHint && isShowingHint )
 					{
-						ControllerButtonHints.HideTextHint( hand, teleportAction);
+						//ControllerButtonHints.HideTextHint( hand, teleportAction);
 					}
 				}
 

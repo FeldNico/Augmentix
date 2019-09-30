@@ -59,11 +59,11 @@ public class Pointer : MonoBehaviour
             if (pointerTarget == null)
             {
                 Dot.SetActive(false);
-                lineRenderer.gameObject.SetActive(false);
+                lineRenderer.enabled = false;
                 return;
             }
             Dot.SetActive(true);
-            lineRenderer.gameObject.SetActive(true);
+            lineRenderer.enabled = true;
             Dot.transform.position = hit.point;
             lineRenderer.SetPosition(0,transform.position);
             lineRenderer.SetPosition(1,Dot.transform.position);
@@ -81,7 +81,7 @@ public class Pointer : MonoBehaviour
         else
         {
             Dot.SetActive(false);
-            lineRenderer.gameObject.SetActive(false);
+            lineRenderer.enabled = false;
 
             if (CurrentPointerTarget != null)
             {

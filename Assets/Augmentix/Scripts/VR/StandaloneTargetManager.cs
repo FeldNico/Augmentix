@@ -1,11 +1,16 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using Valve.VR;
 using Valve.VR.InteractionSystem;
 
 namespace Augmentix.Scripts.VR
 {
     public class StandaloneTargetManager: TargetManager
     {
+        public SteamVR_Action_Boolean Menu =  SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Menu");
+        public SteamVR_Action_Boolean Help =  SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Help");
+        
+        
         new void Start()
         {
             base.Start();
@@ -20,9 +25,13 @@ namespace Augmentix.Scripts.VR
                 player.transform.localRotation = Quaternion.identity;
                 PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
             };
+            
+            Menu.AddOnStateUpListener((action, source) =>
+            {
+                Map.Instance.gameObject.SetActive(!Map.Instance.gameObject.activeSelf);
+            },SteamVR_Input_Sources.LeftHand);
+            Map.Instance.gameObject.SetActive(false);
         }
-
-
     }
 }
 

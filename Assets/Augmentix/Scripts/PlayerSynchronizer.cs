@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using Augmentix.Scripts.AR;
+using Augmentix.Scripts.VR;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
+using Valve.VR;
 
 namespace Augmentix.Scripts
 {
@@ -18,7 +20,7 @@ namespace Augmentix.Scripts
 
         void Start()
         {
-            if (GetComponent<PhotonView>().IsMine)
+            if (photonView.IsMine)
             {
                 /*
                 GetComponentsInChildren<Transform>().First(transform1 => transform1.gameObject.name.Equals("Cube"))
@@ -32,7 +34,15 @@ namespace Augmentix.Scripts
                     if (child.GetComponent<Collider>())
                         child.GetComponent<Collider>().enabled = false;
                 }
-
+                
+                #if UNITY_STANDALONE
+                
+                ((StandaloneTargetManager) TargetManager.Instance).Help.AddOnStateUpListener((action, source) =>
+                {
+                    photonView.RPC("OnHelpRPC",RpcTarget.Others);
+                },SteamVR_Input_Sources.RightHand);
+                
+                #endif
 
                 OnPickup += (player) =>
                 {
@@ -52,10 +62,10 @@ namespace Augmentix.Scripts
                 if (PickupTarget.Instance != null)
                 {
                     PickupTarget.Instance.GotPlayer += (player) =>
-                        GetComponent<PhotonView>().RPC("OnPickupRPC", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
+                        photonView.RPC("OnPickupRPC", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
                     
                     PickupTarget.Instance.LostPlayer += (player) =>
-                        GetComponent<PhotonView>().RPC("OnLostRPC", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
+                        photonView.RPC("OnLostRPC", GetComponent<PhotonView>().Controller, PhotonNetwork.LocalPlayer.ActorNumber);
                 }
             }
         }
@@ -65,6 +75,12 @@ namespace Augmentix.Scripts
             InstanceAction?.Invoke(info);
         }
 
+        [PunRPC]
+        public void OnHelpRPC()
+        {
+            Debug.Log("Gondor "+photonView.Owner.ActorNumber+" calls for aid!");
+        }
+        
         [PunRPC]
         public void OnPickupRPC(int primaryActorNumber)
         {

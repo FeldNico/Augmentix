@@ -14,6 +14,8 @@ namespace Augmentix.Scripts.AR.UI
         public Toggle LockCam;
         public Button RemovePlayer;
 
+        private PlayerSynchronizer IndicatorTarget;
+
         void Awake()
         {
             if (Instance == null)

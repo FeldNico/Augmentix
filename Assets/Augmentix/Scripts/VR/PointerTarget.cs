@@ -18,7 +18,7 @@ public class PointerTarget : MonoBehaviour
     {
         OnRelease += pos =>
         {
-            if (!pos.Equals(Vector2.zero))
+            if (!TeleportTarget.Equals(Vector3.zero))
                 FindObjectOfType<Player>().transform.position = TeleportTarget;
         };
     }

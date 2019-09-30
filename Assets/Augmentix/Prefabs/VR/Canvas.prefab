@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e41247204d4af64590479039beab962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TeleportTarget: {x: -1089, y: 0, z: -499}
+  TeleportTarget: {x: -1103.2, y: 0, z: -482.8}
 --- !u!65 &779653244
 BoxCollider:
   m_ObjectHideFlags: 0
