@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6190125207586654002}
   - component: {fileID: 8212663162837306291}
   - component: {fileID: 3826755945464059973}
+  - component: {fileID: 1032983679759412304}
   m_Layer: 0
   m_Name: Statue
   m_TagString: Untagged
@@ -49,10 +50,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 1032983679759412304}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -105,6 +106,18 @@ VideoPlayer:
   m_Looping: 0
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
+--- !u!114 &1032983679759412304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7397364066031690185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d80302e0f21b1244b426d92bf49f994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7682643157372079884
 GameObject:
   m_ObjectHideFlags: 0

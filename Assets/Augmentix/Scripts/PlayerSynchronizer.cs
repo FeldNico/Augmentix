@@ -37,10 +37,11 @@ namespace Augmentix.Scripts
                 
                 #if UNITY_STANDALONE
                 
-                ((StandaloneTargetManager) TargetManager.Instance).Help.AddOnStateUpListener((action, source) =>
-                {
-                    photonView.RPC("OnHelpRPC",RpcTarget.Others);
-                },SteamVR_Input_Sources.RightHand);
+                if (OpenVR.Input != null)
+                    ((StandaloneTargetManager) TargetManager.Instance).Help?.AddOnStateUpListener((action, source) =>
+                    {
+                        photonView.RPC("OnHelpRPC",RpcTarget.Others);
+                    },SteamVR_Input_Sources.RightHand);
                 
                 #endif
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2536562171889394527}
   - component: {fileID: 1246691394785400964}
   - component: {fileID: 8835517538490857348}
+  - component: {fileID: -6869049774604208856}
   m_Layer: 0
   m_Name: Vase
   m_TagString: Untagged
@@ -48,10 +49,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: -6869049774604208856}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -70,6 +71,18 @@ MonoBehaviour:
   Flags: 99
   Text: Dies ist eine Tonvase
   TextScale: 0.02
+--- !u!114 &-6869049774604208856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773127983147666949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d80302e0f21b1244b426d92bf49f994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7324412623146795694
 GameObject:
   m_ObjectHideFlags: 0

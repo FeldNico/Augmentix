@@ -57,14 +57,9 @@ namespace Augmentix.Scripts.AR.UI
             return l;
         }
 
-        private OOI.OOI _target;
-
 #if UNITY_ANDROID
         void Start()
         {
-            OnSelect += (target) => { _target = target; };
-
-            OnDeselect += () => { _target = null; };
 
             PickupTarget.Instance.OnStatusChange += status =>
             {
@@ -141,8 +136,10 @@ namespace Augmentix.Scripts.AR.UI
                             ? transform.GetComponent<OOI.OOI>()
                             : transform.GetComponentInParent<OOI.OOI>();
                         
-                        if (ooi)
+                        if (ooi != null)
                             Select(ooi);
+                        else
+                            Deselect();
                     }
                     else
                     {
@@ -160,7 +157,7 @@ namespace Augmentix.Scripts.AR.UI
 
         void SmoothMoveButtons()
         {
-            if (_target == null)
+            if (CurrentSelected == null)
             {
                 if (_prevtarget == null) return;
 
@@ -171,46 +168,45 @@ namespace Augmentix.Scripts.AR.UI
                 return;
             }
 
-            if (_target != _prevtarget)
+            if (CurrentSelected != _prevtarget)
             {
                 if (_prevtarget != null)
                     foreach (Transform child in transform)
                         child.gameObject.SetActive(false);
 
-                _prevtarget = _target;
+                _prevtarget = CurrentSelected;
 
-                _buttons = GetButtons(_target);
-                foreach (var button in _buttons)
-                    button.gameObject.SetActive(true);
-
-                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
+                _buttons?.Clear();
+                _buttons = GetButtons(CurrentSelected);
+                
+                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
                 {
                     Slider.gameObject.SetActive(true);
-                    var scale = _target.transform.localScale.x;
+                    var scale = CurrentSelected.transform.localScale.x;
                     Slider.minValue = scale / 5f;
                     Slider.value = scale;
                     Slider.maxValue = scale * 5f;
                 }
-                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
+                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
                 {
                     Dropdown.gameObject.SetActive(true);
                 }
 
                 _center = new Vector3();
-                var renderers = _target.GetComponentsInChildren<Renderer>();
+                var renderers = CurrentSelected.GetComponentsInChildren<Renderer>();
 
                 if (renderers.Length > 0)
                 {
                     foreach (var child in renderers)
                         _center += child.bounds.center;
                     _center = _center / renderers.Length;
-                    _center = _center - _target.transform.position;
+                    _center = _center - CurrentSelected.transform.position;
                 }
             }
 
-            if (_target != null)
+            if (CurrentSelected != null)
             {
-                var worldCenter = Camera.main.WorldToScreenPoint(_target.transform.position + _center);
+                var worldCenter = Camera.main.WorldToScreenPoint(CurrentSelected.transform.position + _center);
 
                 for (var i = 0; i < _buttons.Count; i++)
                 {
@@ -225,15 +221,19 @@ namespace Augmentix.Scripts.AR.UI
 
 
                     rectTransform.transform.position = worldCenter + new Vector3(x, y, 0);
+                    
+                    _buttons[i].gameObject.SetActive(true);
                 }
+                
+                    
 
-                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
+                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
                 {
                     Slider.GetComponent<RectTransform>().transform.position =
                         worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
                 }
                 
-                if (_target.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
+                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
                 {
                     Dropdown.GetComponent<RectTransform>().transform.position =
                         worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
@@ -245,14 +245,14 @@ namespace Augmentix.Scripts.AR.UI
         {
             Deselect();
             CurrentSelected = Target;
-            OnSelect.Invoke(CurrentSelected);
+            OnSelect?.Invoke(CurrentSelected);
         }
 
         public void Deselect()
         {
             if (CurrentSelected != null)
             {
-                OnDeselect.Invoke();
+                OnDeselect?.Invoke();
                 CurrentSelected = null;
             }
         }

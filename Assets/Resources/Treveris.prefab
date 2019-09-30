@@ -3184,15 +3184,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608367588650165357}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-  m_LocalPosition: {x: -865.5, y: 0, z: 95.5}
+  m_LocalRotation: {x: -0, y: 0.9862229, z: -0, w: -0.16542219}
+  m_LocalPosition: {x: -849.7, y: 0, z: 66.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5783326512173701211}
   - {fileID: 6881594397730680816}
   m_Father: {fileID: 1833893256112000364}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -160.95601, z: 0}
 --- !u!114 &5306629298205377454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8362,6 +8362,7 @@ GameObject:
   - component: {fileID: 1490757222374148271}
   - component: {fileID: 3631096139573711654}
   - component: {fileID: 5579491121105407086}
+  - component: {fileID: 6580032192548465152}
   m_Layer: 0
   m_Name: OG2 Tower Module
   m_TagString: Untagged
@@ -8472,6 +8473,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &6580032192548465152
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560307303395801129}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8597726266612319105, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &1637592440612517305
 GameObject:
   m_ObjectHideFlags: 0
@@ -10781,6 +10796,56 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &7277281079083309476
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072057171365339806}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3704.0017, y: 4999.9995, z: 3891.002}
+  m_Center: {x: 601.0003, y: -468.99997, z: -287.50012}
+--- !u!114 &7978033877697600062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072057171365339806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e212faef564c8de45bdf5300a4ff69c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Flags: 3
+  Text: Eine alte Tonvase
+  TextScale: 0.02
+--- !u!114 &9079189980277061624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072057171365339806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2073372447341843235
 GameObject:
   m_ObjectHideFlags: 0
@@ -12309,6 +12374,7 @@ GameObject:
   - component: {fileID: 5403462825215741928}
   - component: {fileID: 8105722670785218414}
   - component: {fileID: 1876883745628518260}
+  - component: {fileID: 3176033287777300141}
   m_Layer: 0
   m_Name: OG Tower Module
   m_TagString: Untagged
@@ -12419,6 +12485,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &3176033287777300141
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2363203891228206964}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6156527452318613809, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &2400875230178673401
 GameObject:
   m_ObjectHideFlags: 0
@@ -12774,6 +12854,7 @@ GameObject:
   - component: {fileID: 2035594116630838896}
   - component: {fileID: 7007509306281262730}
   - component: {fileID: 5976054451866174863}
+  - component: {fileID: 5301708919656138260}
   m_Layer: 0
   m_Name: OG2 Roof Front
   m_TagString: Untagged
@@ -12842,6 +12923,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &5301708919656138260
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2541379502108166713}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3714189647500768961, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &2592259151652793761
 GameObject:
   m_ObjectHideFlags: 0
@@ -14853,7 +14948,6 @@ GameObject:
   - component: {fileID: 7572123089201183665}
   - component: {fileID: 203737377715663154}
   - component: {fileID: 1101313269207996414}
-  - component: {fileID: 3022704349755290136}
   - component: {fileID: 6472560196673844021}
   - component: {fileID: 530359110349385783}
   m_Layer: 0
@@ -14884,7 +14978,6 @@ Transform:
   - {fileID: 2274042380472331328}
   - {fileID: 3613969460443776509}
   - {fileID: 1550378164656961221}
-  - {fileID: 1298405299930507206}
   m_Father: {fileID: 1833893256112000364}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14922,20 +15015,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!64 &3022704349755290136
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3044692927534628534}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &6472560196673844021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14949,11 +15028,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Flags: 7
-  Text: "Der Bau des Stadttores wurde 170 n. Chr. als n\xF6rdlicher Zugang zur Stadt
-    Augusta Treverorum (Augustus-Stadt im Land der Treverer) begonnen. Die Datierung
-    des Tores war lange umstritten und reichte vom 2. bis zum 4. Jahrhundert n. Chr.
-    Im Januar 2018 konnte der Baubeginn aufgrund einer dendrochronologischen Untersuchung
-    von Holzresten der Stadtmauer auf das Jahr 170 n. Chr. festgeschrieben werden,
+  Text: "Der Bau des Stadttores wurde 170 n. Chr. als n\xF6rdlicher Zugang zur\nStadt
+    Augusta Treverorum (Augustus-Stadt im Land der Treverer)\n begonnen. Die Datierung
+    des Tores war lange umstritten und reichte\n vom 2. bis zum 4. Jahrhundert n.
+    Chr. Im Januar 2018 konnte der\n Baubeginn aufgrund einer dendrochronologischen
+    Untersuchung von\n Holzresten der Stadtmauer auf das Jahr 170 n. Chr. festgeschrieben\nwerden,
     da diese 169/170 gef\xE4llt worden waren."
   TextScale: 0.01
 --- !u!328 &530359110349385783
@@ -15689,8 +15768,7 @@ GameObject:
   - component: {fileID: 3613969460443776509}
   - component: {fileID: 196421605469864678}
   - component: {fileID: 6746587457311548584}
-  - component: {fileID: 8007189944175841627}
-  - component: {fileID: 1049267756828059010}
+  - component: {fileID: 4616327614242563640}
   m_Layer: 0
   m_Name: Roof Left
   m_TagString: Untagged
@@ -15759,29 +15837,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8007189944175841627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3199266530964092702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!64 &1049267756828059010
+--- !u!64 &4616327614242563640
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17358,38 +17414,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &3468571322410617966
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1298405299930507206}
-  m_Layer: 0
-  m_Name: poterie_obj (Missing Prefab)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1298405299930507206
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3468571322410617966}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: -7537552796262020943}
-  - {fileID: 8833386754508993808}
-  m_Father: {fileID: 7572123089201183665}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3473700866016979553
 GameObject:
   m_ObjectHideFlags: 0
@@ -20116,100 +20140,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &4204035473100695837
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: -8810323725943474409, guid: 20e735855180cf84996270fba6d6d99c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: -7537552796262020943}
-  - component: {fileID: 6935489012193090148}
-  - component: {fileID: 1656250307509561895}
-  - component: {fileID: 4322505190933946803}
-  m_Layer: 0
-  m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &-7537552796262020943
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4204035473100695837}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1298405299930507206}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &6935489012193090148
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4204035473100695837}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3583834153196801009, guid: 20e735855180cf84996270fba6d6d99c, type: 3}
---- !u!114 &1656250307509561895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4204035473100695837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e212faef564c8de45bdf5300a4ff69c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Flags: 3
-  Text: "Eine Vase (von lat. vas, vasis Gef\xE4\xDF, Geschirr) ist ein meist aus
-    Glas, Keramik oder Metall bestehendes, grunds\xE4tzlich aber aus jedem geeigneten
-    Material herstellbares Hohlgef\xE4\xDF, das dem Aufstellen von Schnittblumen
-    oder auch nur zur Dekoration dient. Traditionelle Vasenformen sind bauchig und
-    haben typischerweise einen engen Hals. \xC4ltere Vasen haben nicht selten seitlich
-    zwei gegenst\xE4ndige Henkel (z. B. Altarvasen aus Metall). Eine besondere Rolle
-    spielen Vasen in der Kunstgeschichte der griechischen Antike, weil die h\xE4ufig
-    bemalten Gef\xE4\xDFe f\xFCr uns heute die wichtigste Quelle zur Malerei jener
-    Zeit sind. Als bauplastischer Dekor fanden Ziervasen Verwendung in Architektur,
-    Innenarchitektur und Gartenkunst."
-  TextScale: 0.01
---- !u!114 &4322505190933946803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4204035473100695837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &4206767664393472238
 GameObject:
   m_ObjectHideFlags: 0
@@ -25473,6 +25403,7 @@ GameObject:
   - component: {fileID: 8699951167755499888}
   - component: {fileID: 2078674747879424047}
   - component: {fileID: 7291845749332862716}
+  - component: {fileID: 2210664047725677139}
   m_Layer: 0
   m_Name: EG
   m_TagString: Untagged
@@ -25545,6 +25476,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &2210664047725677139
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5282172670216637364}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7949821028123563670, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &5289824512750851912
 GameObject:
   m_ObjectHideFlags: 0
@@ -31477,13 +31422,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6470464862155415335}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-  m_LocalPosition: {x: -223, y: 0, z: -763.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.6013554, z: -0, w: -0.7989817}
+  m_LocalPosition: {x: -279, y: 0, z: -610}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 1833893256112000364}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -73.934006, z: 0}
 --- !u!33 &9143549527330018181
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -31963,37 +31908,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &6546923916990955624
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8833386754508993808}
-  m_Layer: 0
-  m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8833386754508993808
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6546923916990955624}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1298405299930507206}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6549019100906399301
 GameObject:
   m_ObjectHideFlags: 0
@@ -34053,6 +33967,7 @@ GameObject:
   - component: {fileID: 2274042380472331328}
   - component: {fileID: 4090892014807003223}
   - component: {fileID: 778828565898663873}
+  - component: {fileID: 4346267215610172521}
   m_Layer: 0
   m_Name: OG3 Right
   m_TagString: Untagged
@@ -34130,6 +34045,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &4346267215610172521
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966955726856820269}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5742372212401537438, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &6974855009896668759
 GameObject:
   m_ObjectHideFlags: 0
@@ -36006,6 +35935,7 @@ GameObject:
   - component: {fileID: 6447941792070042866}
   - component: {fileID: 5088115215116891864}
   - component: {fileID: 86978020140714572}
+  - component: {fileID: 3692368182948875417}
   m_Layer: 0
   m_Name: OG3 Left
   m_TagString: Untagged
@@ -36083,6 +36013,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &3692368182948875417
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485587789348307246}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1866663195012446537, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &7506769393513626546
 GameObject:
   m_ObjectHideFlags: 0
@@ -36915,6 +36859,7 @@ Transform:
   - {fileID: 157127631905835709}
   - {fileID: 1052566004176258779}
   - {fileID: 1833893256112000364}
+  - {fileID: 8833386754508993808}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -37524,6 +37469,7 @@ GameObject:
   - component: {fileID: 1550378164656961221}
   - component: {fileID: 7888834501462348515}
   - component: {fileID: 1357381665458909103}
+  - component: {fileID: 3197851336433516601}
   m_Layer: 0
   m_Name: Roof Right
   m_TagString: Untagged
@@ -37592,6 +37538,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &3197851336433516601
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782130759807068250}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1124275575352033, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &7821873377589041855
 GameObject:
   m_ObjectHideFlags: 0
@@ -40683,6 +40643,7 @@ GameObject:
   - component: {fileID: 1027364852782819285}
   - component: {fileID: 4948292363371796785}
   - component: {fileID: 8266928130750955288}
+  - component: {fileID: 8904539753183576393}
   m_Layer: 0
   m_Name: OG2 Roof Back
   m_TagString: Untagged
@@ -40751,6 +40712,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &8904539753183576393
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8405981951759822230}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6844554419374323776, guid: 748b8b9476f124949b1dfc3433383f08, type: 3}
 --- !u!1 &8440616681909227662
 GameObject:
   m_ObjectHideFlags: 0
@@ -44744,32 +44719,32 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7572123089201183665}
+    m_TransformParent: {fileID: 6472028634101124440}
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -27.911
+      value: 52.911
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.46
+      value: 2.15
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.525
+      value: 374.475
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.2597451
+      value: 0.96567726
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
@@ -44779,12 +44754,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9656772
+      value: -0.25974515
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
@@ -44804,7 +44779,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0007
+      value: 0.00069999986
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
@@ -44814,7 +44789,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.0007
+      value: 0.00069999986
       objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 20e735855180cf84996270fba6d6d99c,
         type: 3}
@@ -44823,3 +44798,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20e735855180cf84996270fba6d6d99c, type: 3}
+--- !u!1 &2072057171365339806 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2534866581884222612, guid: 20e735855180cf84996270fba6d6d99c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4606279432859000330}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8833386754508993808 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4606279432859000330}
+  m_PrefabAsset: {fileID: 0}

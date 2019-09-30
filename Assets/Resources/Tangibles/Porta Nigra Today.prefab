@@ -9316,6 +9316,7 @@ GameObject:
   - component: {fileID: 371545751642331657}
   - component: {fileID: 8943024936327620602}
   - component: {fileID: 8565700568382997442}
+  - component: {fileID: -1727399810422819888}
   m_Layer: 0
   m_Name: Porta Nigra Today
   m_TagString: Untagged
@@ -9353,10 +9354,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: -1727399810422819888}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -9409,6 +9410,18 @@ VideoPlayer:
   m_Looping: 0
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
+--- !u!114 &-1727399810422819888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8242442389127168192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d80302e0f21b1244b426d92bf49f994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8243734010105987362
 GameObject:
   m_ObjectHideFlags: 0
