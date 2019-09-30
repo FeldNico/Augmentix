@@ -921,7 +921,7 @@ namespace Valve.VR.InteractionSystem
 					hitTeleportMarker.Highlight( true );
 
 					prevPointedAtPosition = pointedAtPosition;
-					PlayPointerHaptic( !hitTeleportMarker.locked );
+					//PlayPointerHaptic( !hitTeleportMarker.locked );
 
 					PlayAudioClip( reticleAudioSource, goodHighlightSound );
 
@@ -939,7 +939,7 @@ namespace Valve.VR.InteractionSystem
 				if ( Vector3.Distance( prevPointedAtPosition, pointedAtPosition ) > 1.0f )
 				{
 					prevPointedAtPosition = pointedAtPosition;
-					PlayPointerHaptic( !hitTeleportMarker.locked );
+					//PlayPointerHaptic( !hitTeleportMarker.locked );
 				}
 			}
 		}
@@ -999,7 +999,7 @@ namespace Valve.VR.InteractionSystem
 							//Haptic pulse for a few seconds
 							pulsed = true;
 
-							hand.TriggerHapticPulse( 500 );
+							//hand.TriggerHapticPulse( 500 );
 						}
 					}
 					else if ( !showHint && isShowingHint )

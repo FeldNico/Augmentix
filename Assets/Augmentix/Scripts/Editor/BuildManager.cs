@@ -3,9 +3,12 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 #if UNITY_EDITOR
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System;
+using System.Collections;
+using System.Threading;
 
 namespace Augmentix.Scripts.Editor
 {
@@ -72,6 +75,7 @@ namespace Augmentix.Scripts.Editor
     
         public static void DoBuild(Type type, BuildTarget target)
         {
+
             BuildManager manager = GetManager();
             BuildManager newManager = GetManager(type.Name);
 
@@ -90,28 +94,29 @@ namespace Augmentix.Scripts.Editor
 
             var filename = type == typeof(VRBuildManager) ? Application.productName + ".exe" : Application.productName + ".apk";
 
-            Cursor.visible = false;
-
             BuildTarget currentTarget = BuildTarget.NoTarget;
             if (EditorUserBuildSettings.activeBuildTarget != target)
             {
+                Debug.LogError("Please Switch to Target before build!");
+                return;
                 currentTarget = EditorUserBuildSettings.activeBuildTarget;
-                EditorUserBuildSettings.SwitchActiveBuildTarget(
-                    target == BuildTarget.Android ? BuildTargetGroup.Android : BuildTargetGroup.Standalone, target);
-
+                DoSwitch(type,target);
             }
+            
             BuildPipeline.BuildPlayer(levels, Path.Combine(newManager._buildPath,filename), target, options);
-
-            if (currentTarget != target)
-                EditorUserBuildSettings.SwitchActiveBuildTarget(
-                    currentTarget == BuildTarget.Android ? BuildTargetGroup.Android : BuildTargetGroup.Standalone, currentTarget);
-
-            Cursor.visible = true;
+            
+            
+            if (currentTarget != BuildTarget.NoTarget)
+                DoSwitch(type == typeof(VRBuildManager) ? typeof(ARBuildManager) : typeof(VRBuildManager),currentTarget);
+            
         }
 
         [MenuItem("BuildManager/Build All")]
         public static void Build()
         {
+            Debug.LogError("Currently not supported");
+            return;
+            
             DoBuild(typeof(ARBuildManager), BuildTarget.Android);
             DoBuild(typeof(VRBuildManager), BuildTarget.StandaloneWindows64);
         }
@@ -127,9 +132,25 @@ namespace Augmentix.Scripts.Editor
             EditorUserBuildSettings.SwitchActiveBuildTarget(
                 target == BuildTarget.Android ? BuildTargetGroup.Android : BuildTargetGroup.Standalone, target);
 
-            EditorBuildSettings.scenes = newManager._scenePaths.Select(s => new EditorBuildSettingsScene(s, true)).ToArray();
+            if (type == typeof(VRBuildManager))
+            {
+                PlayerSettings.vuforiaEnabled = false;
+                PlayerSettings.virtualRealitySupported = true; // Does not work, yet
+            }
+            else
+            {
+                PlayerSettings.vuforiaEnabled = true;
+                PlayerSettings.virtualRealitySupported = false; // Does not work, yet
+            }
 
-            EditorSceneManager.OpenScene(newManager._scenePaths[0]);
+
+            EditorBuildSettings.scenes =
+                newManager._scenePaths.Select(s => new EditorBuildSettingsScene(s, true)).ToArray();
+
+            if (newManager._scenePaths.Count > 0)
+                EditorSceneManager.OpenScene(newManager._scenePaths[0]);
+            else
+                Debug.Log("No Scenes defined. See BuildManager->Setup");
 
         }
 

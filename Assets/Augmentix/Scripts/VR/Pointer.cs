@@ -26,7 +26,7 @@ public class Pointer : MonoBehaviour
 
             var pos = CurrentPointerTarget.transform.InverseTransformPoint(Dot.transform.position);
             
-            CurrentPointerTarget.OnPress.Invoke(new Vector2(pos.x,pos.z));
+            CurrentPointerTarget.OnPress?.Invoke(new Vector2(pos.x,pos.z));
         },SteamVR_Input_Sources.RightHand);
         
         OnClick.AddOnStateUpListener((action, source) =>
@@ -36,7 +36,7 @@ public class Pointer : MonoBehaviour
 
             var pos = CurrentPointerTarget.transform.InverseTransformPoint(Dot.transform.position);
             
-            CurrentPointerTarget.OnRelease.Invoke(new Vector2(pos.x,pos.z));
+            CurrentPointerTarget.OnRelease?.Invoke(new Vector2(pos.x,pos.z));
         },SteamVR_Input_Sources.RightHand);
     }
 
@@ -52,13 +52,21 @@ public class Pointer : MonoBehaviour
         var ray = new Ray(transform.position,transform.forward);
         Physics.Raycast(ray, out hit, MaxLength);
 
-        if (hit.collider != null && hit.transform.GetComponent<PointerTarget>())
+        if (hit.collider != null)
         {
+            var pointerTarget = hit.transform.GetComponent<PointerTarget>();
+
+            if (pointerTarget == null)
+            {
+                Dot.SetActive(false);
+                lineRenderer.gameObject.SetActive(false);
+                return;
+            }
+            Dot.SetActive(true);
+            lineRenderer.gameObject.SetActive(true);
             Dot.transform.position = hit.point;
             lineRenderer.SetPosition(0,transform.position);
-            lineRenderer.SetPosition(1,hit.point);
-
-            var pointerTarget = hit.transform.GetComponent<PointerTarget>();
+            lineRenderer.SetPosition(1,Dot.transform.position);
 
             if (pointerTarget != CurrentPointerTarget)
             {
@@ -68,17 +76,17 @@ public class Pointer : MonoBehaviour
                 }
                 pointerTarget.OnHoverStart?.Invoke();
                 CurrentPointerTarget = pointerTarget;
-                Dot.gameObject.SetActive(true);
             }
         }
         else
         {
+            Dot.SetActive(false);
+            lineRenderer.gameObject.SetActive(false);
+
             if (CurrentPointerTarget != null)
             {
-                lineRenderer.SetPosition(0,Vector3.zero);
-                lineRenderer.SetPosition(1,Vector3.zero);
                 CurrentPointerTarget.OnHoverEnd?.Invoke();
-                Dot.gameObject.SetActive(false);
+                //Dot.gameObject.SetActive(false);
             }
             CurrentPointerTarget = null;
         }

@@ -3,10 +3,13 @@ using Photon.Pun;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_ANDROID
 using Vuforia;
+#endif
 
 namespace Augmentix.Scripts.AR
 {
+    #if UNITY_ANDROID
     public class TangibleTarget : MonoBehaviour
     {
         public UnityAction<TrackableBehaviour.Status> OnStatusChange;
@@ -71,4 +74,5 @@ namespace Augmentix.Scripts.AR
 
         }
     }
+#endif
 }

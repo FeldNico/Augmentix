@@ -186,7 +186,7 @@ RectTransform:
   m_LocalRotation: {x: 0.000000007450579, y: -0.000000052154054, z: 0.0000000069849175,
     w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.01}
-  m_LocalScale: {x: 0.01000001, y: 0.010000006, z: 0.010000007}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children:
   - {fileID: 1042283797}
   m_Father: {fileID: 1703130701001209444}
@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e41247204d4af64590479039beab962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TeleportTarget: {x: 0, y: 0, z: 0}
+  TeleportTarget: {x: -1089, y: 0, z: -499}
 --- !u!65 &779653244
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -297,7 +297,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 779653242}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 160, y: 30, z: 5}
@@ -333,7 +333,7 @@ RectTransform:
   m_LocalRotation: {x: 0.000000007450579, y: -0.000000052154054, z: 0.0000000069849175,
     w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.01}
-  m_LocalScale: {x: 0.010000009, y: 0.010000006, z: 0.010000007}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children:
   - {fileID: 952834106}
   m_Father: {fileID: 1703130701001209444}
@@ -435,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e41247204d4af64590479039beab962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TeleportTarget: {x: 0, y: 0, z: 0}
+  TeleportTarget: {x: 222, y: 0, z: -1238}
 --- !u!65 &836939884
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -444,7 +444,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 836939882}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 160, y: 30, z: 5}
@@ -790,7 +790,7 @@ RectTransform:
   m_LocalRotation: {x: 0.000000007450579, y: -0.000000052154054, z: 0.0000000069849175,
     w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.01}
-  m_LocalScale: {x: 0.010000009, y: 0.010000006, z: 0.010000007}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children:
   - {fileID: 441171395}
   m_Father: {fileID: 1703130701001209444}
@@ -892,7 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e41247204d4af64590479039beab962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TeleportTarget: {x: 0, y: 0, z: 0}
+  TeleportTarget: {x: -845, y: 0, z: 24}
 --- !u!65 &1950010795
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -901,7 +901,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1950010793}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 160, y: 30, z: 5}
@@ -975,7 +975,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: ad13531d67ef5c84b8e886f7bdbfefe4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1015,7 +1015,7 @@ RectTransform:
   m_GameObject: {fileID: 1703130701001209445}
   m_LocalRotation: {x: -0.048097905, y: 0.14477009, z: 0.65360874, w: -0.7412988}
   m_LocalPosition: {x: 0, y: 0, z: 0.131}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children:
   - {fileID: 1703130700603400996}
   - {fileID: 7190591540766636041}
@@ -1027,7 +1027,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -6.773, y: -16.228, z: 278.161}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.32598877, y: 0.10600281}
+  m_AnchoredPosition: {x: 0.32598877, y: 0.10601807}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1703130701001209441
@@ -1120,7 +1120,7 @@ RectTransform:
   m_GameObject: {fileID: 4825203761718256398}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.01}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children:
   - {fileID: 5568095658902727679}
   m_Father: {fileID: 1703130701001209444}
@@ -1218,7 +1218,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4825203761718256398}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 160, y: 30, z: 5}
@@ -1235,7 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e41247204d4af64590479039beab962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TeleportTarget: {x: 0, y: 0, z: 0}
+  TeleportTarget: {x: 63, y: 0, z: 402}
 --- !u!1 &5613399909781608552
 GameObject:
   m_ObjectHideFlags: 0

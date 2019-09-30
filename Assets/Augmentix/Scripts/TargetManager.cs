@@ -4,10 +4,9 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
-using Vuforia;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 #if UNITY_ANDROID
-
+using Vuforia;
 #endif
 
 

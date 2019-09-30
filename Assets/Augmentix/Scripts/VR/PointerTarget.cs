@@ -16,6 +16,10 @@ public class PointerTarget : MonoBehaviour
 
     public void Awake()
     {
-        OnRelease += pos => { FindObjectOfType<Player>().transform.position = TeleportTarget; };
+        OnRelease += pos =>
+        {
+            if (!pos.Equals(Vector2.zero))
+                FindObjectOfType<Player>().transform.position = TeleportTarget;
+        };
     }
 }

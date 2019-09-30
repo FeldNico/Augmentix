@@ -7,8 +7,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.PUN;
 using UnityEngine;
-using UnityEngine.UI;
-using Vuforia;
 using Recorder = Photon.Voice.Unity.Recorder;
 
 namespace Augmentix.Scripts

@@ -3,10 +3,13 @@ using Augmentix.Scripts.AR.UI;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_ANDROID
 using Vuforia;
+#endif
 
 namespace Augmentix.Scripts.AR
 {
+
     public class PickupTarget : MonoBehaviour
     {
         public static PickupTarget Instance = null;
@@ -19,13 +22,14 @@ namespace Augmentix.Scripts.AR
         public float Scale;
         public UnityAction<GameObject> GotPlayer;
         public UnityAction<GameObject> LostPlayer;
-        public UnityAction<TrackableBehaviour.Status> OnStatusChange;
+        
         public GameObject Scaler { private set; get; }
 
         private Treveris _treveris;
         private MapTarget _mapTarget;
         private bool _locked = false;
-
+#if UNITY_ANDROID      
+        public UnityAction<TrackableBehaviour.Status> OnStatusChange;
 
         void Awake()
         {
@@ -175,5 +179,7 @@ namespace Augmentix.Scripts.AR
             }
 
         }
+#endif
     }
+
 }

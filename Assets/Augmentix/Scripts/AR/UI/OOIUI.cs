@@ -9,11 +9,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Vuforia;
 using Outline = Augmentix.Scripts.VR.Outline;
+#if UNITY_ANDROID
+using Vuforia;
+#endif
 
 namespace Augmentix.Scripts.AR.UI
 {
+
     public class OOIUI : MonoBehaviour
     {
         public static OOIUI Instance = null;
@@ -56,6 +59,7 @@ namespace Augmentix.Scripts.AR.UI
 
         private OOI.OOI _target;
 
+#if UNITY_ANDROID
         void Start()
         {
             OnSelect += (target) => { _target = target; };
@@ -252,8 +256,8 @@ namespace Augmentix.Scripts.AR.UI
                 CurrentSelected = null;
             }
         }
-
-
+#endif
+        
         private GameObject _prevHighlightTarget = null;
 
         public void ToggleHighlightTarget(GameObject Target)
@@ -271,4 +275,5 @@ namespace Augmentix.Scripts.AR.UI
                 Target.AddComponent<Outline>();
         }
     }
+
 }
