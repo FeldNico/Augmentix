@@ -69,10 +69,20 @@ namespace Augmentix.Scripts.VR
             {
                 while (true)
                 {
-                    Vector3 center = new Vector3();
+                    var trans = _target.transform;
+                    var center = new Vector3();
+                    var closestPoint = new Vector3();
                     var renderers = _target.GetComponentsInChildren<Renderer>();
                     foreach (var child in renderers)
+                    {
+                        var tmp = child.bounds.ClosestPoint(trans.position);
+                        if (Vector3.Distance(tmp, trans.position) < Vector3.Distance(closestPoint, trans.position))
+                        {
+                            closestPoint = tmp;
+                        }
                         center += child.bounds.center;
+                    }
+                        
                     center = center / renderers.Length;
                 
                     _indicator.transform.LookAt(center);
