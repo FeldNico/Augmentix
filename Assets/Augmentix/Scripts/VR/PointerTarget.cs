@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Valve.VR;
 using Valve.VR.InteractionSystem;
 
 public class PointerTarget : MonoBehaviour
@@ -19,7 +20,11 @@ public class PointerTarget : MonoBehaviour
         OnRelease += pos =>
         {
             if (!TeleportTarget.Equals(Vector3.zero))
+            {
+                SteamVR_Fade.Start( Color.clear, 0 );
+                SteamVR_Fade.Start( Color.black, 0.2f );
                 FindObjectOfType<Player>().transform.position = TeleportTarget;
+            }
         };
     }
 }
