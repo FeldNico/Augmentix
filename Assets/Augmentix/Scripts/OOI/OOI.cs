@@ -157,12 +157,11 @@ namespace Augmentix.Scripts.OOI
                     _videoCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     _videoCube.name = "VideoCube";
                     _videoCube.transform.parent = transform;
-                    _videoCube.GetComponent<Renderer>().material = player.GetComponentInChildren<Renderer>().material;
-                    _videoCube.GetComponent<Renderer>().material.shader =
-                        Shader.Find("Lightweight Render Pipeline/Unlit");
+                    //_videoCube.GetComponent<Renderer>().material = player.GetComponentInChildren<Renderer>().material;
+                    //_videoCube.GetComponent<Renderer>().material.shader = Shader.Find("Standard");
 
                     video.targetMaterialRenderer = _videoCube.GetComponent<Renderer>();
-                    video.targetMaterialProperty = "_BaseMap";
+                    //video.targetMaterialProperty = "_BaseMap";
                 }
 
                 Vector3 nearestPoint = transform.position;

@@ -5,6 +5,7 @@ public class POI : MonoBehaviour, IPunInstantiateMagicCallback
 {
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
+        
         if (info.photonView.InstantiationData.Length > 0)
         {
             var viewID = (int) info.photonView.InstantiationData[0];
@@ -13,5 +14,6 @@ public class POI : MonoBehaviour, IPunInstantiateMagicCallback
             transform.localRotation = (Quaternion) info.photonView.InstantiationData[2];
             transform.localScale = Vector3.one;
         }
+        
     }
 }

@@ -114,10 +114,10 @@ namespace Augmentix.Scripts.AR.UI
         void Update()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
         {
 #else
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
 #endif
                 if (!(EventSystem.current.IsPointerOverGameObject() ||
@@ -160,7 +160,7 @@ namespace Augmentix.Scripts.AR.UI
         {
             if (CurrentSelected == null)
             {
-                if (_prevtarget == null) return;
+                //if (_prevtarget == null) return;
 
                 foreach (Transform child in transform)
                     child.gameObject.SetActive(false);
@@ -219,14 +219,11 @@ namespace Augmentix.Scripts.AR.UI
                     var sizeDelta = rectTransform.sizeDelta;
                     x = x > 0 ? x + sizeDelta.x / 2 : x - sizeDelta.x / 2;
                     y = y > 0 ? y + sizeDelta.y / 2 : y - sizeDelta.y / 2;
-
-
+                    
                     rectTransform.transform.position = worldCenter + new Vector3(x, y, 0);
                     
                     _buttons[i].gameObject.SetActive(true);
                 }
-                
-                    
 
                 if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
                 {

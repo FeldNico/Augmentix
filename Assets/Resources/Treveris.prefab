@@ -3167,7 +3167,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7305496197149478096}
   - component: {fileID: 5306629298205377454}
-  - component: {fileID: 6130361180034651197}
   - component: {fileID: 3876999303777902839}
   - component: {fileID: 2938689137150944307}
   m_Layer: 0
@@ -3215,18 +3214,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 3
   isRuntimeInstantiated: 1
---- !u!114 &6130361180034651197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608367588650165357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &3876999303777902839
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3255,9 +3242,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Flags: 3
   Text: "Zwischen der Innenstadt und der Mosel standen im antiken Trier Vorratslager
-    und Getreidespeicher. Reste eines solchen Speichers, die im 7. Jh. n. Chr. beim
-    Umbau des Geb\xE4udes zu einem Frauenkloster weiterverwendet wurden, haben sich
-    bis heute in den Weinkellern der Vereinigten Hospizien erhalten.\r\nAu\xDFer
+    und Getreidespeicher. \nReste eines solchen Speichers, die im 7. Jh. n. Chr.
+    beim Umbau des Geb\xE4udes zu einem \nFrauenkloster weiterverwendet wurden, haben
+    sich bis heute in den Weinkellern der \nVereinigten Hospizien erhalten.\r\nAu\xDFer
     den bis zu 8 m hohen, mit Blendarkaden versehenen Mauerst\xFCcken besitzt das
     Weingut im Eingangsbereich noch originalen r\xF6mischen Ziegelboden.\r\n\r\nDes
     weiteren wurde im Osten des Gel\xE4ndes der Hospizien/St. Irminen ein an einer
@@ -14947,7 +14934,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7572123089201183665}
   - component: {fileID: 203737377715663154}
-  - component: {fileID: 1101313269207996414}
   - component: {fileID: 6472560196673844021}
   - component: {fileID: 530359110349385783}
   m_Layer: 0
@@ -15003,18 +14989,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 1
---- !u!114 &1101313269207996414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3044692927534628534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6472560196673844021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15051,7 +15025,7 @@ VideoPlayer:
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: _MainTex
-  m_RenderMode: 2
+  m_RenderMode: 3
   m_AspectRatio: 2
   m_DataSource: 0
   m_PlaybackSpeed: 1
@@ -31407,7 +31381,6 @@ GameObject:
   - component: {fileID: 9143549527330018181}
   - component: {fileID: 5467287413602278254}
   - component: {fileID: 5858410716767915606}
-  - component: {fileID: 5730167915751859945}
   m_Layer: 0
   m_Name: 00005(Clone)
   m_TagString: Untagged
@@ -31498,18 +31471,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 2
   isRuntimeInstantiated: 1
---- !u!114 &5730167915751859945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6470464862155415335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6475807798600198449
 GameObject:
   m_ObjectHideFlags: 0
@@ -33348,7 +33309,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7202169509118315304}
   - component: {fileID: 4578632217316559767}
-  - component: {fileID: 5485711385951377175}
   m_Layer: 0
   m_Name: 00002(Clone)
   m_TagString: Untagged
@@ -33428,18 +33388,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 4
   isRuntimeInstantiated: 1
---- !u!114 &5485711385951377175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6781367617394835094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6808044130136038265
 GameObject:
   m_ObjectHideFlags: 0
@@ -35018,7 +34966,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4190962486967304489}
   - component: {fileID: 7880891210322417000}
-  - component: {fileID: 6975035132261641606}
   m_Layer: 0
   m_Name: 00003(Clone)
   m_TagString: Untagged
@@ -35076,18 +35023,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 6
   isRuntimeInstantiated: 1
---- !u!114 &6975035132261641606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7276400235108666349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7278105561312586048
 GameObject:
   m_ObjectHideFlags: 0
@@ -38666,7 +38601,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1236035292762663597}
   - component: {fileID: 5311739246641555045}
-  - component: {fileID: 2063225034909695623}
   m_Layer: 0
   m_Name: 00006(Clone)
   m_TagString: Untagged
@@ -38720,18 +38654,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 5
   isRuntimeInstantiated: 1
---- !u!114 &2063225034909695623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8051767523316589202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2170a00efbfbb54fa200220d05fa760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8078498720217415229
 GameObject:
   m_ObjectHideFlags: 0
@@ -44798,15 +44720,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20e735855180cf84996270fba6d6d99c, type: 3}
---- !u!1 &2072057171365339806 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2534866581884222612, guid: 20e735855180cf84996270fba6d6d99c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4606279432859000330}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8833386754508993808 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 20e735855180cf84996270fba6d6d99c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4606279432859000330}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2072057171365339806 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2534866581884222612, guid: 20e735855180cf84996270fba6d6d99c,
     type: 3}
   m_PrefabInstance: {fileID: 4606279432859000330}
   m_PrefabAsset: {fileID: 0}
