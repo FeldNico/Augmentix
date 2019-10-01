@@ -18,6 +18,7 @@ namespace Augmentix.Scripts.VR
         public GameObject IndicationPrefab;
         public Image VideoImage;
         public Text ConnectionText;
+        public float HighlightDistance;
 
         private GameObject _target;
         private GameObject _indicator;
@@ -71,14 +72,14 @@ namespace Augmentix.Scripts.VR
                 {
                     var trans = _target.transform;
                     var center = new Vector3();
-                    var closestPoint = new Vector3();
+                    var distance = float.MaxValue;
                     var renderers = _target.GetComponentsInChildren<Renderer>();
                     foreach (var child in renderers)
                     {
-                        var tmp = child.bounds.ClosestPoint(trans.position);
-                        if (Vector3.Distance(tmp, trans.position) < Vector3.Distance(closestPoint, trans.position))
+                        var tmp = Vector3.Distance(child.bounds.ClosestPoint(trans.position),trans.position);
+                        if (tmp < distance)
                         {
-                            closestPoint = tmp;
+                            distance = tmp;
                         }
                         center += child.bounds.center;
                     }
@@ -86,7 +87,7 @@ namespace Augmentix.Scripts.VR
                     center = center / renderers.Length;
                 
                     _indicator.transform.LookAt(center);
-                    if (Quaternion.Angle(_indicator.transform.rotation, Camera.main.transform.rotation) < 20f)
+                    if (Quaternion.Angle(_indicator.transform.rotation, Camera.main.transform.rotation) < 20f && distance < HighlightDistance)
                     {
                         _indicator.gameObject.SetActive(false);
                         break;
