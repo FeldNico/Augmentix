@@ -146,6 +146,7 @@ namespace Augmentix.Scripts.AR.UI
                         Deselect();
                     }
                 }
+
             }
 
             SmoothMoveButtons();
