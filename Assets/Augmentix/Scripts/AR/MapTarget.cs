@@ -8,7 +8,7 @@ namespace Augmentix.Scripts.AR
 
         public float PlayerScale;
         public float Scale;
-        public Vector3 MapOffset;
+        public Vector3 MapOffset = new Vector3(1.694f,0f,1.261f);
         public GameObject Scaler { private set; get; }
 
         void Awake()

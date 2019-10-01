@@ -39,15 +39,17 @@ namespace Augmentix.Scripts
                 plane.transform.localPosition = new Vector3(-318,0,-500);
                 plane.transform.localScale = new Vector3(220,1,300);
                 plane.AddComponent<TeleportArea>();
-                plane.GetComponent<Renderer>().enabled = false;
+                //plane.GetComponent<Renderer>().enabled = false;
+                plane.GetComponent<Renderer>().material = GroundMaterial;
                 
-                
+                /*
                 plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 plane.transform.parent = transform;
                 plane.transform.localRotation = Quaternion.identity;
                 plane.transform.localPosition = new Vector3(-7,-0.01f,-500);
                 plane.transform.localScale = new Vector3(220,1,300);
-                plane.GetComponent<Renderer>().material = GroundMaterial;
+                */
+                
             }
 
             /*
