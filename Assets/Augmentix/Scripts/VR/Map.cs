@@ -8,6 +8,7 @@ public class Map : MonoBehaviour
     public static Map Instance { private set; get; }
     
     public SpriteRenderer MapImage;
+    public PointerTarget[] Targets;
 
     private void Awake()
     {

@@ -4055,6 +4055,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &753502860617853422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 587430452578950262}
+  m_Layer: 0
+  m_Name: Generics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &587430452578950262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753502860617853422}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 92.24689, y: -78.54668, z: 234.7146}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6472028634101124440}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &769239945424697592
 GameObject:
   m_ObjectHideFlags: 0
@@ -36758,6 +36788,7 @@ Transform:
   - {fileID: 157127631905835709}
   - {fileID: 1052566004176258779}
   - {fileID: 1833893256112000364}
+  - {fileID: 587430452578950262}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44643,11 +44674,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1833893256112000364}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: c6eb15ee735ed224c9827da267fccc80,
-        type: 3}
-      propertyPath: m_Name
-      value: poterie_obj
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c6eb15ee735ed224c9827da267fccc80,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -44717,6 +44743,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.0005
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: c6eb15ee735ed224c9827da267fccc80,
+        type: 3}
+      propertyPath: m_Name
+      value: poterie_obj
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6eb15ee735ed224c9827da267fccc80, type: 3}

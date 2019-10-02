@@ -1,11 +1,14 @@
 ﻿using Augmentix.Scripts.AR;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Augmentix.Scripts.OOI
 {
     public class TangibleView : MonoBehaviourPunCallbacks, IPunObservable
     {
+        public bool IsLocked = false;
+        
         private float m_Distance;
         private float m_Angle;
 
@@ -27,6 +30,13 @@ namespace Augmentix.Scripts.OOI
             m_NetworkPosition = Vector3.zero;
 
             m_NetworkRotation = Quaternion.identity;
+            
+            
+            if (!photonView.IsMine && gameObject.name.Equals("Empty"))
+                foreach (var child in GetComponentsInChildren<Renderer>())
+                {
+                    child.enabled = false;
+                }
         }
 
         void OnEnable()
@@ -46,10 +56,17 @@ namespace Augmentix.Scripts.OOI
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
 
+            
+            
             if (stream.IsWriting)
             {
 
                 if (PickupTarget.Instance.PlayerSync == null)
+                    return;
+                
+                stream.SendNext(IsLocked);
+                
+                if (IsLocked)
                     return;
                 
                 var localTransform =
@@ -68,6 +85,12 @@ namespace Augmentix.Scripts.OOI
             }
             else
             {
+                this.IsLocked = (bool) stream.ReceiveNext();
+                
+                if (IsLocked)
+                    return;
+                
+                
                 this.m_NetworkPosition = (Vector3) stream.ReceiveNext();
                 this.m_Direction = (Vector3) stream.ReceiveNext();
 

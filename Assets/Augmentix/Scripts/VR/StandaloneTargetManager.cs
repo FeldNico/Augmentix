@@ -9,7 +9,8 @@ namespace Augmentix.Scripts.VR
     {
         public SteamVR_Action_Boolean Menu =  SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Menu");
         public SteamVR_Action_Boolean Help =  SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Help");
-        
+
+        public float TeleportFadeDuration = 0.1f;
         
         new void Start()
         {

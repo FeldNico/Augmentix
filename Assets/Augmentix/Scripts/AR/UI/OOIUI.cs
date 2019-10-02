@@ -31,6 +31,7 @@ namespace Augmentix.Scripts.AR.UI
 
         public Slider Slider;
         public TMP_Dropdown Dropdown;
+        public Toggle TangibleLock;
         public Button Text;
         public Button Video;
         public Button Animation;
