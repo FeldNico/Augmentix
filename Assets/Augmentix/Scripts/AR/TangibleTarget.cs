@@ -19,7 +19,7 @@ namespace Augmentix.Scripts.AR
             TargetManager.Instance.OnConnection += () =>
             {
                 AddOOI("Tangibles/Empty");
-                Current.SetActive(false);
+                //Current.SetActive(false);
             };
             
             PickupTarget.Instance.LostPlayer += player =>
@@ -28,7 +28,7 @@ namespace Augmentix.Scripts.AR
                 {
                     PhotonNetwork.Destroy(Current);
                     AddOOI("Tangibles/Empty");
-                    Current.SetActive(false);
+                    //Current.SetActive(false);
                 }
             };
 

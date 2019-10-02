@@ -97,6 +97,44 @@ namespace Augmentix.Scripts.AR.UI
             {
                 CurrentSelected.transform.localScale = new Vector3(value,value,value);
             });
+            TangibleLock.onValueChanged.AddListener(value =>
+            {
+                if (CurrentSelected == null)
+                    return;
+                
+                if (value)
+                {
+                    var target = CurrentSelected.GetComponentInParent<TangibleTarget>();
+                    CurrentSelected.transform.parent =
+                        Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.photonView.Owner).transform;
+                    CurrentSelected.GetComponent<TangibleView>().IsLocked = true;
+                    target.AddOOI("Tangible/Empty");
+                }
+                else
+                {
+                    var targets = FindObjectsOfType<TangibleTarget>().Where(target => target.GetComponent<ImageTargetBehaviour>().CurrentStatus !=
+                                                                                      TrackableBehaviour.Status.NO_POSE && target.Current.name.Equals("Empty")).ToList();
+                    
+                    TangibleTarget closest = null;
+
+                    foreach (var target in targets)
+                    {
+                        if (closest == null ||
+                            Vector3.Distance(closest.transform.position, CurrentSelected.transform.position) >
+                            Vector3.Distance(target.transform.position, CurrentSelected.transform.position))
+                        {
+                            closest = target;
+                        }
+                    }
+                    
+                    CurrentSelected.transform.parent = closest.transform;
+                    CurrentSelected.transform.localPosition = Vector3.zero;
+                    CurrentSelected.transform.localRotation = Quaternion.identity;
+                    CurrentSelected.GetComponent<TangibleView>().IsLocked = false;
+                    
+                }
+                Deselect();
+            });
             Dropdown.onValueChanged.AddListener(value =>
             {
                 var current = CurrentSelected;
@@ -194,6 +232,12 @@ namespace Augmentix.Scripts.AR.UI
                     Dropdown.gameObject.SetActive(true);
                 }
 
+                if (CurrentSelected.GetComponent<TangibleView>())
+                {
+                    TangibleLock.gameObject.SetActive(true);
+                    TangibleLock.isOn = CurrentSelected.GetComponent<TangibleView>().IsLocked;
+                }
+
                 _center = new Vector3();
                 var renderers = CurrentSelected.GetComponentsInChildren<Renderer>();
 
@@ -225,26 +269,23 @@ namespace Augmentix.Scripts.AR.UI
                     
                     _buttons[i].gameObject.SetActive(true);
                 }
-
-                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
-                {
-                    Slider.GetComponent<RectTransform>().transform.position =
-                        worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
-                }
                 
-                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
-                {
-                    Dropdown.GetComponent<RectTransform>().transform.position =
-                        worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
-                }
+                Slider.GetComponent<RectTransform>().transform.position =
+                    worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
+
+                Dropdown.GetComponent<RectTransform>().transform.position =
+                    worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
+
+                TangibleLock.GetComponent<RectTransform>().transform.position =
+                    worldCenter + new Vector3(-3 * Radius * Screen.width / 100, 3 * Radius * Screen.height / 100, 0);
             }
         }
 
         public void Select(OOI.OOI Target)
         {
             Deselect();
+            OnSelect?.Invoke(Target);
             CurrentSelected = Target;
-            OnSelect?.Invoke(CurrentSelected);
         }
 
         public void Deselect()
