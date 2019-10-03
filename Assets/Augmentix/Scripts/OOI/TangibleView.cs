@@ -59,7 +59,6 @@ namespace Augmentix.Scripts.OOI
             if (IsEmpty)
                 return;
             
-            
             if (stream.IsWriting)
             {
 
