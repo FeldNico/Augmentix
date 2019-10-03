@@ -8,6 +8,7 @@ namespace Augmentix.Scripts.OOI
     public class TangibleView : MonoBehaviourPunCallbacks, IPunObservable
     {
         public bool IsLocked = false;
+        public bool IsEmpty = false;
         
         private float m_Distance;
         private float m_Angle;
@@ -31,8 +32,7 @@ namespace Augmentix.Scripts.OOI
 
             m_NetworkRotation = Quaternion.identity;
             
-            
-            if (!photonView.IsMine && gameObject.name.Equals("Empty"))
+            if (!photonView.IsMine && IsEmpty)
                 foreach (var child in GetComponentsInChildren<Renderer>())
                 {
                     child.enabled = false;
@@ -55,7 +55,9 @@ namespace Augmentix.Scripts.OOI
         
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-
+            
+            if (IsEmpty)
+                return;
             
             
             if (stream.IsWriting)

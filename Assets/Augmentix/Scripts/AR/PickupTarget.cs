@@ -28,13 +28,16 @@ namespace Augmentix.Scripts.AR
         private Treveris _treveris;
         private MapTarget _mapTarget;
         private bool _locked = false;
-#if UNITY_ANDROID      
+#if UNITY_ANDROID  
+        private TrackableBehaviour _trackableBehaviour;
         public UnityAction<TrackableBehaviour.Status> OnStatusChange;
 
         void Awake()
         {
             if (Instance == null)
                 Instance = this;
+
+            _trackableBehaviour = GetComponent<TrackableBehaviour>();
         }
 
         // Start is called before the first frame update
@@ -90,13 +93,13 @@ namespace Augmentix.Scripts.AR
         // Update is called once per frame
         void Update()
         {
-            if (_prevStatus != GetComponent<TrackableBehaviour>().CurrentStatus)
+            if (_prevStatus != _trackableBehaviour.CurrentStatus)
             {
-                OnStatusChange.Invoke(GetComponent<TrackableBehaviour>().CurrentStatus);
-                _prevStatus = GetComponent<TrackableBehaviour>().CurrentStatus;
+                OnStatusChange.Invoke(_trackableBehaviour.CurrentStatus);
+                _prevStatus = _trackableBehaviour.CurrentStatus;
             }
             
-            if (GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.NO_POSE)
+            if (_trackableBehaviour.CurrentStatus == TrackableBehaviour.Status.NO_POSE)
                 return;
 
             if (PlayerSync == null && !_locked )
@@ -124,7 +127,18 @@ namespace Augmentix.Scripts.AR
             
             if (_treveris != null && PlayerSync != null)
             {
+                foreach (Transform child in _treveris.transform)
+                {
+                    if (Vector3.Distance(child.position, PlayerSync.transform.position) > ViewDistance)
+                    {
+                        foreach (var inChild in child.GetComponentsInChildren<Renderer>())
+                        {
+                            //inChild.enabled = false;
+                        }
+                    }
+                }
 
+                /*
                 foreach (var childRenderer in _treveris.GetComponentsInChildren<Renderer>())
                 {
                     
@@ -139,6 +153,7 @@ namespace Augmentix.Scripts.AR
                             childRenderer.enabled = true;
                     }
                 }
+                */
             }
             
 

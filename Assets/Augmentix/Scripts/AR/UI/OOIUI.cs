@@ -11,6 +11,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Outline = Augmentix.Scripts.VR.Outline;
 #if UNITY_ANDROID
+using System.Runtime.InteropServices.WindowsRuntime;
 using Vuforia;
 #endif
 
@@ -27,25 +28,25 @@ namespace Augmentix.Scripts.AR.UI
                 Instance = this;
         }
 
-        public float Radius = 100f;
+        public float Radius = 5f;
 
-        public Slider Slider;
-        public TMP_Dropdown Dropdown;
-        public Toggle TangibleLock;
-        public Button Text;
-        public Button Video;
-        public Button Animation;
-        public Button Highlight;
+        public RectTransform Slider;
+        public RectTransform Dropdown;
+        public RectTransform TangibleLock;
+        public RectTransform Text;
+        public RectTransform Video;
+        public RectTransform Animation;
+        public RectTransform Highlight;
 
         public OOI.OOI CurrentSelected { private set; get; } = null;
 
         public UnityAction<OOI.OOI> OnSelect;
         public UnityAction OnDeselect;
 
-        public List<Button> GetButtons(OOI.OOI ooi)
+        public List<RectTransform> GetButtons(OOI.OOI ooi)
         {
             var flags = ooi.Flags;
-            var l = new List<Button>();
+            var l = new List<RectTransform>();
             if (flags.HasFlag(OOI.OOI.InteractionFlag.Highlight))
                 l.Add(Highlight);
             if (flags.HasFlag(OOI.OOI.InteractionFlag.Animation))
@@ -73,31 +74,32 @@ namespace Augmentix.Scripts.AR.UI
                 Deselect();
             };
 
-            Highlight.onClick.AddListener(() =>
+            Highlight.GetComponent<Button>().onClick.AddListener(() =>
             {
                 CurrentSelected.Interact(OOI.OOI.InteractionFlag.Highlight);
                 Deselect();
             });
-            Animation.onClick.AddListener(() =>
+            Animation.GetComponent<Button>().onClick.AddListener(() =>
             {
                 CurrentSelected.Interact(OOI.OOI.InteractionFlag.Animation);
                 Deselect();
             });
-            Text.onClick.AddListener(() =>
+            Text.GetComponent<Button>().onClick.AddListener(() =>
             {
                 CurrentSelected.Interact(OOI.OOI.InteractionFlag.Text);
                 Deselect();
             });
-            Video.onClick.AddListener(() =>
+            Video.GetComponent<Button>().onClick.AddListener(() =>
             {
                 CurrentSelected.Interact(OOI.OOI.InteractionFlag.Video);
                 Deselect();
             });
-            Slider.onValueChanged.AddListener(value =>
+            Slider.GetComponent<Slider>().onValueChanged.AddListener(value =>
             {
-                CurrentSelected.transform.localScale = new Vector3(value,value,value);
+                if (CurrentSelected != null)
+                    CurrentSelected.transform.localScale = new Vector3(value,value,value);
             });
-            TangibleLock.onValueChanged.AddListener(value =>
+            TangibleLock.GetComponent<Toggle>().onValueChanged.AddListener(value =>
             {
                 if (CurrentSelected == null)
                     return;
@@ -108,12 +110,12 @@ namespace Augmentix.Scripts.AR.UI
                     CurrentSelected.transform.parent =
                         Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.photonView.Owner).transform;
                     CurrentSelected.GetComponent<TangibleView>().IsLocked = true;
-                    target.AddOOI("Tangible/Empty");
+                    target.AddOOI("Tangibles/"+((AndroidTargetManager) TargetManager.Instance).EmptyTangible.name);
                 }
                 else
                 {
                     var targets = FindObjectsOfType<TangibleTarget>().Where(target => target.GetComponent<ImageTargetBehaviour>().CurrentStatus !=
-                                                                                      TrackableBehaviour.Status.NO_POSE && target.Current.name.Equals("Empty")).ToList();
+                                                                                      TrackableBehaviour.Status.NO_POSE && target.Current.GetComponent<TangibleView>().IsEmpty).ToList();
                     
                     TangibleTarget closest = null;
 
@@ -135,19 +137,64 @@ namespace Augmentix.Scripts.AR.UI
                 }
                 Deselect();
             });
-            Dropdown.onValueChanged.AddListener(value =>
+            Dropdown.GetComponent<TMP_Dropdown>().onValueChanged.AddListener(value =>
             {
                 var current = CurrentSelected;
                 Deselect();
                 var parent = current.transform.parent;
                 PhotonNetwork.Destroy(current.gameObject);
-                parent.GetComponent<TangibleTarget>().AddOOI("Tangibles/"+Dropdown.options[value].text);
+                parent.GetComponent<TangibleTarget>().AddOOI("Tangibles/"+Dropdown.GetComponent<TMP_Dropdown>().options[value].text);
             });
             
             var options = ((AndroidTargetManager) AndroidTargetManager.Instance).TangiblePrefabs.Select(o => o.name)
                 .ToList();
-            Dropdown.AddOptions(options);
-            
+            Dropdown.GetComponent<TMP_Dropdown>().AddOptions(options);
+
+            OnSelect += ooi =>
+            {
+                foreach (Transform child in transform)
+                    child.gameObject.SetActive(false);
+
+                _buttons?.Clear();
+                _buttons = GetButtons(ooi);
+
+                if (ooi.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
+                {
+                    Slider.gameObject.SetActive(true);
+                    var scale = ooi.transform.localScale.x;
+                    var slider = Slider.GetComponent<Slider>();
+                    slider.minValue = scale / 5f;
+                    slider.value = scale;
+                    slider.maxValue = scale * 5f;
+                }
+                if (ooi.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
+                {
+                    Dropdown.gameObject.SetActive(true);
+                }
+
+                if (ooi.GetComponent<TangibleView>())
+                {
+                    TangibleLock.gameObject.SetActive(true);
+                    TangibleLock.GetComponent<Toggle>().isOn = ooi.GetComponent<TangibleView>().IsLocked;
+                }
+
+                _center = new Vector3();
+                var renderers = ooi.GetComponentsInChildren<Renderer>();
+
+                if (renderers.Length > 0)
+                {
+                    foreach (var child in renderers)
+                        _center += child.bounds.center;
+                    _center = _center / renderers.Length;
+                    _center = _center - ooi.transform.position;
+                }
+            };
+
+            OnDeselect += () =>
+            {
+                foreach (Transform child in transform)
+                    child.gameObject.SetActive(false);
+            };
         }
 
         void Update()
@@ -185,99 +232,67 @@ namespace Augmentix.Scripts.AR.UI
                         Deselect();
                     }
                 }
-
             }
 
             SmoothMoveButtons();
         }
 
-        private List<Button> _buttons = null;
+        private List<RectTransform> _buttons = null;
         private OOI.OOI _prevtarget = null;
         private Vector3 _center = new Vector3();
 
         void SmoothMoveButtons()
         {
             if (CurrentSelected == null)
-            {
-                //if (_prevtarget == null) return;
-
-                foreach (Transform child in transform)
-                    child.gameObject.SetActive(false);
-
-                _prevtarget = null;
                 return;
-            }
+            
+            var worldCenter = Camera.main.WorldToScreenPoint(CurrentSelected.transform.position + _center);
 
-            if (CurrentSelected != _prevtarget)
+            for (var i = 0; i < _buttons.Count; i++)
             {
-                if (_prevtarget != null)
-                    foreach (Transform child in transform)
-                        child.gameObject.SetActive(false);
+                var rectTransform = _buttons[i];
 
-                _prevtarget = CurrentSelected;
+                var x = (float) (Radius * Screen.width / 100 * Math.Cos(2 * i * Math.PI / _buttons.Count));
+                var y = (float) (Radius * Screen.height / 100 * Math.Sin(2 * i * Math.PI / _buttons.Count));
 
-                _buttons?.Clear();
-                _buttons = GetButtons(CurrentSelected);
+                var sizeDelta = rectTransform.sizeDelta;
+                x = x > 0 ? x + sizeDelta.x / 2 : x - sizeDelta.x / 2;
+                y = y > 0 ? y + sizeDelta.y / 2 : y - sizeDelta.y / 2;
                 
-                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Scale))
-                {
-                    Slider.gameObject.SetActive(true);
-                    var scale = CurrentSelected.transform.localScale.x;
-                    Slider.minValue = scale / 5f;
-                    Slider.value = scale;
-                    Slider.maxValue = scale * 5f;
-                }
-                if (CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
-                {
-                    Dropdown.gameObject.SetActive(true);
-                }
-
-                if (CurrentSelected.GetComponent<TangibleView>())
-                {
-                    TangibleLock.gameObject.SetActive(true);
-                    TangibleLock.isOn = CurrentSelected.GetComponent<TangibleView>().IsLocked;
-                }
-
-                _center = new Vector3();
-                var renderers = CurrentSelected.GetComponentsInChildren<Renderer>();
-
-                if (renderers.Length > 0)
-                {
-                    foreach (var child in renderers)
-                        _center += child.bounds.center;
-                    _center = _center / renderers.Length;
-                    _center = _center - CurrentSelected.transform.position;
-                }
+                rectTransform.transform.position = worldCenter + new Vector3(x, y, 0);
+                
+                _buttons[i].gameObject.SetActive(true);
             }
+            
+            Slider.transform.position =
+                worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
 
-            if (CurrentSelected != null)
+            Dropdown.transform.position =
+                worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
+
+            TangibleLock.transform.position =
+                worldCenter + new Vector3(-3 * Radius * Screen.width / 100, 3 * Radius * Screen.height / 100, 0);
+
+            var toggle = TangibleLock.GetComponent<Toggle>();
+            if (CurrentSelected.GetComponent<TangibleView>() && toggle.isOn)
             {
-                var worldCenter = Camera.main.WorldToScreenPoint(CurrentSelected.transform.position + _center);
-
-                for (var i = 0; i < _buttons.Count; i++)
+                var closestDistance = float.MaxValue;
+                foreach (var tangibleTarget in TangibleTarget.AllTangibles)
                 {
-                    var rectTransform = _buttons[i].GetComponent<RectTransform>();
+                    if (!tangibleTarget.Current.GetComponent<TangibleView>().IsEmpty || tangibleTarget.GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.NO_POSE)
+                        continue;
 
-                    var x = (float) (Radius * Screen.width / 100 * Math.Cos(2 * i * Math.PI / _buttons.Count));
-                    var y = (float) (Radius * Screen.height / 100 * Math.Sin(2 * i * Math.PI / _buttons.Count));
-
-                    var sizeDelta = rectTransform.sizeDelta;
-                    x = x > 0 ? x + sizeDelta.x / 2 : x - sizeDelta.x / 2;
-                    y = y > 0 ? y + sizeDelta.y / 2 : y - sizeDelta.y / 2;
-                    
-                    rectTransform.transform.position = worldCenter + new Vector3(x, y, 0);
-                    
-                    _buttons[i].gameObject.SetActive(true);
+                    var screenPos = Camera.main.WorldToScreenPoint(tangibleTarget.transform.position);
+                    if (Vector3.Distance(screenPos, worldCenter) < closestDistance)
+                    {
+                        closestDistance = Vector3.Distance(screenPos, worldCenter);
+                    }
                 }
-                
-                Slider.GetComponent<RectTransform>().transform.position =
-                    worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
 
-                Dropdown.GetComponent<RectTransform>().transform.position =
-                    worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
-
-                TangibleLock.GetComponent<RectTransform>().transform.position =
-                    worldCenter + new Vector3(-3 * Radius * Screen.width / 100, 3 * Radius * Screen.height / 100, 0);
+                if (closestDistance < Radius * 20f)
+                    toggle.gameObject.SetActive(true);
+                else
+                    toggle.gameObject.SetActive(false);
             }
         }
 

@@ -1,9 +1,12 @@
-﻿using Augmentix.Scripts.OOI;
+﻿using System;
+using Augmentix.Scripts.OOI;
 using Photon.Pun;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 #if UNITY_ANDROID
+using System.Collections.Generic;
+using Augmentix.Scripts.AR.UI;
 using Vuforia;
 #endif
 
@@ -12,14 +15,25 @@ namespace Augmentix.Scripts.AR
     #if UNITY_ANDROID
     public class TangibleTarget : MonoBehaviour
     {
+        public static List<TangibleTarget> AllTangibles { private set; get; } = new List<TangibleTarget>();
+        
         public UnityAction<TrackableBehaviour.Status> OnStatusChange;
         public GameObject Current { private set; get; } = null;
+        
+        private TrackableBehaviour _trackableBehaviour;
+
+        private void Awake()
+        {
+            _trackableBehaviour = GetComponent<TrackableBehaviour>();
+            AllTangibles.Add(this);
+        }
+
         private void Start()
         {
             TargetManager.Instance.OnConnection += () =>
             {
                 AddOOI("Tangibles/Empty");
-                //Current.SetActive(false);
+                Current.SetActive(false);
             };
             
             PickupTarget.Instance.LostPlayer += player =>
@@ -28,7 +42,7 @@ namespace Augmentix.Scripts.AR
                 {
                     PhotonNetwork.Destroy(Current);
                     AddOOI("Tangibles/Empty");
-                    //Current.SetActive(false);
+                    Current.SetActive(false);
                 }
             };
 
@@ -57,19 +71,20 @@ namespace Augmentix.Scripts.AR
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
             Current = go;
+            OOIUI.Instance.Select(Current.GetComponent<OOI.OOI>());
         }
     
         private TrackableBehaviour.Status _prevStatus = TrackableBehaviour.Status.NO_POSE;
         // Update is called once per frame
         void Update()
         {
-            if (_prevStatus != GetComponent<TrackableBehaviour>().CurrentStatus)
+            if (_prevStatus != _trackableBehaviour.CurrentStatus)
             {
-                OnStatusChange.Invoke(GetComponent<TrackableBehaviour>().CurrentStatus);
-                _prevStatus = GetComponent<TrackableBehaviour>().CurrentStatus;
+                OnStatusChange.Invoke(_trackableBehaviour.CurrentStatus);
+                _prevStatus = _trackableBehaviour.CurrentStatus;
             }
 
-            if (GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.NO_POSE)
+            if (_trackableBehaviour.CurrentStatus == TrackableBehaviour.Status.NO_POSE)
                 return;
 
         }

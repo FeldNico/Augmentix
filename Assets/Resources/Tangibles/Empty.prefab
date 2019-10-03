@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLocked: 0
+  IsEmpty: 1
 --- !u!33 &1236174991164739922
 MeshFilter:
   m_ObjectHideFlags: 0

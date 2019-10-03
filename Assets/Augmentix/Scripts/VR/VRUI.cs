@@ -68,12 +68,26 @@ namespace Augmentix.Scripts.VR
 
             IEnumerator RotateIndicator()
             {
+                Renderer[] renderers = null;
+                GameObject prev = null;
+                var center = new Vector3();
                 while (true)
                 {
                     var trans = _target.transform;
-                    var center = new Vector3();
                     var distance = float.MaxValue;
-                    var renderers = _target.GetComponentsInChildren<Renderer>();
+                    if (_target != prev)
+                    {
+                        renderers = _target.GetComponentsInChildren<Renderer>();
+                        prev = _target;
+                        
+                        center = new Vector3();
+                        
+                        foreach (var child in renderers)
+                        {
+                            center += child.bounds.center;
+                        }
+                        center = center / renderers.Length;
+                    }
                     foreach (var child in renderers)
                     {
                         var tmp = Vector3.Distance(child.bounds.ClosestPoint(trans.position),trans.position);
@@ -81,19 +95,17 @@ namespace Augmentix.Scripts.VR
                         {
                             distance = tmp;
                         }
-                        center += child.bounds.center;
                     }
-                        
-                    center = center / renderers.Length;
-                
-                    _indicator.transform.LookAt(center);
-                    if (Quaternion.Angle(_indicator.transform.rotation, Camera.main.transform.rotation) < 20f && distance < HighlightDistance)
+
+                    var indicatorTransform = _indicator.transform;
+                    indicatorTransform.LookAt(center);
+                    indicatorTransform.localRotation = indicatorTransform.localRotation * Quaternion.Euler(80, 0, 0);
+                    
+                    if (Quaternion.Angle(indicatorTransform.rotation, Camera.main.transform.rotation) < 20f && distance < HighlightDistance)
                     {
                         _indicator.gameObject.SetActive(false);
                         break;
                     }
-                
-                    _indicator.transform.localRotation = _indicator.transform.localRotation * Quaternion.Euler(80, 0, 0);
 
                     yield return new WaitForEndOfFrame();
                 }
