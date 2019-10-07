@@ -71,7 +71,6 @@ namespace Augmentix.Scripts.AR
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
             Current = go;
-            OOIUI.Instance.Select(Current.GetComponent<OOI.OOI>());
         }
     
         private TrackableBehaviour.Status _prevStatus = TrackableBehaviour.Status.NO_POSE;

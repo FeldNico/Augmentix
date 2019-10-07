@@ -8,6 +8,9 @@ using Augmentix.Scripts.VR;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Video;
+#if UNITY_ANDROID
+using Vuforia;
+#endif
 
 namespace Augmentix.Scripts.OOI
 {
@@ -23,24 +26,32 @@ namespace Augmentix.Scripts.OOI
             Animation = 8,
             Manipulate = 16,
             Scale = 32,
-            Changeable = 64
+            Changeable = 64,
+            Lockable = 128
         }
 
 #if UNITY_EDITOR
         [OOIViewEditor.EnumFlagsAttribute]
 #endif
-        public InteractionFlag Flags = InteractionFlag.Highlight;
+        public InteractionFlag Flags = InteractionFlag.Highlight | InteractionFlag.Lockable;
 
         [TextArea] public string Text;
 
         public float TextScale = 0.02f;
 
+        private LineRenderer lineRenderer;
         private void Start()
         {
             GetComponent<PhotonView>().OwnershipTransfer = OwnershipOption.Takeover;
 
             if (TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
             {
+                
+                lineRenderer = gameObject.AddComponent<LineRenderer>();
+                lineRenderer.widthMultiplier = 0.001f;
+                lineRenderer.material = OOIUI.Instance.HeightLineMaterial;
+                
+                
                 PickupTarget.Instance.GotPlayer += player =>
                 {
                     var treveris = Treveris.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner);
@@ -55,6 +66,33 @@ namespace Augmentix.Scripts.OOI
                         GetComponent<PhotonView>().TransferOwnership(player.GetComponent<PhotonView>().Owner);
                 };
             }
+        }
+        
+        private void Update()
+        {
+            if (lineRenderer == null)
+                return;
+
+            var trackable = FindObjectOfType<PickupTarget>();
+            
+            #if UNITY_ANDROID
+            if (trackable.GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.NO_POSE)
+                return;
+            #endif
+            
+            var pos = trackable.transform.InverseTransformPoint(transform.position);
+            if (pos.y > OOIUI.Instance.HeightLineThreshold)
+            {
+                pos.y = 0f;
+                lineRenderer.enabled = true;
+                lineRenderer.SetPosition(0,transform.position - new Vector3(0f,0.001f,0f));
+                lineRenderer.SetPosition(1,trackable.transform.TransformPoint(pos));
+            }
+            else
+            {
+                lineRenderer.enabled = false;
+            }
+
         }
 
         private GameObject _videoCube = null;

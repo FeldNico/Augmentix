@@ -445,7 +445,7 @@ MonoBehaviour:
     type: 3}
   VideoImage: {fileID: 1454756549}
   ConnectionText: {fileID: 968629059}
-  HighlightDistance: 0
+  HighlightDistance: 3
 --- !u!1001 &1151710226
 PrefabInstance:
   m_ObjectHideFlags: 0

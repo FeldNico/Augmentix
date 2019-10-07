@@ -90,7 +90,7 @@ namespace Augmentix.Scripts.VR
                     }
                     foreach (var child in renderers)
                     {
-                        var tmp = Vector3.Distance(child.bounds.ClosestPoint(trans.position),trans.position);
+                        var tmp = Vector3.Distance(child.bounds.ClosestPoint(Camera.main.transform.position),Camera.main.transform.position);
                         if (tmp < distance)
                         {
                             distance = tmp;
@@ -99,13 +99,13 @@ namespace Augmentix.Scripts.VR
 
                     var indicatorTransform = _indicator.transform;
                     indicatorTransform.LookAt(center);
-                    indicatorTransform.localRotation = indicatorTransform.localRotation * Quaternion.Euler(80, 0, 0);
-                    
+
                     if (Quaternion.Angle(indicatorTransform.rotation, Camera.main.transform.rotation) < 20f && distance < HighlightDistance)
                     {
                         _indicator.gameObject.SetActive(false);
                         break;
                     }
+                    indicatorTransform.localRotation = indicatorTransform.localRotation * Quaternion.Euler(80, 0, 0);
 
                     yield return new WaitForEndOfFrame();
                 }

@@ -31,12 +31,24 @@ namespace Augmentix.Scripts.AR.UI
         public float Radius = 5f;
 
         public RectTransform Slider;
+        public Vector2 SliderOffset = new Vector2(0f,-3f);
         public RectTransform Dropdown;
+        public Vector2 DropdownOffset = new Vector2(0f,3f);
         public RectTransform TangibleLock;
+        public Vector2 TangibleLockOffset = new Vector2(-3f,3.2f);
+        public float TangibleLockDistance;
+        public RectTransform Delete;
+        public Vector2 DeleteOffset= new Vector2(3f,3.2f);
         public RectTransform Text;
         public RectTransform Video;
         public RectTransform Animation;
         public RectTransform Highlight;
+        
+       
+        
+        
+        public float HeightLineThreshold = 0.05f;
+        public Material HeightLineMaterial;
 
         public OOI.OOI CurrentSelected { private set; get; } = null;
 
@@ -111,6 +123,7 @@ namespace Augmentix.Scripts.AR.UI
                         Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.photonView.Owner).transform;
                     CurrentSelected.GetComponent<TangibleView>().IsLocked = true;
                     target.AddOOI("Tangibles/"+((AndroidTargetManager) TargetManager.Instance).EmptyTangible.name);
+                    Delete.gameObject.SetActive(true);
                 }
                 else
                 {
@@ -128,17 +141,22 @@ namespace Augmentix.Scripts.AR.UI
                             closest = target;
                         }
                     }
+
+                    PhotonNetwork.Destroy(closest.GetComponentInChildren<TangibleView>().gameObject);
                     
                     CurrentSelected.transform.parent = closest.transform;
                     CurrentSelected.transform.localPosition = Vector3.zero;
                     CurrentSelected.transform.localRotation = Quaternion.identity;
                     CurrentSelected.GetComponent<TangibleView>().IsLocked = false;
-                    
+                    Delete.gameObject.SetActive(false);
                 }
-                Deselect();
+                //Deselect();
             });
             Dropdown.GetComponent<TMP_Dropdown>().onValueChanged.AddListener(value =>
             {
+                if (CurrentSelected == null)
+                    return;
+
                 var current = CurrentSelected;
                 Deselect();
                 var parent = current.transform.parent;
@@ -148,8 +166,16 @@ namespace Augmentix.Scripts.AR.UI
             
             var options = ((AndroidTargetManager) AndroidTargetManager.Instance).TangiblePrefabs.Select(o => o.name)
                 .ToList();
+            options.Insert(0,((AndroidTargetManager) AndroidTargetManager.Instance).EmptyTangible.name);
             Dropdown.GetComponent<TMP_Dropdown>().AddOptions(options);
 
+            Delete.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                var current = CurrentSelected.gameObject;
+                Deselect();
+                PhotonNetwork.Destroy(current);
+            });
+            
             OnSelect += ooi =>
             {
                 foreach (Transform child in transform)
@@ -169,17 +195,25 @@ namespace Augmentix.Scripts.AR.UI
                 }
                 if (ooi.Flags.HasFlag(OOI.OOI.InteractionFlag.Changeable))
                 {
+                    var dropdown = Dropdown.GetComponent<TMP_Dropdown>();
+                    var o = dropdown.options.First(data => ooi.gameObject.name.Equals(data.text+"(Clone)"));
+                    dropdown.value = dropdown.options.IndexOf(o);
                     Dropdown.gameObject.SetActive(true);
                 }
 
-                if (ooi.GetComponent<TangibleView>())
+                if (ooi.GetComponent<TangibleView>() && ooi.Flags.HasFlag(OOI.OOI.InteractionFlag.Lockable))
                 {
                     TangibleLock.gameObject.SetActive(true);
                     TangibleLock.GetComponent<Toggle>().isOn = ooi.GetComponent<TangibleView>().IsLocked;
                 }
+                
+                if (ooi.GetComponent<TangibleView>() && ooi.GetComponent<TangibleView>().IsLocked)
+                {
+                    Delete.gameObject.SetActive(true);
+                }
 
                 _center = new Vector3();
-                var renderers = ooi.GetComponentsInChildren<Renderer>();
+                var renderers = ooi.GetComponentsInChildren<MeshRenderer>();
 
                 if (renderers.Length > 0)
                 {
@@ -265,13 +299,16 @@ namespace Augmentix.Scripts.AR.UI
             }
             
             Slider.transform.position =
-                worldCenter + new Vector3(0, -3 * Radius * Screen.height / 100, 0);
+                worldCenter + new Vector3(SliderOffset.x * Radius * Screen.width / 100, SliderOffset.y * Radius * Screen.height / 100, 0);
 
             Dropdown.transform.position =
-                worldCenter + new Vector3(0, 3 * Radius * Screen.height / 100, 0);
+                worldCenter + new Vector3(DropdownOffset.x * Radius * Screen.width / 100, DropdownOffset.y * Radius * Screen.height / 100, 0);
 
             TangibleLock.transform.position =
-                worldCenter + new Vector3(-3 * Radius * Screen.width / 100, 3 * Radius * Screen.height / 100, 0);
+                worldCenter + new Vector3(TangibleLockOffset.x * Radius * Screen.width / 100, TangibleLockOffset.y * Radius * Screen.height / 100, 0);
+            
+            Delete.transform.position =
+                worldCenter + new Vector3(DeleteOffset.x * Radius * Screen.width / 100, DeleteOffset.y * Radius * Screen.height / 100, 0);
 
             var toggle = TangibleLock.GetComponent<Toggle>();
             if (CurrentSelected.GetComponent<TangibleView>() && toggle.isOn)
@@ -281,15 +318,14 @@ namespace Augmentix.Scripts.AR.UI
                 {
                     if (!tangibleTarget.Current.GetComponent<TangibleView>().IsEmpty || tangibleTarget.GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.NO_POSE)
                         continue;
-
-                    var screenPos = Camera.main.WorldToScreenPoint(tangibleTarget.transform.position);
-                    if (Vector3.Distance(screenPos, worldCenter) < closestDistance)
+                    
+                    if (Vector3.Distance(tangibleTarget.transform.position, CurrentSelected.transform.position) < closestDistance)
                     {
-                        closestDistance = Vector3.Distance(screenPos, worldCenter);
+                        closestDistance = Vector3.Distance(tangibleTarget.transform.position, CurrentSelected.transform.position);
                     }
                 }
 
-                if (closestDistance < Radius * 20f)
+                if (closestDistance < TangibleLockDistance && CurrentSelected.Flags.HasFlag(OOI.OOI.InteractionFlag.Lockable))
                     toggle.gameObject.SetActive(true);
                 else
                     toggle.gameObject.SetActive(false);

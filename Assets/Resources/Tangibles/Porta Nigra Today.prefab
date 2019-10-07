@@ -9373,7 +9373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e212faef564c8de45bdf5300a4ff69c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flags: 103
+  Flags: 231
   Text: Neue Porta Nigra ohne Turm
   TextScale: 0.01
 --- !u!328 &8565700568382997442
@@ -9423,6 +9423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLocked: 0
+  IsEmpty: 0
 --- !u!1 &8243734010105987362
 GameObject:
   m_ObjectHideFlags: 0

@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e212faef564c8de45bdf5300a4ff69c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flags: 99
+  Flags: 227
   Text: Dies ist eine Tonvase
   TextScale: 0.02
 --- !u!114 &-6869049774604208856
@@ -83,6 +83,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d80302e0f21b1244b426d92bf49f994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsLocked: 0
+  IsEmpty: 0
 --- !u!1 &7324412623146795694
 GameObject:
   m_ObjectHideFlags: 0
