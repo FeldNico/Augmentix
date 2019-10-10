@@ -25,7 +25,7 @@ namespace Augmentix.Scripts.AR
         
         public GameObject Scaler { private set; get; }
 
-        public Treveris Treveris;
+        private Treveris _treveris;
         private bool _locked = false;
 #if UNITY_ANDROID  
         private TrackableBehaviour _trackableBehaviour;
@@ -59,6 +59,7 @@ namespace Augmentix.Scripts.AR
                 t.localPosition = Vector3.zero;
                 Current = null;
                 Treveris.RemoveTreveris();
+                _treveris = null;
             };
         }
 
@@ -90,18 +91,18 @@ namespace Augmentix.Scripts.AR
 
             if (Current != null && !_locked && ARUI.Instance.LockCam.isOn)
             {
-                if (Treveris != null)
+                if (_treveris != null)
                 {
-                    var t = Treveris.transform;
+                    var t = _treveris.transform;
                     var localPosition = Current.transform.localPosition;
                     t.localPosition = t.localScale.x * -new Vector3(localPosition.x,0,localPosition.z);
                 }
             }
 
             
-            if (Treveris != null && Current != null)
+            if (_treveris != null && Current != null)
             {
-                foreach (Transform child in Treveris.transform)
+                foreach (Transform child in _treveris.transform)
                 {
                     if (Vector3.Distance(child.position, Current.transform.position) > ViewDistance)
                     {
@@ -113,7 +114,7 @@ namespace Augmentix.Scripts.AR
                 }
 
                 /*
-                foreach (var childRenderer in Treveris.GetComponentsInChildren<Renderer>())
+                foreach (var childRenderer in _treveris.GetComponentsInChildren<Renderer>())
                 {
                     
                     if (Vector3.Distance(childRenderer.bounds.ClosestPoint(Current.transform.position), Current.transform.position) > ViewDistance)
@@ -135,8 +136,8 @@ namespace Augmentix.Scripts.AR
             {
                 _locked = true;
 
-                Treveris = Treveris.GetTreverisByPlayer(Current.GetComponent<PhotonView>().Owner);
-                Current.transform.parent = Treveris.transform;
+                _treveris = Treveris.GetTreverisByPlayer(Current.GetComponent<PhotonView>().Owner);
+                Current.transform.parent = _treveris.transform;
 
                 var elapsedTime = 0f;
                 var startingPos = Current.transform.position;
