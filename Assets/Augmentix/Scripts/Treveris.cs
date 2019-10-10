@@ -22,62 +22,27 @@ namespace Augmentix.Scripts
         {
             view = GetComponent<PhotonView>();
 
-            if (!view.IsMine)
+            if (!view.IsMine && TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
             {
                 transform.parent = PickupTarget.Instance.Scaler.transform;
                 transform.localScale = Vector3.one;
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
                 gameObject.SetActive(false);
-                _treveri.Add(view.OwnerActorNr,this);
+                _treveri.Add(view.OwnerActorNr, this);
             }
             else
             {
                 var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 plane.transform.parent = transform;
                 plane.transform.localRotation = Quaternion.identity;
-                plane.transform.localPosition = new Vector3(-318,0,-500);
-                plane.transform.localScale = new Vector3(220,1,300);
+                plane.transform.localPosition = new Vector3(-318, 0, -500);
+                plane.transform.localScale = new Vector3(220, 1, 300);
                 plane.AddComponent<TeleportArea>();
-                //plane.GetComponent<Renderer>().enabled = false;
                 plane.GetComponent<Renderer>().material = GroundMaterial;
-                
-                /*
-                plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                plane.transform.parent = transform;
-                plane.transform.localRotation = Quaternion.identity;
-                plane.transform.localPosition = new Vector3(-7,-0.01f,-500);
-                plane.transform.localScale = new Vector3(220,1,300);
-                */
-                
+
             }
 
-            /*
-            var wg = gameObject.GetComponent<WorldGenerator>();
-            wg.OnBuildingCreation = (pxr_model,parent) =>
-            {
-                if (view.IsMine)
-                {
-                    var prefab = Resources.Load<GameObject>("PortaXR/"+pxr_model.id.Substring(1));
-
-                    if (prefab != null)
-                    {
-                        var go = PhotonNetwork.Instantiate("PortaXR/"+prefab.name, Vector3.zero, Quaternion.identity,0,new object[] {view.ViewID,pxr_model.position,Quaternion.Euler(0,180,0)});
-                        go.transform.parent = parent;
-                        go.transform.localPosition = pxr_model.position;
-                        go.transform.localRotation = Quaternion.Euler(0,180,0);
-                        go.transform.localScale = Vector3.one;
-                        return true;
-                    }
-                    
-                    return false;
-                }
-
-                return true;
-            };
-            wg.Generate();
-            */
-            
         }
 
         public static Treveris GetTreverisByPlayer(Player player)

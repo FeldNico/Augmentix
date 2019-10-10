@@ -109,7 +109,7 @@ namespace Augmentix.Scripts
                         new RaiseEventOptions
                         {
                             TargetActors = new[]
-                                {PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber}
+                                {PickupTarget.Instance.Current.GetComponent<PhotonView>().Controller.ActorNumber}
                         }, SendOptions.SendReliable);
                 };
 
@@ -148,12 +148,12 @@ namespace Augmentix.Scripts
                 if (Input.deviceOrientation != _prevOrientation)
                 {
                     _prevOrientation = Input.deviceOrientation;
-                    if (PickupTarget.Instance != null && PickupTarget.Instance.PlayerSync != null)
+                    if (PickupTarget.Instance != null && PickupTarget.Instance.Current != null)
                         PhotonNetwork.RaiseEvent(CHANGEORIENTATION, _prevOrientation,
                             new RaiseEventOptions
                             {
                                 TargetActors = new[]
-                                    {PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber}
+                                    {PickupTarget.Instance.Current.GetComponent<PhotonView>().Controller.ActorNumber}
                             }, SendOptions.SendReliable);
                 }
             }
@@ -162,7 +162,7 @@ namespace Augmentix.Scripts
         private void SendImage()
         {
             if (!_isPrimary || !IsStreaming || PickupTarget.Instance == null ||
-                PickupTarget.Instance.PlayerSync == null || !_webCam.isPlaying || _webCam.width < 100)
+                PickupTarget.Instance.Current == null || !_webCam.isPlaying || _webCam.width < 100)
                 return;
 
             if (_tex2d.width == 1)
@@ -175,7 +175,7 @@ namespace Augmentix.Scripts
             {
                 CachingOption = EventCaching.DoNotCache, Receivers = ReceiverGroup.Others,
                 TargetActors = new[]
-                    {PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber}
+                    {PickupTarget.Instance.Current.GetComponent<PhotonView>().Controller.ActorNumber}
             };
 
             PhotonNetwork.RaiseEvent(SENDIMAGE, _tex2d.EncodeToJPG(10), options, SendOptions.SendUnreliable);
@@ -266,7 +266,7 @@ namespace Augmentix.Scripts
 
         public void ToogleStream(bool toggle)
         {
-            if (PickupTarget.Instance == null || PickupTarget.Instance.PlayerSync == null || !_isPrimary)
+            if (PickupTarget.Instance == null || PickupTarget.Instance.Current == null || !_isPrimary)
                 return;
 
             GetComponent<PhotonVoiceNetwork>().Client
@@ -280,7 +280,7 @@ namespace Augmentix.Scripts
                     new RaiseEventOptions
                     {
                         TargetActors = new[]
-                            {PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber}
+                            {PickupTarget.Instance.Current.GetComponent<PhotonView>().Controller.ActorNumber}
                     }, SendOptions.SendReliable);
                 IsStreaming = true;
             }
@@ -294,7 +294,7 @@ namespace Augmentix.Scripts
                     new RaiseEventOptions
                     {
                         TargetActors = new[]
-                            {PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Controller.ActorNumber}
+                            {PickupTarget.Instance.Current.GetComponent<PhotonView>().Controller.ActorNumber}
                     }, SendOptions.SendReliable);
                 IsStreaming = false;
             }

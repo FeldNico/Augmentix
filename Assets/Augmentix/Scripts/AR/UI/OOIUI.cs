@@ -120,7 +120,7 @@ namespace Augmentix.Scripts.AR.UI
                 {
                     var target = CurrentSelected.GetComponentInParent<TangibleTarget>();
                     CurrentSelected.transform.parent =
-                        Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.photonView.Owner).transform;
+                        Treveris.GetTreverisByPlayer(PickupTarget.Instance.Current.photonView.Owner).transform;
                     CurrentSelected.GetComponent<TangibleView>().IsLocked = true;
                     target.AddOOI("Tangibles/"+((AndroidTargetManager) TargetManager.Instance).EmptyTangible.name);
                     Delete.gameObject.SetActive(true);

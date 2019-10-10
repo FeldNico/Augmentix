@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Augmentix.Scripts.AR.UI
@@ -39,6 +40,25 @@ namespace Augmentix.Scripts.AR.UI
                 RemovePlayer.gameObject.SetActive(false);
                 LockCam.gameObject.SetActive(false);
             };
+            
+            ScaleSlider.minValue = PickupTarget.Instance.Scale / 5f;
+            ScaleSlider.value = PickupTarget.Instance.Scale;
+            ScaleSlider.maxValue = PickupTarget.Instance.Scale * 5f;
+
+            ScaleSlider.onValueChanged.AddListener(scale =>
+            {
+                PickupTarget.Instance.transform.localScale = new Vector3(scale, scale, scale);
+            });
+
+            PickupTarget.Instance.LostPlayer += (player) =>
+            {
+                ScaleSlider.value = PickupTarget.Instance.Scale;
+            };
+            
+            RemovePlayer.onClick.AddListener(() =>
+            {
+                PickupTarget.Instance.LostPlayer.Invoke(PickupTarget.Instance.Current.gameObject);
+            });
         }
     }
 }

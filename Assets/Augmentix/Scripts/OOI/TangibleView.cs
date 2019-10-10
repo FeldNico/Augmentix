@@ -62,7 +62,7 @@ namespace Augmentix.Scripts.OOI
             if (stream.IsWriting)
             {
 
-                if (PickupTarget.Instance.PlayerSync == null)
+                if (PickupTarget.Instance.Current == null)
                     return;
                 
                 stream.SendNext(IsLocked);
@@ -71,7 +71,7 @@ namespace Augmentix.Scripts.OOI
                     return;
                 
                 var localTransform =
-                    Treveris.GetTreverisByPlayer(PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Owner).transform;
+                    Treveris.GetTreverisByPlayer(PickupTarget.Instance.Current.GetComponent<PhotonView>().Owner).transform;
                 var position = localTransform.InverseTransformPoint(transform.position);
 
                 this.m_Direction = position - this.m_StoredPosition;

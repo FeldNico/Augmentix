@@ -17,7 +17,7 @@ namespace Augmentix.Scripts.AR
         public float PickupDistance = 0.02f;
         public float TransitionTime = 1;
         public float ViewDistance = 0.75f;
-        public PlayerSynchronizer PlayerSync { private set; get; }
+        public PlayerSynchronizer Current;
         public GameObject TreverisPrefab;
         public float Scale;
         public UnityAction<GameObject> GotPlayer;
@@ -25,8 +25,7 @@ namespace Augmentix.Scripts.AR
         
         public GameObject Scaler { private set; get; }
 
-        private Treveris _treveris;
-        private MapTarget _mapTarget;
+        public Treveris Treveris;
         private bool _locked = false;
 #if UNITY_ANDROID  
         private TrackableBehaviour _trackableBehaviour;
@@ -48,44 +47,19 @@ namespace Augmentix.Scripts.AR
                 PhotonNetwork.SetInterestGroups((byte) PhotonNetwork.LocalPlayer.ActorNumber, true);
             };
             
-            _mapTarget = FindObjectOfType<MapTarget>();
             Scaler = new GameObject("Scaler");
             Scaler.transform.parent = transform;
             Scaler.transform.localPosition = Vector3.zero;
             Scaler.transform.localScale = new Vector3(Scale, Scale, Scale);
 
-            var scaleSlicer = ARUI.Instance.ScaleSlider;
-            scaleSlicer.minValue = Scale / 5f;
-            scaleSlicer.value = Scale;
-            scaleSlicer.maxValue = Scale * 5f;
-
-            scaleSlicer.onValueChanged.AddListener(scale =>
+            LostPlayer += (player) =>
             {
-                Scaler.transform.localScale = new Vector3(scale, scale, scale);
-            });
-
-            ARUI.Instance.RemovePlayer.onClick.AddListener(() =>
-            {
-                LostPlayer.Invoke(PlayerSync.gameObject);
-
-                _locked = true;
-
-                var t = PlayerSync.transform;
-                t.parent = _mapTarget.Scaler.transform;
+                var t = Current.transform;
+                t.parent = MapTarget.Instance.Scaler.transform;
                 t.localPosition = Vector3.zero;
-
-                PlayerSync = null;
+                Current = null;
                 Treveris.RemoveTreveris();
-                _treveris = null;
-
-                StartCoroutine(LockTimer());
-
-                IEnumerator LockTimer()
-                {
-                    yield return new WaitForSeconds(TransitionTime * 2);
-                    _locked = false;
-                }
-            });
+            };
         }
 
 
@@ -102,34 +76,34 @@ namespace Augmentix.Scripts.AR
             if (_trackableBehaviour.CurrentStatus == TrackableBehaviour.Status.NO_POSE)
                 return;
 
-            if (PlayerSync == null && !_locked )
+            if (Current == null && !_locked )
             {
-                foreach (var synchronizer in _mapTarget.GetComponentsInChildren<PlayerSynchronizer>())
+                foreach (var synchronizer in MapTarget.Instance.GetComponentsInChildren<PlayerSynchronizer>())
                 {
-                    if (Vector3.Distance(transform.position, synchronizer.transform.position) < PickupDistance && _mapTarget.GetComponent<TrackableBehaviour>().CurrentStatus != TrackableBehaviour.Status.NO_POSE && GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.TRACKED)
+                    if (Vector3.Distance(transform.position, synchronizer.transform.position) < PickupDistance && MapTarget.Instance.GetComponent<TrackableBehaviour>().CurrentStatus != TrackableBehaviour.Status.NO_POSE && GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.TRACKED)
                     {
-                        PlayerSync = synchronizer;
+                        Current = synchronizer;
                         StartCoroutine(AnimateTransition());
                     }
                 }
             }
 
-            if (PlayerSync != null && !_locked && ARUI.Instance.LockCam.isOn)
+            if (Current != null && !_locked && ARUI.Instance.LockCam.isOn)
             {
-                if (_treveris != null)
+                if (Treveris != null)
                 {
-                    var t = _treveris.transform;
-                    var localPosition = PlayerSync.transform.localPosition;
+                    var t = Treveris.transform;
+                    var localPosition = Current.transform.localPosition;
                     t.localPosition = t.localScale.x * -new Vector3(localPosition.x,0,localPosition.z);
                 }
             }
 
             
-            if (_treveris != null && PlayerSync != null)
+            if (Treveris != null && Current != null)
             {
-                foreach (Transform child in _treveris.transform)
+                foreach (Transform child in Treveris.transform)
                 {
-                    if (Vector3.Distance(child.position, PlayerSync.transform.position) > ViewDistance)
+                    if (Vector3.Distance(child.position, Current.transform.position) > ViewDistance)
                     {
                         foreach (var inChild in child.GetComponentsInChildren<Renderer>())
                         {
@@ -139,10 +113,10 @@ namespace Augmentix.Scripts.AR
                 }
 
                 /*
-                foreach (var childRenderer in _treveris.GetComponentsInChildren<Renderer>())
+                foreach (var childRenderer in Treveris.GetComponentsInChildren<Renderer>())
                 {
                     
-                    if (Vector3.Distance(childRenderer.bounds.ClosestPoint(PlayerSync.transform.position), PlayerSync.transform.position) > ViewDistance)
+                    if (Vector3.Distance(childRenderer.bounds.ClosestPoint(Current.transform.position), Current.transform.position) > ViewDistance)
                     {
                         if (childRenderer.enabled)
                             childRenderer.enabled = false;
@@ -161,34 +135,34 @@ namespace Augmentix.Scripts.AR
             {
                 _locked = true;
 
-                _treveris = Treveris.GetTreverisByPlayer(PlayerSync.GetComponent<PhotonView>().Owner);
-                PlayerSync.transform.parent = _treveris.transform;
+                Treveris = Treveris.GetTreverisByPlayer(Current.GetComponent<PhotonView>().Owner);
+                Current.transform.parent = Treveris.transform;
 
                 var elapsedTime = 0f;
-                var startingPos = PlayerSync.transform.position;
-                var startingScale = PlayerSync.transform.localScale;
+                var startingPos = Current.transform.position;
+                var startingScale = Current.transform.localScale;
 
                 while (elapsedTime < TransitionTime)
                 {
-                    if (PlayerSync == null)
+                    if (Current == null)
                     {
                         _locked = false;
                         yield break;
                     }
 
-                    PlayerSync.transform.position = Vector3.Lerp(startingPos, transform.position, (elapsedTime / TransitionTime));
-                    PlayerSync.transform.localScale = Vector3.Lerp(startingScale, Vector3.one, (elapsedTime / TransitionTime));
+                    Current.transform.position = Vector3.Lerp(startingPos, transform.position, (elapsedTime / TransitionTime));
+                    Current.transform.localScale = Vector3.Lerp(startingScale, Vector3.one, (elapsedTime / TransitionTime));
                     elapsedTime += Time.deltaTime;
                     yield return new WaitForEndOfFrame();
                 }
 
-                if (PlayerSync != null)
+                if (Current != null)
                 {
-                    PlayerSync.transform.localPosition = Vector3.zero;
-                    PlayerSync.transform.localScale = Vector3.one;
+                    Current.transform.localPosition = Vector3.zero;
+                    Current.transform.localScale = Vector3.one;
                 }
 
-                GotPlayer.Invoke(PlayerSync.gameObject);
+                GotPlayer.Invoke(Current.gameObject);
 
                 _locked = false;
             }

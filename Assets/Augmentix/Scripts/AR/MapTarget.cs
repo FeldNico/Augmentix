@@ -35,6 +35,11 @@ namespace Augmentix.Scripts.AR
             Scaler.transform.parent = transform;
             Scaler.transform.localPosition = MapOffset;
             Scaler.transform.localScale = new Vector3(Scale,Scale,Scale);
+
+            PickupTarget.Instance.LostPlayer += (player) =>
+            {
+                Scaler.transform.localScale = new Vector3(Scale, Scale, Scale);
+            };
         }
 
     }

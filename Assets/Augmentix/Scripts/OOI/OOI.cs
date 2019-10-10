@@ -40,12 +40,18 @@ namespace Augmentix.Scripts.OOI
         public float TextScale = 0.02f;
 
         private LineRenderer lineRenderer;
+        #if UNITY_ANDROID
+        private TrackableBehaviour _trackable;
+        #endif
         private void Start()
         {
             GetComponent<PhotonView>().OwnershipTransfer = OwnershipOption.Takeover;
 
             if (TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
             {
+                #if UNITY_ANDROID
+                _trackable = PickupTarget.Instance.GetComponent<TrackableBehaviour>();
+                #endif
                 
                 lineRenderer = gameObject.AddComponent<LineRenderer>();
                 lineRenderer.widthMultiplier = 0.001f;
@@ -73,20 +79,18 @@ namespace Augmentix.Scripts.OOI
             if (lineRenderer == null)
                 return;
 
-            var trackable = FindObjectOfType<PickupTarget>();
-            
-            #if UNITY_ANDROID
-            if (trackable.GetComponent<TrackableBehaviour>().CurrentStatus == TrackableBehaviour.Status.NO_POSE)
+#if UNITY_ANDROID
+            if (_trackable.CurrentStatus == TrackableBehaviour.Status.NO_POSE)
                 return;
             #endif
             
-            var pos = trackable.transform.InverseTransformPoint(transform.position);
+            var pos = _trackable.transform.InverseTransformPoint(transform.position);
             if (pos.y > OOIUI.Instance.HeightLineThreshold)
             {
                 pos.y = 0f;
                 lineRenderer.enabled = true;
                 lineRenderer.SetPosition(0,transform.position - new Vector3(0f,0.001f,0f));
-                lineRenderer.SetPosition(1,trackable.transform.TransformPoint(pos));
+                lineRenderer.SetPosition(1,_trackable.transform.TransformPoint(pos));
             }
             else
             {
@@ -102,8 +106,8 @@ namespace Augmentix.Scripts.OOI
         public void Interact(InteractionFlag flag)
         {
             var view = GetComponent<PhotonView>();
-            if (view.IsMine && PickupTarget.Instance.PlayerSync)
-                view.RPC("Interact", PickupTarget.Instance.PlayerSync.GetComponent<PhotonView>().Owner, flag);
+            if (view.IsMine && PickupTarget.Instance.Current)
+                view.RPC("Interact", PickupTarget.Instance.Current.GetComponent<PhotonView>().Owner, flag);
 
             switch (flag)
             {
