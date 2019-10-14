@@ -14799,7 +14799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e212faef564c8de45bdf5300a4ff69c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flags: 7
+  Flags: 6
   Text: "Der Bau des Stadttores wurde 170 n. Chr. als n\xF6rdlicher Zugang zur\nStadt
     Augusta Treverorum (Augustus-Stadt im Land der Treverer)\n begonnen. Die Datierung
     des Tores war lange umstritten und reichte\n vom 2. bis zum 4. Jahrhundert n.

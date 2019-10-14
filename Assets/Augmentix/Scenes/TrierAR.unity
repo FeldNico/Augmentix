@@ -5881,6 +5881,7 @@ MonoBehaviour:
   PickupDistance: 0.05
   TransitionTime: 0.5
   ViewDistance: 1
+  Current: {fileID: 0}
   TreverisPrefab: {fileID: 7638506087388565901, guid: bae70b6884b10f64e9fdc41f64372441,
     type: 3}
   Scale: 0.1
@@ -7068,7 +7069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &7284717644058181459
 MeshFilter:
   m_ObjectHideFlags: 0
