@@ -6,6 +6,18 @@ Introduction:
 	-	For now only one student
 
 
+Tasks:
+
+1. 	In the left part of Horrea is on the left side a roman vase. 
+	Please explain to the student, that this is a typical roman vase and show the attached video to the student.
+2. 	Let the student compare this vase to a greek vase and a roman clay vase and then show him the additional informations about them (Hint: Tangibles)
+3. 	Go back to the Porta Nigra and show the text and the video to the student
+4.  Compare the old Porta Nigra to the Porta Nigra today
+
+
+
+Questions:
+
 1.	You just tested a system using augmented reality to guide a student through a virtual city. 
 	What benefits or disadvantages do you see using augmented reality instead of just a normal Desktop-Application?
 

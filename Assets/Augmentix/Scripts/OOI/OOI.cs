@@ -82,7 +82,7 @@ namespace Augmentix.Scripts.OOI
 #if UNITY_ANDROID
             if (_trackable.CurrentStatus == TrackableBehaviour.Status.NO_POSE)
                 return;
-            #endif
+            
             
             var pos = _trackable.transform.InverseTransformPoint(transform.position);
             if (pos.y > OOIUI.Instance.HeightLineThreshold)
@@ -96,7 +96,7 @@ namespace Augmentix.Scripts.OOI
             {
                 lineRenderer.enabled = false;
             }
-
+#endif
         }
 
         private GameObject _videoCube = null;

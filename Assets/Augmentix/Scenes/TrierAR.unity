@@ -4482,7 +4482,7 @@ PrefabInstance:
     - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
         type: 3}
       propertyPath: TangiblePrefabs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
         type: 3}
@@ -4521,7 +4521,7 @@ PrefabInstance:
         type: 3}
       propertyPath: TangiblePrefabs.Array.data[3]
       value: 
-      objectReference: {fileID: 1773127983147666949, guid: 006a94100d137d1418e8000fb5d14449,
+      objectReference: {fileID: 3781186902279215317, guid: 221e3f662200b584780e7d78ee48693c,
         type: 3}
     - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
         type: 3}

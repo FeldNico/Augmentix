@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Augmentix/Scenes/TrierAR.unity
-    guid: b14b78f7189e4d546af1b6b4cc875be3
+    path: Assets/Augmentix/Scenes/TrierVR.unity
+    guid: 18d4447acd7cb0846a321780787e5ac3
   m_configObjects: {}
