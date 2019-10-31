@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8835517538490857348}
   - component: {fileID: -6869049774604208856}
   m_Layer: 0
-  m_Name: Vase
+  m_Name: "R\xF6mische Amphore"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
