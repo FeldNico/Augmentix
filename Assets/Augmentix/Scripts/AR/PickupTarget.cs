@@ -58,8 +58,15 @@ namespace Augmentix.Scripts.AR
                 t.parent = MapTarget.Instance.Scaler.transform;
                 t.localPosition = Vector3.zero;
                 Current = null;
-                Treveris.RemoveTreveris();
-                _treveris = null;
+
+                StartCoroutine(removeTreverisNextFrame());
+                IEnumerator removeTreverisNextFrame()
+                {
+                    yield return new WaitForEndOfFrame();
+                    Treveris.RemoveTreveris();
+                    _treveris = null;
+                }
+                
             };
         }
 
