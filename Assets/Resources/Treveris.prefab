@@ -3099,7 +3099,8 @@ MonoBehaviour:
     weiteren wurde im Osten des Gel\xE4ndes der Hospizien/St. Irminen ein an einer
     Stra\xDFenkreuzung gelegener Komplex mit r\xF6mischer Wohn- und Gewerbebebauung
     ergraben und teilweise konserviert."
-  TextScale: 0.01
+  TextScaleMax: 5
+  TextScaleMin: 1
 --- !u!1 &621195165606101889
 GameObject:
   m_ObjectHideFlags: 0
@@ -14801,13 +14802,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Flags: 6
-  Text: "Der Bau des Stadttores wurde 170 n. Chr. als n\xF6rdlicher Zugang zur\nStadt
-    Augusta Treverorum (Augustus-Stadt im Land der Treverer)\n begonnen. Die Datierung
-    des Tores war lange umstritten und reichte\n vom 2. bis zum 4. Jahrhundert n.
-    Chr. Im Januar 2018 konnte der\n Baubeginn aufgrund einer dendrochronologischen
-    Untersuchung von\n Holzresten der Stadtmauer auf das Jahr 170 n. Chr. festgeschrieben\nwerden,
+  Text: "Der Bau des Stadttores wurde 170 n. Chr. als n\xF6rdlicher Zugang zur Stadt
+    Augusta Treverorum (Augustus-Stadt im Land der Treverer) begonnen. Die Datierung
+    des Tores war lange umstritten und reichte vom 2. bis zum 4. Jahrhundert n. Chr.
+    Im Januar 2018 konnte der Baubeginn aufgrund einer dendrochronologischen Untersuchung
+    von Holzresten der Stadtmauer auf das Jahr 170 n. Chr. festgeschrieben werden,
     da diese 169/170 gef\xE4llt worden waren."
-  TextScale: 0.01
+  TextScaleMax: 10
+  TextScaleMin: 0.5
 --- !u!328 &530359110349385783
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -29911,7 +29913,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Flags: 7
   Text: "Eine r\xF6mische Vase"
-  TextScale: 0.02
+  TextScaleMax: 5
+  TextScaleMin: 1
 --- !u!328 &2764359480432296219
 VideoPlayer:
   m_ObjectHideFlags: 0

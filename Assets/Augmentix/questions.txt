@@ -5,6 +5,9 @@ Introduction:
 	-	System should scale with multiple Students in the future.
 	-	For now only one student
 
+Test Phase:
+	- Let user test all the features.
+
 
 Tasks:
 

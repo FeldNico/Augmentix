@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
@@ -25,6 +26,13 @@ namespace Augmentix.Scripts.VR
                 player.transform.localPosition = Vector3.zero;
                 player.transform.localRotation = Quaternion.identity;
                 PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
+
+                //StartCoroutine(test());
+                IEnumerator test()
+                {
+                    yield return new WaitForSeconds(3);
+                    GameObject.Find("00001(Clone)").GetComponent<OOI.OOI>().Interact(OOI.OOI.InteractionFlag.Text);
+                }
             };
             
             Menu.AddOnStateUpListener((action, source) =>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Augmentix.Scripts.AR;
 using Augmentix.Scripts.AR.UI;
 #if UNITY_EDITOR
@@ -6,8 +8,10 @@ using Augmentix.Scripts.OOI.Editor;
 #endif
 using Augmentix.Scripts.VR;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Video;
+
 #if UNITY_ANDROID
 using Vuforia;
 #endif
@@ -37,27 +41,32 @@ namespace Augmentix.Scripts.OOI
 
         [TextArea] public string Text;
 
-        public float TextScale = 0.02f;
+        public float TextScaleMax = 10f;
+        public float TextScaleMin = 0.5f;
 
         private LineRenderer lineRenderer;
-        #if UNITY_ANDROID
+        private List<MeshCollider> _convexCollider = new List<MeshCollider>();
+        
+#if UNITY_ANDROID
         private TrackableBehaviour _trackable;
-        #endif
+#endif
         private void Start()
         {
+            GenerateConvexMeshCollider();
+            
             GetComponent<PhotonView>().OwnershipTransfer = OwnershipOption.Takeover;
 
             if (TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
             {
-                #if UNITY_ANDROID
+#if UNITY_ANDROID
                 _trackable = PickupTarget.Instance.GetComponent<TrackableBehaviour>();
-                #endif
-                
+#endif
+
                 lineRenderer = gameObject.AddComponent<LineRenderer>();
                 lineRenderer.widthMultiplier = 0.001f;
                 lineRenderer.material = OOIUI.Instance.HeightLineMaterial;
-                
-                
+
+
                 PickupTarget.Instance.GotPlayer += player =>
                 {
                     var treveris = Treveris.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner);
@@ -73,7 +82,7 @@ namespace Augmentix.Scripts.OOI
                 };
             }
         }
-        
+
         private void Update()
         {
             if (lineRenderer == null)
@@ -106,7 +115,7 @@ namespace Augmentix.Scripts.OOI
         public void Interact(InteractionFlag flag)
         {
             var view = GetComponent<PhotonView>();
-            if (view.IsMine && PickupTarget.Instance.Current)
+            if (view.IsMine && PickupTarget.Instance && PickupTarget.Instance.Current)
                 view.RPC("Interact", PickupTarget.Instance.Current.GetComponent<PhotonView>().Owner, flag);
 
             switch (flag)
@@ -137,41 +146,76 @@ namespace Augmentix.Scripts.OOI
             }
         }
 
+        private Coroutine _moveText;
+
         private void ToggleText()
         {
             GameObject player = FindObjectOfType<PlayerSynchronizer>().gameObject;
+
+#if UNITY_STANDALONE
+            player = player.transform.parent.parent.gameObject;
+#endif
 
             if (_textCube == null || !_textCube.gameObject.activeSelf)
             {
                 if (_textCube == null)
                 {
-                    _textCube = new GameObject(gameObject.name + "_Text");
+                    _textCube = Instantiate(TargetManager.Instance.OOITextPrefab);
                     _textCube.transform.parent = transform;
-                    var text = _textCube.AddComponent<TextMesh>();
-                    text.fontSize = 90;
-                    text.anchor = TextAnchor.MiddleCenter;
+                    _textCube.GetComponent<TextMeshPro>().text = Text;
                 }
 
-                _textCube.GetComponent<TextMesh>().text = Text;
-                _textCube.transform.localScale = new Vector3(TextScale, TextScale, TextScale);
-
-                Vector3 nearestPoint = transform.position;
-                foreach (var child in GetComponentsInChildren<Renderer>())
-                    if (child.gameObject != _textCube &&
-                        Vector3.Distance(player.transform.position,
-                            child.bounds.ClosestPoint(player.transform.position)) <
-                        Vector3.Distance(player.transform.position, nearestPoint))
-                        nearestPoint = child.bounds.ClosestPoint(player.transform.position);
-
-                nearestPoint.y = player.transform.position.y;
-
                 _textCube.SetActive(true);
-                _textCube.transform.position = nearestPoint;
-                _textCube.transform.LookAt(player.transform);
-                _textCube.transform.Rotate(Vector3.up, 180);
+                _moveText = StartCoroutine(MoveText());
+
+                IEnumerator MoveText()
+                {
+                    while (true)
+                    {
+                        var isInside = false;
+                        Vector3 nearestPoint = transform.position;
+
+                        foreach (var meshCollider in _convexCollider)
+                        {
+                            if (meshCollider.gameObject != _textCube)
+                            {
+                                var closest = meshCollider.ClosestPoint(player.transform.position);
+                                if (Vector3.Distance(player.transform.position, closest) <
+                                    Vector3.Distance(player.transform.position, nearestPoint))
+                                {
+                                    nearestPoint = closest;
+                                }
+                            }
+                        }
+
+                        
+                        nearestPoint.y = player.transform.position.y;
+
+                        var direction = nearestPoint - player.transform.position;
+
+                        var newposition = Vector3.zero;
+                        
+                        if (direction.sqrMagnitude < 1)
+                        {
+                            newposition = player.transform.position + player.transform.forward;
+                        }
+                        else
+                        {
+                            newposition = player.transform.position + (nearestPoint - player.transform.position).normalized;
+                        }
+
+                        _textCube.transform.position = Vector3.Lerp(_textCube.transform.position, newposition, 0.2f);
+                        _textCube.transform.LookAt(player.transform);
+                        _textCube.transform.Rotate(Vector3.up, 180);
+
+                        yield return new WaitForEndOfFrame();
+                    }
+                }
             }
             else
             {
+                if (_moveText != null)
+                    StopCoroutine(_moveText);
                 _textCube.SetActive(false);
             }
         }
@@ -223,6 +267,61 @@ namespace Augmentix.Scripts.OOI
 
                 video.Play();
             }
+        }
+
+
+        private void GenerateConvexMeshCollider()
+        {
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+
+            if (meshFilters.Length == 0)
+                return;
+
+            List<CombineInstance> combine = new List<CombineInstance>();
+
+
+            Mesh prevMesh = null;
+            if (GetComponent<MeshFilter>())
+                prevMesh = GetComponent<MeshFilter>().sharedMesh;
+            
+            var count = 0;
+            
+            var filter = GetComponent<MeshFilter>();
+            if (filter == null)
+                filter = gameObject.AddComponent<MeshFilter>();
+
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                var c = new CombineInstance();
+                c.mesh = meshFilters[i].sharedMesh;
+                c.transform = transform.worldToLocalMatrix *
+                              meshFilters[i].transform.localToWorldMatrix;
+                combine.Add(c);
+
+                count += meshFilters[i].sharedMesh.vertexCount;
+
+                if (i + 1 == meshFilters.Length || meshFilters[i + 1].sharedMesh.vertexCount + count > 65536)
+                {
+                    
+                    filter.sharedMesh = new Mesh();
+                    filter.sharedMesh
+                        .CombineMeshes(combine.ToArray());
+
+                    
+                    var collider = gameObject.AddComponent<MeshCollider>();
+                    collider.convex = true;
+                    collider.isTrigger = true;
+                    _convexCollider.Add(collider);
+
+                    combine.Clear();
+                    count = 0;
+                }
+            }
+
+            if (prevMesh != null)
+                GetComponent<MeshFilter>().sharedMesh = prevMesh;
+            else
+                DestroyImmediate(GetComponent<MeshFilter>());
         }
     }
 }

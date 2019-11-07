@@ -65,6 +65,8 @@ namespace Augmentix.Scripts
 
         public PlayerType Type = PlayerType.Unkown;
 
+        public GameObject OOITextPrefab;
+
         public UnityAction OnConnection;
 
         protected const string gameVersion = "1";

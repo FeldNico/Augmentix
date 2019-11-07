@@ -152,7 +152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Flags: 64
   Text: 
-  TextScale: 0.02
+  TextScaleMax: 10
+  TextScaleMin: 0.5
 --- !u!114 &-3892584179567823976
 MonoBehaviour:
   m_ObjectHideFlags: 0
