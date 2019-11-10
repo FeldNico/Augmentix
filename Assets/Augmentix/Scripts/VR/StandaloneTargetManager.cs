@@ -27,11 +27,13 @@ namespace Augmentix.Scripts.VR
                 player.transform.localRotation = Quaternion.identity;
                 PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
 
-                //StartCoroutine(test());
+                StartCoroutine(test());
                 IEnumerator test()
                 {
-                    yield return new WaitForSeconds(3);
+                    yield return new WaitForSeconds(2);
                     GameObject.Find("00001(Clone)").GetComponent<OOI.OOI>().Interact(OOI.OOI.InteractionFlag.Text);
+                    yield return new WaitForSeconds(2);
+                    GameObject.Find("00001(Clone)").GetComponent<OOI.OOI>().Interact(OOI.OOI.InteractionFlag.Video);
                 }
             };
             

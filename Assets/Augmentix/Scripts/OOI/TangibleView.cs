@@ -82,7 +82,7 @@ namespace Augmentix.Scripts.OOI
 
                 stream.SendNext(Quaternion.Inverse(localTransform.transform.rotation) * transform.rotation);
 
-                stream.SendNext(transform.localScale / PickupTarget.Instance.Scaler.transform.localScale.x);
+                stream.SendNext(transform.lossyScale.x / PickupTarget.Instance.Current.transform.lossyScale.x);
             }
             else
             {
@@ -106,8 +106,7 @@ namespace Augmentix.Scripts.OOI
                     this.m_NetworkPosition += this.m_Direction * lag;
                     this.m_Distance = Vector3.Distance(transform.localPosition, this.m_NetworkPosition);
                 }
-
-
+                
                 this.m_NetworkRotation = (Quaternion) stream.ReceiveNext();
 
                 if (m_firstTake)
