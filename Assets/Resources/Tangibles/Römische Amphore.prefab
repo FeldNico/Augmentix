@@ -69,8 +69,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Flags: 227
-  Text: Dies ist eine Tonvase
-  TextScale: 0.02
+  Text: "Eine Amphore bzw. Amphora ist ein bauchiges enghalsiges Gef\xE4\xDF mit
+    zwei Henkeln meist aus Ton, aber auch aus Metall (Bronze, Silber, Gold). Durch
+    zwei Henkel sollte urspr\xFCnglich das Tragen erleichtert werden. Amphoren sind
+    zu den antiken Vasen zu z\xE4hlen.\r Als Amphore wird jede T\xF6pferware betrachtet,
+    die zwei Henkel hat und deren Basis, die h\xE4ufig aus einer Spitze oder aus
+    einem Knopf besteht, die vertikale Aufrechthaltung schlecht oder gar nicht erm\xF6glicht.\r\n\rDie
+    Amphora ist auch eine Ma\xDFeinheit. Das Volumen als r\xF6misches Hohlma\xDF
+    betr\xE4gt einen r\xF6mischen Kubikfu\xDF, das sind etwa 26,026 l. Bei der Halsamphora
+    sind die Henkel am Hals angebracht, der durch einen deutlichen Knick vom Bauch
+    abgegrenzt ist."
 --- !u!114 &-6869049774604208856
 MonoBehaviour:
   m_ObjectHideFlags: 0

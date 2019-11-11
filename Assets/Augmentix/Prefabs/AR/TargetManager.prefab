@@ -43,5 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412c69d9ed1e4f94da86810c12393cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapTarget: {fileID: 0}
-  TrierScene: TrierAR
+  Type: 1
+  OOITextPrefab: {fileID: 758814557266669943, guid: eb2be0f53962a9547bfccdbe1ecc4372,
+    type: 3}
+  EmptyTangible: {fileID: 8607242043497277583, guid: 2cf02ae3f438cfd40b2e9e30d0ac785f,
+    type: 3}
+  TangiblePrefabs:
+  - {fileID: 8242442389127168192, guid: 92f82e4e378852145b14e949184e0b08, type: 3}
+  - {fileID: 7397364066031690185, guid: dbe96fb2a9140284580efb28bf07525a, type: 3}
+  - {fileID: 1773127983147666949, guid: 006a94100d137d1418e8000fb5d14449, type: 3}
+  - {fileID: 3781186902279215317, guid: 221e3f662200b584780e7d78ee48693c, type: 3}

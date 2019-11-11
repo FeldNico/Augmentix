@@ -22,35 +22,39 @@ Tasks:
 Questions:
 
 1.	You just tested a system using augmented reality to guide a student through a virtual city. 
-	What benefits or disadvantages do you see using augmented reality instead of just a normal Desktop-Application?
+	What advantages or disadvantages do you see using augmented reality in comparison to a normal Desktop-Application?
 
 
 2.	In the beginning you got a short introduction into the system and got some time to get familiar with the system.
-	Do you think the system was difficult to understand and what do you think were the hardest part to understand and why? 
+    How difficult was the workflow to understand and why? (MapHub, Pickup-Shovel, Tangibles)
+    How difficult was the interface to understand and why? Did you know which buttons to press?
+    How difficult was the object interaction to understand and why? 
+    What was the hardest part of this system to understand and why?
+    what was the easiest part of this system to understand and why?
+
+3.	To interact with a student he/she had to be picked up from a Map-Hub via a Pickup-Shovel.
+	Do you think this workflow does scale well with multiple students?
+
+	What do you think about this workflow in general?
+
+4.	After the introduction and some testing time you had to perform a few tasks.
+    Did you miss any interactions with the player to perform these tasks well and if yes, which?
+    Did you miss any interactions with the objects to perform these taskswell and if yes, which?
+	Did you feel to have a sufficient amount of control over the environment to perfom these tasks well?
+
+	What additional interaction-techniques did you miss?
 
 
-3.	After the introduction and some testing time you had to perform a few tasks.
-	Did you have a sufficant amount of control over the enviroment to perfome these tasks well?
-
-	What interaction-techniques did you miss?
+5.	In the test you were only able to communicate with the student via voicechat.
+	Which additional communication channels would you recommend.
 
 
-4.	In the test you were only able to communicate with the student via voicechat.
-	Which additionaly communication channels would you recomment.
-
-
-5.	In this test you used a common mobile device and therefore you just had one free hand.
+6.	In this test you used a common mobile device and therefore you just had one free hand.
 	Do you think this had an significant impact on your performance?
 
 	What were the most critical parts where this had an impact.
 
 	Can you think of any ways to counter this problem? (Like e.g. mechanical Tangibles, HMD)
-
-
-6.	To interact with a student he/she had to be picked up from a Map-Hub via a Pickup-Shovel.
-	Do you think this workflow does scale well with multiple students?
-
-	What do you think about this workflow in general?
 
 
 7.	Apart from everything already mentioned.

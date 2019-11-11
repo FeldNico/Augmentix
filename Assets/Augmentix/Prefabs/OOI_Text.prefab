@@ -144,8 +144,8 @@ MonoBehaviour:
   m_fontSize: 2
   m_fontSizeBase: 2
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 0.01
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_textAlignment: 513
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 4
+  m_overflowMode: 1
   m_firstOverflowCharacterIndex: 212
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
@@ -212,11 +212,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2691008291599685628}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 10cb96047f1b3264790a337e35773150,
-        type: 3}
-      propertyPath: m_Name
-      value: scroll
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 10cb96047f1b3264790a337e35773150,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -286,6 +281,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 15.220799
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 10cb96047f1b3264790a337e35773150,
+        type: 3}
+      propertyPath: m_Name
+      value: scroll
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10cb96047f1b3264790a337e35773150, type: 3}

@@ -101,6 +101,11 @@ namespace Augmentix.Scripts.VR
       needsUpdate = true;
     }
 
+    private void Start()
+    {
+      enabled = false;
+    }
+
     void OnEnable() {
       foreach (var renderer in renderers) {
 

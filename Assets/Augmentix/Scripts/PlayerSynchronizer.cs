@@ -68,7 +68,7 @@ namespace Augmentix.Scripts
                     PhotonNetwork.SetInterestGroups(0, true);
                 };
             }
-            else if (StandaloneTargetManager.Instance.Type == TargetManager.PlayerType.Primary)
+            else if (TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
             {
                 lineHeight = gameObject.AddComponent<LineRenderer>();
                 lineHeight.widthMultiplier = 0.001f;
@@ -106,7 +106,7 @@ namespace Augmentix.Scripts
         {
             if (lineHeight != null)
             {
-                if (_trackable.CurrentStatus != TrackableBehaviour.Status.NO_POSE)
+                if (_trackable.CurrentStatus == TrackableBehaviour.Status.TRACKED)
                 {
                     var pos = _trackable.transform.InverseTransformPoint(transform.position);
                     pos.y = 0f;

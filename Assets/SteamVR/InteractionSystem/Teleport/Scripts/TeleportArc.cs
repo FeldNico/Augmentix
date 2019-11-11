@@ -267,7 +267,7 @@ namespace Valve.VR.InteractionSystem
                 float segmentEndTime = segmentStartTime + timeStep;
                 Vector3 segmentEndPos = GetArcPositionAtTime(segmentEndTime);
 
-                if (Physics.Linecast(segmentStartPos, segmentEndPos, out hitInfo, traceLayerMask))
+                if (Physics.Linecast(segmentStartPos, segmentEndPos, out hitInfo, traceLayerMask,QueryTriggerInteraction.Ignore))
                 {
                     if (hitInfo.collider.GetComponent<IgnoreTeleportTrace>() == null)
                     {

@@ -28,10 +28,14 @@ namespace Augmentix.Scripts.VR
         {
             if (_target != null && _target != Target)
             {
-                Destroy(_target.GetComponent<Outline>());
                 _target = Target;
-                var outline = _target.AddComponent<Outline>();
-                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                var outline = _target.GetComponent<Outline>();
+                if (!outline)
+                {
+                    outline = _target.AddComponent<Outline>();
+                    outline.OutlineMode = Outline.Mode.OutlineVisible;
+                }
+                outline.enabled = true;
                 return;
             }
 
@@ -46,15 +50,20 @@ namespace Augmentix.Scripts.VR
                 }
 
                 _target = Target;
-                var outline= _target.AddComponent<Outline>();
-                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                var outline = _target.GetComponent<Outline>();
+                if (!outline)
+                {
+                    outline = _target.AddComponent<Outline>();
+                    outline.OutlineMode = Outline.Mode.OutlineVisible;
+                }
+                outline.enabled = true;
                 _indicator.SetActive(true);
                 _indicatorRotate = StartCoroutine(RotateIndicator());
             }
             else
             {
                 _indicator.SetActive(false);
-                Destroy(_target.GetComponent<Outline>());
+                _target.GetComponent<Outline>().enabled = false;
                 _target = null;
                 try
                 {
@@ -68,39 +77,22 @@ namespace Augmentix.Scripts.VR
 
             IEnumerator RotateIndicator()
             {
-                Renderer[] renderers = null;
-                GameObject prev = null;
-                var center = new Vector3();
+                var ooi = _target.GetComponent<OOI.OOI>();
                 while (true)
                 {
-                    var trans = _target.transform;
-                    var distance = float.MaxValue;
-                    if (_target != prev)
+                    var closedPoint = _target.transform.position;
+                    var playerPos = Camera.main.transform.position;
+                    foreach (var meshCollider in ooi.ConvexCollider)
                     {
-                        renderers = _target.GetComponentsInChildren<Renderer>();
-                        prev = _target;
-                        
-                        center = new Vector3();
-                        
-                        foreach (var child in renderers)
-                        {
-                            center += child.bounds.center;
-                        }
-                        center = center / renderers.Length;
-                    }
-                    foreach (var child in renderers)
-                    {
-                        var tmp = Vector3.Distance(child.bounds.ClosestPoint(Camera.main.transform.position),Camera.main.transform.position);
-                        if (tmp < distance)
-                        {
-                            distance = tmp;
-                        }
+                        var tmp = meshCollider.ClosestPoint(playerPos);
+                        if (Vector3.Distance(tmp, playerPos) < Vector3.Distance(closedPoint, playerPos))
+                            closedPoint = tmp;
                     }
 
                     var indicatorTransform = _indicator.transform;
-                    indicatorTransform.LookAt(center);
+                    indicatorTransform.LookAt(closedPoint);
 
-                    if (Quaternion.Angle(indicatorTransform.rotation, Camera.main.transform.rotation) < 20f && distance < HighlightDistance)
+                    if (Quaternion.Angle(indicatorTransform.rotation, Camera.main.transform.rotation) < 20f && Vector3.Distance(closedPoint, playerPos) < HighlightDistance)
                     {
                         _indicator.gameObject.SetActive(false);
                         break;

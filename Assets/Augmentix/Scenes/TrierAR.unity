@@ -4507,56 +4507,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: TangiblePrefabs.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: MapTarget
-      value: 
-      objectReference: {fileID: 915885747}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: TrierScene
-      value: TrierAR
-      objectReference: {fileID: 0}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: TangiblePrefabs.Array.data[0]
-      value: 
-      objectReference: {fileID: 8242442389127168192, guid: 92f82e4e378852145b14e949184e0b08,
-        type: 3}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: TangiblePrefabs.Array.data[1]
-      value: 
-      objectReference: {fileID: 7397364066031690185, guid: dbe96fb2a9140284580efb28bf07525a,
-        type: 3}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: TangiblePrefabs.Array.data[2]
-      value: 
-      objectReference: {fileID: 1773127983147666949, guid: 006a94100d137d1418e8000fb5d14449,
-        type: 3}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: TangiblePrefabs.Array.data[3]
-      value: 
-      objectReference: {fileID: 3781186902279215317, guid: 221e3f662200b584780e7d78ee48693c,
-        type: 3}
-    - target: {fileID: 3416450636246743932, guid: d870682ee69aba446927844ccdda7dd4,
-        type: 3}
-      propertyPath: EmptyTangible
-      value: 
-      objectReference: {fileID: 8607242043497277583, guid: 2cf02ae3f438cfd40b2e9e30d0ac785f,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d870682ee69aba446927844ccdda7dd4, type: 3}
 --- !u!1 &1205089627

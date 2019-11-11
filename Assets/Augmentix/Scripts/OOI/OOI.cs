@@ -40,13 +40,11 @@ namespace Augmentix.Scripts.OOI
 #endif
         public InteractionFlag Flags = InteractionFlag.Highlight | InteractionFlag.Lockable;
 
-        [TextArea] public string Text;
-
-        public float TextScaleMax = 10f;
-        public float TextScaleMin = 0.5f;
+        [TextArea(15,20)] 
+        public string Text;
 
         private LineRenderer lineRenderer;
-        private List<MeshCollider> _convexCollider = new List<MeshCollider>();
+        public List<MeshCollider> ConvexCollider = new List<MeshCollider>();
 
 #if UNITY_ANDROID
         private TrackableBehaviour _trackable;
@@ -123,7 +121,7 @@ namespace Augmentix.Scripts.OOI
             {
                 case InteractionFlag.Highlight:
                 {
-                    if (!view.IsMine)
+                    if (VRUI.Instance)
                     {
                         VRUI.Instance.ToggleHighlightTarget(gameObject);
                     }
@@ -232,7 +230,7 @@ namespace Augmentix.Scripts.OOI
                 var isInside = false;
                 Vector3 nearestPoint = transform.position;
 
-                foreach (var meshCollider in _convexCollider)
+                foreach (var meshCollider in ConvexCollider)
                 {
                     if (meshCollider.gameObject != _textCube)
                     {
@@ -320,7 +318,7 @@ namespace Augmentix.Scripts.OOI
                     collider.convex = true;
                     collider.isTrigger = true;
 
-                    _convexCollider.Add(collider);
+                    ConvexCollider.Add(collider);
 
                     combine.Clear();
                     count = 0;

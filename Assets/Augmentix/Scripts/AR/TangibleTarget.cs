@@ -30,9 +30,10 @@ namespace Augmentix.Scripts.AR
 
         private void Start()
         {
+            var targetManager = (AndroidTargetManager) TargetManager.Instance;
             TargetManager.Instance.OnConnection += () =>
             {
-                AddOOI("Tangibles/Empty");
+                AddOOI("Tangibles/"+targetManager.EmptyTangible.name);
                 Current.SetActive(false);
             };
             
@@ -41,7 +42,7 @@ namespace Augmentix.Scripts.AR
                 if (Current)
                 {
                     PhotonNetwork.Destroy(Current);
-                    AddOOI("Tangibles/Empty");
+                    AddOOI("Tangibles/"+targetManager.EmptyTangible.name);
                     Current.SetActive(false);
                 }
             };

@@ -445,7 +445,7 @@ MonoBehaviour:
     type: 3}
   VideoImage: {fileID: 1454756549}
   ConnectionText: {fileID: 968629059}
-  HighlightDistance: 3
+  HighlightDistance: 5
 --- !u!1001 &1151710226
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -588,7 +588,7 @@ MonoBehaviour:
   voiceDetection: 0
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
-  unityMicrophoneDevice: Mikrofon (5- Logitech Microphone (Pro 4000))
+  unityMicrophoneDevice: Microphone (Realtek(R) Audio)
   photonMicrophoneDeviceId: 0
   interestGroup: 0
   debugEchoMode: 0
