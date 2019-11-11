@@ -162,11 +162,12 @@ namespace Augmentix.Scripts.OOI
                 {
                     _textCube = Instantiate(TargetManager.Instance.OOITextPrefab);
                     _textCube.transform.parent = transform;
+                    _textCube.transform.localScale = Vector3.one;
                     _textCube.GetComponent<TextMeshPro>().text = Text;
                 }
 
                 _textCube.SetActive(true);
-                _moveText = StartCoroutine(MoveObject(_textCube,player,Quaternion.identity,Vector3.zero));
+                _moveText = StartCoroutine(MoveObject(_textCube,player,Quaternion.identity,new Vector3(0,-0.1f,0)));
             }
             else
             {
@@ -187,7 +188,7 @@ namespace Augmentix.Scripts.OOI
                 return;
             }
 
-            if (!video.isPlaying)
+            if (_videoCube == null || !_videoCube.activeSelf)
             {
                 GameObject player = FindObjectOfType<PlayerSynchronizer>().gameObject;
                 
@@ -211,7 +212,7 @@ namespace Augmentix.Scripts.OOI
 
                 _videoCube.SetActive(true);
                 video.Play();
-                _moveVideo = StartCoroutine(MoveObject(_videoCube, player,Quaternion.Euler(0,0,180),new Vector3(0,-0.4f,0)));
+                _moveVideo = StartCoroutine(MoveObject(_videoCube, player,Quaternion.Euler(0,0,180),new Vector3(0,-0.3f,0)));
             }
             else
             {
@@ -257,17 +258,17 @@ namespace Augmentix.Scripts.OOI
 
                 if (direction.sqrMagnitude < 1)
                 {
-                    newposition += player.transform.position + Vector3.ProjectOnPlane(player.transform.forward,Vector3.up).normalized  * player.transform.lossyScale.x * 0.6f;
+                    newposition += player.transform.position + Vector3.ProjectOnPlane(player.transform.forward,Vector3.up).normalized  * player.transform.lossyScale.x;
                 }
                 else
                 {
                     newposition += player.transform.position + (nearestPoint - player.transform.position).normalized *
-                                   player.transform.lossyScale.x * 0.6f;
+                                   player.transform.lossyScale.x;
                 }
                 
                 var objPosition = objTransform.position;
                 objPosition = Vector3.Lerp(objPosition, newposition, 0.5f);
-                objPosition = objPosition + objTransform.up * positionOffset.y;
+                objPosition = objPosition + objTransform.up * positionOffset.y * objTransform.lossyScale.x;
                 objTransform.position = objPosition;
                 objTransform.LookAt(new Vector3(playerTransform.position.x,objPosition.y,playerTransform.position.z));
                 objTransform.Rotate(Vector3.up, 180);

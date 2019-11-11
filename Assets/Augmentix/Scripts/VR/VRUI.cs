@@ -28,14 +28,16 @@ namespace Augmentix.Scripts.VR
         {
             if (_target != null && _target != Target)
             {
-                _target = Target;
-                var outline = _target.GetComponent<Outline>();
+                _target.GetComponent<Outline>().enabled = false;
+                var outline = Target.GetComponent<Outline>();
                 if (!outline)
                 {
-                    outline = _target.AddComponent<Outline>();
+                    outline = Target.AddComponent<Outline>();
                     outline.OutlineMode = Outline.Mode.OutlineVisible;
                 }
                 outline.enabled = true;
+                _target = Target;
+                
                 return;
             }
 
@@ -91,13 +93,12 @@ namespace Augmentix.Scripts.VR
 
                     var indicatorTransform = _indicator.transform;
                     indicatorTransform.LookAt(closedPoint);
-
-                    if (Quaternion.Angle(indicatorTransform.rotation, Camera.main.transform.rotation) < 20f && Vector3.Distance(closedPoint, playerPos) < HighlightDistance)
+                    
+                    if (Quaternion.Angle(indicatorTransform.rotation, Camera.main.transform.rotation) < 30f && Vector3.Distance(closedPoint, playerPos) < HighlightDistance)
                     {
                         _indicator.gameObject.SetActive(false);
                         break;
                     }
-                    indicatorTransform.localRotation = indicatorTransform.localRotation * Quaternion.Euler(80, 0, 0);
 
                     yield return new WaitForEndOfFrame();
                 }

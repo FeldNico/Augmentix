@@ -356,14 +356,19 @@ namespace Augmentix.Scripts.AR.UI
             if (_prevHighlightTarget != Target)
             {
                 if (_prevHighlightTarget != null)
-                    Destroy(_prevHighlightTarget.GetComponent<Outline>());
+                    _prevHighlightTarget.GetComponent<Outline>().enabled = false;
                 _prevHighlightTarget = Target;
             }
 
-            if (Target.GetComponent<Outline>())
-                Destroy(Target.GetComponent<Outline>());
-            else
-                Target.AddComponent<Outline>();
+            var outline = Target.GetComponent<Outline>();
+            if (!outline)
+            {
+                outline = Target.AddComponent<Outline>();
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+            }
+
+            outline.enabled = !outline.enabled;
+            
         }
     }
 

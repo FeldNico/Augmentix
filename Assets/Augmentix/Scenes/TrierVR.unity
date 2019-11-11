@@ -441,11 +441,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dbf09eeba87cb9408fdc7b138d2a783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IndicationPrefab: {fileID: -927199367670048503, guid: 05b9fce820ff9704dafa20efa6bf2708,
+  IndicationPrefab: {fileID: 2956311014281023883, guid: 405bb73de69bf144da0ee1bfa0995260,
     type: 3}
   VideoImage: {fileID: 1454756549}
   ConnectionText: {fileID: 968629059}
-  HighlightDistance: 5
+  HighlightDistance: 3
 --- !u!1001 &1151710226
 PrefabInstance:
   m_ObjectHideFlags: 0

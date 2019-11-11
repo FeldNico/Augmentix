@@ -109,18 +109,19 @@ namespace Augmentix.Scripts.AR
             
             if (_treveris != null && Current != null)
             {
+                /*
                 foreach (Transform child in _treveris.transform)
                 {
                     if (Vector3.Distance(child.position, Current.transform.position) > ViewDistance)
                     {
                         foreach (var inChild in child.GetComponentsInChildren<Renderer>())
                         {
-                            //inChild.enabled = false;
+                            inChild.enabled = false;
                         }
                     }
                 }
 
-                /*
+                
                 foreach (var childRenderer in _treveris.GetComponentsInChildren<Renderer>())
                 {
                     

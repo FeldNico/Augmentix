@@ -118,8 +118,9 @@ namespace Augmentix.Scripts.OOI
                 {
                     this.m_Angle = Quaternion.Angle(transform.localRotation, this.m_NetworkRotation);
                 }
-                
-                transform.localScale = (Vector3) stream.ReceiveNext();
+
+                var scale = (float) stream.ReceiveNext();
+                transform.localScale = new Vector3(scale,scale,scale);
 
                 if (m_firstTake)
                 {
