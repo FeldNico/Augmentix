@@ -160,7 +160,7 @@ namespace Augmentix.Scripts.OOI
                 if (_textCube == null)
                 {
                     _textCube = Instantiate(TargetManager.Instance.OOITextPrefab);
-                    _textCube.transform.parent = Treveris.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner).transform;
+                    _textCube.transform.parent = player.transform;
                     _textCube.transform.localScale = Vector3.one;
                     _textCube.GetComponent<TextMeshPro>().text = Text;
                 }
@@ -201,7 +201,7 @@ namespace Augmentix.Scripts.OOI
                 {
                     _videoCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     _videoCube.name = "VideoCube";
-                    _videoCube.transform.parent = Treveris.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner).transform;
+                    _videoCube.transform.parent = player.transform;
                     _videoCube.transform.localScale = new Vector3(1.3f, 1.3f * video.height / video.width, 0.01f);
                     //_videoCube.GetComponent<Renderer>().material = player.GetComponentInChildren<Renderer>().material;
                     //_videoCube.GetComponent<Renderer>().material.shader = Shader.Find("Standard");
