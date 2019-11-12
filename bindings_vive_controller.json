@@ -214,7 +214,7 @@
                   }
                },
                "mode" : "button",
-               "path" : "/user/hand/left/input/menu"
+               "path" : "/user/hand/left/input/application_menu"
             }
          ]
       },

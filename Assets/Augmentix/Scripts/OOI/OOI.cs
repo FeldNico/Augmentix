@@ -40,8 +40,7 @@ namespace Augmentix.Scripts.OOI
 #endif
         public InteractionFlag Flags = InteractionFlag.Highlight | InteractionFlag.Lockable;
 
-        [TextArea(15,20)] 
-        public string Text;
+        [TextArea(15, 20)] public string Text;
 
         private LineRenderer lineRenderer;
         public List<MeshCollider> ConvexCollider = new List<MeshCollider>();
@@ -161,13 +160,14 @@ namespace Augmentix.Scripts.OOI
                 if (_textCube == null)
                 {
                     _textCube = Instantiate(TargetManager.Instance.OOITextPrefab);
-                    _textCube.transform.parent = transform;
+                    _textCube.transform.parent = Treveris.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner).transform;
                     _textCube.transform.localScale = Vector3.one;
                     _textCube.GetComponent<TextMeshPro>().text = Text;
                 }
 
                 _textCube.SetActive(true);
-                _moveText = StartCoroutine(MoveObject(_textCube,player,Quaternion.identity,new Vector3(0,-0.1f,0)));
+                _moveText = StartCoroutine(MoveObject(_textCube, player, Quaternion.identity,
+                    new Vector3(0, -0.1f, 0)));
             }
             else
             {
@@ -191,7 +191,7 @@ namespace Augmentix.Scripts.OOI
             if (_videoCube == null || !_videoCube.activeSelf)
             {
                 GameObject player = FindObjectOfType<PlayerSynchronizer>().gameObject;
-                
+
 #if UNITY_STANDALONE
                 if (SteamVR.instance != null)
                     player = player.transform.parent.parent.gameObject;
@@ -201,7 +201,7 @@ namespace Augmentix.Scripts.OOI
                 {
                     _videoCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     _videoCube.name = "VideoCube";
-                    _videoCube.transform.parent = transform;
+                    _videoCube.transform.parent = Treveris.GetTreverisByPlayer(player.GetComponent<PhotonView>().Owner).transform;
                     _videoCube.transform.localScale = new Vector3(1.3f, 1.3f * video.height / video.width, 0.01f);
                     //_videoCube.GetComponent<Renderer>().material = player.GetComponentInChildren<Renderer>().material;
                     //_videoCube.GetComponent<Renderer>().material.shader = Shader.Find("Standard");
@@ -212,7 +212,8 @@ namespace Augmentix.Scripts.OOI
 
                 _videoCube.SetActive(true);
                 video.Play();
-                _moveVideo = StartCoroutine(MoveObject(_videoCube, player,Quaternion.Euler(0,0,180),new Vector3(0,-0.3f,0)));
+                _moveVideo = StartCoroutine(MoveObject(_videoCube, player, Quaternion.Euler(0, 0, 180),
+                    new Vector3(0, -0.3f, 0)));
             }
             else
             {
@@ -222,12 +223,16 @@ namespace Augmentix.Scripts.OOI
             }
         }
 
-        private IEnumerator MoveObject(GameObject obj, GameObject player, Quaternion rotationOffset, Vector3 positionOffset)
+        private IEnumerator MoveObject(GameObject obj, GameObject player, Quaternion rotationOffset,
+            Vector3 positionOffset)
         {
             var objTransform = obj.transform;
             var playerTransform = player.transform;
+            var currentPosition = Vector3.zero;
             while (true)
             {
+                var playerPosition = playerTransform.position;
+
                 var isInside = false;
                 Vector3 nearestPoint = transform.position;
 
@@ -235,9 +240,9 @@ namespace Augmentix.Scripts.OOI
                 {
                     if (meshCollider.gameObject != _textCube)
                     {
-                        var closest = meshCollider.ClosestPoint(player.transform.position);
-                        if (Vector3.Distance(player.transform.position, closest) <
-                            Vector3.Distance(player.transform.position, nearestPoint))
+                        var closest = meshCollider.ClosestPoint(playerPosition);
+                        if (Vector3.Distance(playerPosition, closest) <
+                            Vector3.Distance(playerPosition, nearestPoint))
                         {
                             nearestPoint = closest;
                         }
@@ -245,9 +250,7 @@ namespace Augmentix.Scripts.OOI
                 }
 
 
-                nearestPoint.y = player.transform.position.y;
-
-                var direction = nearestPoint - player.transform.position;
+                nearestPoint.y = playerPosition.y;
 
                 var newposition = Vector3.zero;
 
@@ -256,21 +259,30 @@ namespace Augmentix.Scripts.OOI
                     newposition += new Vector3(0, 1.7f, 0);
 #endif
 
-                if (direction.sqrMagnitude < 1)
+                if ((nearestPoint - playerPosition).sqrMagnitude < 1)
                 {
-                    newposition += player.transform.position + Vector3.ProjectOnPlane(player.transform.forward,Vector3.up).normalized  * player.transform.lossyScale.x;
+                    newposition += playerPosition +
+                                   Vector3.ProjectOnPlane(playerTransform.forward, Vector3.up).normalized *
+                                   playerTransform.lossyScale.x;
                 }
                 else
                 {
-                    newposition += player.transform.position + (nearestPoint - player.transform.position).normalized *
-                                   player.transform.lossyScale.x;
+                    newposition += playerPosition + (nearestPoint - playerPosition).normalized *
+                                   playerTransform.lossyScale.x;
                 }
-                
-                var objPosition = objTransform.position;
-                objPosition = Vector3.Lerp(objPosition, newposition, 0.5f);
-                objPosition = objPosition + objTransform.up * positionOffset.y * objTransform.lossyScale.x;
-                objTransform.position = objPosition;
-                objTransform.LookAt(new Vector3(playerTransform.position.x,objPosition.y,playerTransform.position.z));
+
+
+                newposition = newposition + objTransform.up * positionOffset.y * objTransform.lossyScale.x;
+# if UNITY_STANDALONE
+                if (((StandaloneTargetManager) TargetManager.Instance).MinMoveDistance <
+                    Vector3.Distance(newposition, objTransform.position) * playerTransform.lossyScale.x)
+                    currentPosition = newposition;
+#else
+                currentPosition = newposition;
+#endif
+                objTransform.position = Vector3.Lerp(objTransform.position, currentPosition, 0.05f);
+                //objTransform.position = currentPosition;
+                objTransform.LookAt(new Vector3(playerPosition.x, currentPosition.y, playerPosition.z));
                 objTransform.Rotate(Vector3.up, 180);
                 objTransform.rotation = objTransform.rotation * rotationOffset;
 
@@ -313,9 +325,9 @@ namespace Augmentix.Scripts.OOI
                     filter.sharedMesh = new Mesh();
                     filter.sharedMesh
                         .CombineMeshes(combine.ToArray());
-                    
+
                     var collider = gameObject.AddComponent<MeshCollider>();
-                    
+
                     collider.convex = true;
                     collider.isTrigger = true;
 
@@ -330,6 +342,15 @@ namespace Augmentix.Scripts.OOI
                 GetComponent<MeshFilter>().sharedMesh = prevMesh;
             else
                 DestroyImmediate(GetComponent<MeshFilter>());
+        }
+
+        private void OnDestroy()
+        {
+            if (_videoCube)
+                Destroy(_videoCube);
+            
+            if (_textCube)
+                Destroy(_textCube);
         }
     }
 }

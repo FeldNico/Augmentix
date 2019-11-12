@@ -86,11 +86,7 @@ namespace Augmentix.Scripts
                 Debug.LogError("No Classname set!");
                 return;
             }
-
-
-#if UNITY_ANDROID
-            CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
-#endif
+            
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             PhotonNetwork.GameVersion = gameVersion;

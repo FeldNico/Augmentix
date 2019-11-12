@@ -12,6 +12,8 @@ namespace Augmentix.Scripts.VR
         public SteamVR_Action_Boolean Help =  SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Help");
 
         public float TeleportFadeDuration = 0.1f;
+
+        public float MinMoveDistance = 1f;
         
         new void Start()
         {
@@ -27,7 +29,7 @@ namespace Augmentix.Scripts.VR
                 player.transform.localRotation = Quaternion.identity;
                 PhotonNetwork.Instantiate("Treveris", new Vector3(), new Quaternion());
 
-                StartCoroutine(test());
+                //StartCoroutine(test());
                 IEnumerator test()
                 {
                     yield return new WaitForSeconds(2);

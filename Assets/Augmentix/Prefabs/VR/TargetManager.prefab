@@ -43,5 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339f1ec1dc263494d89dcbbb21a43e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxPlayersPerRoom: 2
-  ConnectionText: {fileID: 0}
+  Type: 2
+  OOITextPrefab: {fileID: 758814557266669943, guid: eb2be0f53962a9547bfccdbe1ecc4372,
+    type: 3}
+  Menu:
+    actionPath: /actions/default/in/Menu
+    needsReinit: 0
+  Help:
+    actionPath: /actions/default/in/Help
+    needsReinit: 0
+  TeleportFadeDuration: 0.2
