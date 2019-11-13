@@ -159,9 +159,9 @@ namespace Augmentix.Scripts.AR.UI
 
                 var current = CurrentSelected;
                 Deselect();
-                var parent = current.transform.parent;
+                var target = current.GetComponentInParent<TangibleTarget>();
                 PhotonNetwork.Destroy(current.gameObject);
-                parent.GetComponent<TangibleTarget>().AddOOI("Tangibles/"+Dropdown.GetComponent<TMP_Dropdown>().options[value].text);
+                target.AddOOI("Tangibles/"+Dropdown.GetComponent<TMP_Dropdown>().options[value].text);
             });
             
             var options = ((AndroidTargetManager) AndroidTargetManager.Instance).TangiblePrefabs.Select(o => o.name)
@@ -178,9 +178,13 @@ namespace Augmentix.Scripts.AR.UI
             
             OnSelect += ooi =>
             {
+
                 foreach (Transform child in transform)
                     child.gameObject.SetActive(false);
 
+                if (PickupTarget.Instance.Current == null)
+                    return;
+                
                 _buttons?.Clear();
                 _buttons = GetButtons(ooi);
 

@@ -18,8 +18,39 @@ Tasks:
 4.  Compare the old Porta Nigra to the Porta Nigra today
 
 
-
 Questions:
+
+1. 	Sie haben gerade ein augmented reality-system getestet mit dem ein Guide einen Schüler durch eine virtuelle Stadt führen kann.
+	Welche Vorteile und welche Nachteile sehen Sie bei der Nutzung von Augmented reality gegenüber eine normalen Desktop-Anwendung mit Maus und Tastatur?
+	
+2. 	Zu Beginn bekamen Sie eine kurze Einführung und etwas Zeit um selbstständig das system kennenzulernen
+	Wie schwierig war für Sie der Workflow zu verstehen und warum? (MapHub, Pickup-Shovel, Tangibles)
+	Wie schwierig war für Sie das Interface zu verstehen und warum? Wussten Sie immer wie Sie duie gewünschte Aktion über die GUI ausführen können?
+	Wie schwierig war für Sie die Interaction mit einzelnen Objekten zu verstehen und warum?
+	
+3.	Um mit einem Schüler interagieren zu können, musste dieser zuerst mit der "Pickup-Shovel" aufgenommen werden.
+	Was halten Sie über diesen Workflow?
+	Glauben Sie, dass dieser Workflow gut mit mehreren Schülern gleichzeitig skaliert?
+	
+4.	Nach der kurzen Einführung mussten Sie einige Aufgaben erfüllen.
+	Haben Sie Interaktionsmöglichkeiten mit dem Spieler vermisst um die Aufgaben gut lösen zu können, wenn ja welche?
+	Haben Sie Interaktionsmöglichkeiten mit den Objekten vermisst um die Aufgaben gut lösen zu können, wenn ja welche?
+	Waren Sie der Meinung im allgemeinen genügend Kontrolle über die Umgebung zu haben um die Aufgaben gut lösen zu können?
+	Haben Sie allgemein weitere Interaktionsmöglichkeiten vermisst, wenn ja welche?
+	
+5.	In diesem Versuch konnten Sie direkt mit den Schüler sprechen, da Sie sich im selben Raum befanden.
+	Falls sich der Schüler jedoch in einem anderen Raum befunden hätte, wäre für die Kommunikation ein Voicechat ausreichen gewesen?
+	Welche weitere Kommunikationkanäle würden Sie empfehlen.
+	
+6.	In diesem Versuch wurde ein übliches Smartphone für augmented reality benutzt und hatten somit stets nur eine Hand für Interaktionen zur Verfügung.
+	Glauben Sie, dass dies eine signifikanten Auswirkung auf Ihre Perfomance hatte, wenn ja warum?
+	Was waren die kritischsten Aspekte wo dies eine Auswirkung hatte?
+	Wie würden Sie dieses Problem beheben? (HMD, mechanical tangibles)
+	
+7. 	Welche weiteren allgemeinen Features würden Sie in diesem System noch wünschen?
+
+8.	Weitere Kommentare?
+	
 
 1.	You just tested a system using augmented reality to guide a student through a virtual city. 
 	What advantages or disadvantages do you see using augmented reality in comparison to a normal Desktop-Application?

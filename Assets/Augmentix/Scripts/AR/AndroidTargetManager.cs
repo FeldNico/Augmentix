@@ -25,6 +25,8 @@ namespace Augmentix.Scripts.AR
             {
                 ARUI.Instance.ConnectionText.text = "Connected";
                 ARUI.Instance.ConnectionText.color = Color.green;
+
+                ARUI.Instance.ConnectionText.enabled = false;
             };
         }
     }

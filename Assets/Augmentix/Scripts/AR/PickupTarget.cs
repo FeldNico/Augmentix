@@ -55,8 +55,9 @@ namespace Augmentix.Scripts.AR
             LostPlayer += (player) =>
             {
                 var t = Current.transform;
+                var localPos = t.localPosition;
                 t.parent = MapTarget.Instance.Scaler.transform;
-                t.localPosition = Vector3.zero;
+                t.localPosition = localPos;
                 Current = null;
 
                 StartCoroutine(removeTreverisNextFrame());
@@ -143,14 +144,17 @@ namespace Augmentix.Scripts.AR
             IEnumerator AnimateTransition()
             {
                 _locked = true;
+                
+                var startingLocalPos = Current.transform.localPosition;
 
                 _treveris = Treveris.GetTreverisByPlayer(Current.GetComponent<PhotonView>().Owner);
                 Current.transform.parent = _treveris.transform;
-
+                
                 var elapsedTime = 0f;
                 var startingPos = Current.transform.position;
                 var startingScale = Current.transform.localScale;
-
+                    
+                
                 while (elapsedTime < TransitionTime)
                 {
                     if (Current == null)
@@ -167,12 +171,12 @@ namespace Augmentix.Scripts.AR
 
                 if (Current != null)
                 {
-                    Current.transform.localPosition = Vector3.zero;
+                    
+                    Current.transform.localPosition = startingLocalPos;
                     Current.transform.localScale = Vector3.one;
+                    GotPlayer.Invoke(Current.gameObject);
                 }
-
-                GotPlayer.Invoke(Current.gameObject);
-
+                
                 _locked = false;
             }
 

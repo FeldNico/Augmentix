@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using Augmentix.Scripts.AR;
 using Augmentix.Scripts.AR.UI;
 #if UNITY_EDITOR
@@ -9,7 +11,10 @@ using Augmentix.Scripts.OOI.Editor;
 using Augmentix.Scripts.VR;
 using Photon.Pun;
 using TMPro;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Video;
 using Valve.VR;
 
@@ -43,15 +48,20 @@ namespace Augmentix.Scripts.OOI
         [TextArea(15, 20)] public string Text;
 
         private LineRenderer lineRenderer;
-        public List<MeshCollider> ConvexCollider = new List<MeshCollider>();
+        public List<MeshCollider> ConvexCollider { private set; get; } = new List<MeshCollider>();
 
 #if UNITY_ANDROID
         private TrackableBehaviour _trackable;
 #endif
-        private void Start()
+
+        private void Awake()
         {
             GenerateConvexMeshCollider();
+        }
 
+        private void Start()
+        {
+            
             GetComponent<PhotonView>().OwnershipTransfer = OwnershipOption.Takeover;
 
             if (TargetManager.Instance.Type == TargetManager.PlayerType.Primary)
@@ -167,7 +177,7 @@ namespace Augmentix.Scripts.OOI
 
                 _textCube.SetActive(true);
                 _moveText = StartCoroutine(MoveObject(_textCube, player, Quaternion.identity,
-                    new Vector3(0, -0.1f, 0)));
+                    new Vector3(0, -0.2f, 0)));
             }
             else
             {
@@ -213,7 +223,7 @@ namespace Augmentix.Scripts.OOI
                 _videoCube.SetActive(true);
                 video.Play();
                 _moveVideo = StartCoroutine(MoveObject(_videoCube, player, Quaternion.Euler(0, 0, 180),
-                    new Vector3(0, -0.3f, 0)));
+                    new Vector3(0, -0.4f, 0)));
             }
             else
             {
@@ -228,7 +238,8 @@ namespace Augmentix.Scripts.OOI
         {
             var objTransform = obj.transform;
             var playerTransform = player.transform;
-            var currentPosition = Vector3.zero;
+            objTransform.position = transform.position;
+            var currentPosition = objTransform.position;
             while (true)
             {
                 var playerPosition = playerTransform.position;
@@ -290,8 +301,33 @@ namespace Augmentix.Scripts.OOI
             }
         }
 
+        struct BakeJob : IJobParallelFor
+        {
+            private NativeArray<int> meshIds;
+
+            public BakeJob(NativeArray<int> meshIds)
+            {
+                this.meshIds = meshIds;
+            }
+
+            public void Execute(int index)
+            {
+                Physics.BakeMesh(meshIds[index], false);
+            }
+        }
+        
         private void GenerateConvexMeshCollider()
         {
+            ConvexCollider = new List<MeshCollider>();
+         /*
+            foreach (var collider in GetComponents<MeshCollider>().Where(meshCollider => meshCollider != null && meshCollider.convex && meshCollider.isTrigger))
+            {
+                ConvexCollider.Add(collider);
+            }
+            return;
+            */
+            
+            
             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
 
             if (meshFilters.Length == 0)
@@ -299,17 +335,11 @@ namespace Augmentix.Scripts.OOI
 
             List<CombineInstance> combine = new List<CombineInstance>();
 
-
-            Mesh prevMesh = null;
-            if (GetComponent<MeshFilter>())
-                prevMesh = GetComponent<MeshFilter>().sharedMesh;
-
             var count = 0;
-
-            var filter = GetComponent<MeshFilter>();
-            if (filter == null)
-                filter = gameObject.AddComponent<MeshFilter>();
-
+            
+            var meshIDs = new NativeArray<int>(meshFilters.Length,Allocator.Persistent);
+            var meshes = new List<Mesh>();
+            var meshCount = 0;
             for (int i = 0; i < meshFilters.Length; i++)
             {
                 var c = new CombineInstance();
@@ -322,26 +352,42 @@ namespace Augmentix.Scripts.OOI
 
                 if (i + 1 == meshFilters.Length || meshFilters[i + 1].sharedMesh.vertexCount + count > 65536)
                 {
-                    filter.sharedMesh = new Mesh();
-                    filter.sharedMesh
-                        .CombineMeshes(combine.ToArray());
-
-                    var collider = gameObject.AddComponent<MeshCollider>();
-
-                    collider.convex = true;
-                    collider.isTrigger = true;
-
-                    ConvexCollider.Add(collider);
-
+                    var mesh = new Mesh();
+                    mesh.CombineMeshes(combine.ToArray());
+                    meshes.Add(mesh);
+                    meshIDs[meshCount] = mesh.GetInstanceID();
+                    meshCount++;
                     combine.Clear();
                     count = 0;
                 }
             }
 
-            if (prevMesh != null)
-                GetComponent<MeshFilter>().sharedMesh = prevMesh;
-            else
-                DestroyImmediate(GetComponent<MeshFilter>());
+            var job = new BakeJob(meshIDs);
+
+            var handle = job.Schedule(meshCount, 2);
+
+            StartCoroutine(calcCollider());
+            IEnumerator calcCollider()
+            {
+                var ts = 0;
+                while (!handle.IsCompleted)
+                {
+                    yield return new WaitForEndOfFrame();
+                    ts++;
+                }
+
+                handle.Complete();
+                foreach (var mesh in meshes)
+                {
+                    var collider = gameObject.AddComponent<MeshCollider>();
+                    collider.sharedMesh = mesh;
+                    collider.convex = true;
+                    collider.isTrigger = true;
+
+                    ConvexCollider.Add(collider);
+                }
+                meshIDs.Dispose();
+            }
         }
 
         private void OnDestroy()

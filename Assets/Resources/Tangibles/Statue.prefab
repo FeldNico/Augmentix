@@ -117,12 +117,12 @@ MonoBehaviour:
     von Myron ca. 460\u2013450 v. Chr. geschaffene Statue aus Bronze geh\xF6rt in
     die antike Hochklassik. Sie zeigt einen rhythmisch bewegten, kraftvollen und
     stolzen Athleten in der Aktion. In dieser Aktion w\xE4hlt Myron den einzigen
-    Moment der Ruhe, gewisserma\xDFen den toten Punkt.\r Die Skulptur l\xE4sst restlos
+    Moment der Ruhe, gewisserma\xDFen den toten Punkt.\r\nDie Skulptur l\xE4sst restlos
     das archaische Prinzip der Frontalit\xE4t fallen zugunsten einer Bewegung und
     r\xE4umlichen Gestaltung der Plastik, die erst im Barock (David von Bernini)
-    und im 19. Jahrhundert von Auguste Rodin wieder aufgegriffen wurde. Auch die
-    bis dahin \xFCbliche Axialit\xE4t scheint v\xF6llig aufgehoben worden zu sein.\r
-    Der Diskobolos ist durch eine 1,55 m hohe r\xF6mische Marmorkopie im Nationalmuseum
+    und im 19. Jahrhundert von Auguste Rodin wieder aufgegriffen wurde.\nAuch die
+    bis dahin \xFCbliche Axialit\xE4t scheint v\xF6llig aufgehoben worden zu sein.\r\nDer
+    Diskobolos ist durch eine 1,55 m hohe r\xF6mische Marmorkopie im Nationalmuseum
     in Rom \xFCberliefert, die 1781 auf dem Esquilin gefunden wurde. Das Bronzeoriginal
     ist nicht gefunden worden, es stand vermutlich in Delphi oder Olympia. Bereits
     kurze Zeit nach dem Auffinden dieser Kopie gelang es dem italienischen Arch\xE4ologen
@@ -135,7 +135,6 @@ MonoBehaviour:
     der Skulptur des Myron nicht um eine Athletendarstellung handelt, sondern um
     die Statue des Hyakinthos, der sich nach der griechischen Mythologie mit Apollon
     im Wettstreit beim Diskuswerfen befand."
-  ConvexCollider: []
 --- !u!328 &3826755945464059973
 VideoPlayer:
   m_ObjectHideFlags: 0

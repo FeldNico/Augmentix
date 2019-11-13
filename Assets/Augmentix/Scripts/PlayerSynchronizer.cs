@@ -121,6 +121,7 @@ namespace Augmentix.Scripts
                     PickupTarget.Instance.GetComponent<TrackableBehaviour>().CurrentStatus ==
                     TrackableBehaviour.Status.TRACKED)
                 {
+                    
                     linePickup.enabled = true;
                     linePickup.SetPosition(0,transform.position);
                     linePickup.SetPosition(1,PickupTarget.Instance.transform.position);

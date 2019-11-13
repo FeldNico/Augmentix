@@ -15,43 +15,7 @@ namespace Augmentix.Scripts
     public abstract class TargetManager : MonoBehaviourPunCallbacks
     {
 
-        private class CustomPhunPool : IPunPrefabPool
-        {
-            private readonly Dictionary<string, GameObject> ResourceCache = new Dictionary<string, GameObject>();
-        
-            public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
-            {
-                GameObject res = null;
-                bool cached = ResourceCache.TryGetValue(prefabId, out res);
-                if (!cached)
-                {
-                    res = (GameObject)Resources.Load(prefabId, typeof(GameObject));
-                    if (res == null)
-                    {
-                        Debug.LogError("DefaultPool failed to load \"" + prefabId + "\" . Make sure it's in a \"Resources\" folder.");
-                    }
-                    else
-                    {
-                        ResourceCache.Add(prefabId, res);
-                    }
-                }
 
-                bool wasActive = res.activeSelf;
-                if (wasActive) res.SetActive(false);
-
-                GameObject instance =GameObject.Instantiate(res, position, rotation) as GameObject;
-
-                if (wasActive) res.SetActive(true);
-                return instance;
-            }
-
-            public void Destroy(GameObject gameObject)
-            {
-                Destroy(gameObject);
-            }
-        }
-    
-    
         public enum PlayerType
         {
             Unkown,

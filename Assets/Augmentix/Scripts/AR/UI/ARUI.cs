@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Valve.VR.InteractionSystem;
 
 namespace Augmentix.Scripts.AR.UI
 {
@@ -16,6 +17,7 @@ namespace Augmentix.Scripts.AR.UI
         public Button RemovePlayer;
 
         private PlayerSynchronizer IndicatorTarget;
+        private float _startScale;
 
         void Awake()
         {
@@ -25,9 +27,12 @@ namespace Augmentix.Scripts.AR.UI
 
         void Start()
         {
+
+            _startScale = PickupTarget.Instance.Scale;
+            
             PickupTarget.Instance.GotPlayer += (player) =>
             {
-                StreamToggle.gameObject.SetActive(true);
+                //StreamToggle.gameObject.SetActive(true);
                 ScaleSlider.gameObject.SetActive(true);
                 RemovePlayer.gameObject.SetActive(true);
                 LockCam.gameObject.SetActive(true);
@@ -47,7 +52,11 @@ namespace Augmentix.Scripts.AR.UI
 
             ScaleSlider.onValueChanged.AddListener(scale =>
             {
-                PickupTarget.Instance.transform.localScale = new Vector3(scale, scale, scale);
+                PickupTarget.Instance.Scaler.transform.localScale = new Vector3(scale, scale, scale);
+                foreach (var tangible in TangibleTarget.AllTangibles)
+                {
+                    tangible.Scaler.transform.localScale = new Vector3(scale / _startScale,scale / _startScale,scale / _startScale);
+                }
             });
 
             PickupTarget.Instance.LostPlayer += (player) =>

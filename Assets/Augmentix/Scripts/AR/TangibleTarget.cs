@@ -4,22 +4,25 @@ using Photon.Pun;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-#if UNITY_ANDROID
 using System.Collections.Generic;
+#if UNITY_ANDROID
 using Augmentix.Scripts.AR.UI;
 using Vuforia;
 #endif
 
 namespace Augmentix.Scripts.AR
 {
-    #if UNITY_ANDROID
+   
     public class TangibleTarget : MonoBehaviour
     {
         public static List<TangibleTarget> AllTangibles { private set; get; } = new List<TangibleTarget>();
-        
-        public UnityAction<TrackableBehaviour.Status> OnStatusChange;
+
+       
         public GameObject Current { private set; get; } = null;
+        public GameObject Scaler { private set; get; } = null;
         
+#if UNITY_ANDROID   
+         public UnityAction<TrackableBehaviour.Status> OnStatusChange;
         private TrackableBehaviour _trackableBehaviour;
 
         private void Awake()
@@ -31,6 +34,12 @@ namespace Augmentix.Scripts.AR
         private void Start()
         {
             var targetManager = (AndroidTargetManager) TargetManager.Instance;
+            
+            Scaler = new GameObject("Scaler");
+            Scaler.transform.parent = transform;
+            Scaler.transform.localPosition = Vector3.zero;
+            Scaler.transform.localScale = new Vector3(1, 1, 1);
+            
             TargetManager.Instance.OnConnection += () =>
             {
                 AddOOI("Tangibles/"+targetManager.EmptyTangible.name);
@@ -66,9 +75,8 @@ namespace Augmentix.Scripts.AR
         public void AddOOI(string name)
         {
             var go =PhotonNetwork.Instantiate(name, Vector3.zero, Quaternion.identity,(byte) PhotonNetwork.LocalPlayer.ActorNumber);
-            var scale = go.transform.localScale;
-            go.transform.parent = transform;
-            go.transform.localScale = scale;
+            go.transform.parent = Scaler.transform;
+            go.transform.localScale = Vector3.one;
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
             Current = go;
@@ -88,6 +96,6 @@ namespace Augmentix.Scripts.AR
                 return;
 
         }
-    }
 #endif
+    }
 }
